@@ -35,6 +35,10 @@ export default function Login() {
               className="w-full p-2 border rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
+          <Link to="/forgotP1">
+            <p className="grid justify-items-end mt-4 text-sm underline underline-offset-1">
+              Forgot Password?</p>
+          </Link>
 
           <button
             type="submit"
