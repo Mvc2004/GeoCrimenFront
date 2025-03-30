@@ -6,6 +6,8 @@ import Reports from "./pages/Reports";
 import Community from "./pages/Community";
 import ForgotPassword1 from "./pages/ForgotPassword1";
 import ForgotPassword2 from "./pages/ForgotPassword2";
+import Profile from "./pages/Profile";
+
 
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
         <Route path="/community" element={<Community />} />
         <Route path="/forgotP1" element={<ForgotPassword1 />} />
         <Route path="/forgotP2" element={<ForgotPassword2 />} />
+        <Route path="/profile" element={<Profile />} />
 
       </Routes>
     </Router>

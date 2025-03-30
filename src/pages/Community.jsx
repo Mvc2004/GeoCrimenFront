@@ -5,6 +5,7 @@ import imagen3 from "../images/notificacion.png";
 import imagen4 from "../images/tulua.png";
 import imagen5 from "../images/lupa.png";
 import imagen6 from "../images/microfono.png";
+import { Link } from 'react-router-dom';
 
 
 
@@ -31,7 +32,7 @@ function Community() {
             <div className="w-10 h-10">
                 <img src={imagen2} alt="Perfil" />
             </div>
-            <p className="mt-2 text-black font-roboto-medium">Perfil</p>
+            <Link to="/profile"><p className="mt-2 text-black font-roboto-medium">Perfil</p></Link>
         </div>
 
           <div className="mt-20 grid grid-cols-2 content-start" >
