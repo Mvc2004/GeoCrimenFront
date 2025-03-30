@@ -3,10 +3,10 @@ import imagen1 from "../images/logo.png";
 import imagen2 from "../images/usuario.png";
 import imagen3 from "../images/notificacion.png";
 import imagen4 from "../images/tulua.png";
-import imagen5 from "../images/lupa.png";
-import imagen6 from "../images/microfono.png";
-import { Link } from 'react-router-dom';
+import imagen5 from "../images/Homicidio.png";
+import imagen6 from "../images/Hurto.png";
 
+import { Link } from 'react-router-dom';
 
 
 function Community() {
@@ -23,8 +23,8 @@ function Community() {
       {/* Contenedor principal con flex-row para organizar las particiones horizontalmente */}
       <div className="flex flex-col md:flex-row min-h-screen">
         {/* Particion 1 (izquierda) */}
-        <div className="flex flex-col w-full md:w-1/5 p-8 bg-[#E0E0E0] shadow-lg border border-[#1A1A1A]/40">
-          <div className="grid justify-items-center bg-white">
+        <div className="flex flex-col w-full md:w-1/5 p-8 bg-[#E0E0E0] shadow-lg">
+          <div className="grid justify-items-center">
             <img src={imagen1} alt="Logo" className="w-20" />
         </div>
 
@@ -53,7 +53,7 @@ function Community() {
 
 
         {/* Particion 2 (centro) */}
-        <div className="w-full md:w-3/5 p-8 bg-[#E0E0E0] shadow-lg border border-[#1A1A1A]/40">
+        <div className="w-full md:w-3/5 p-8 bg-[#E0E0E0] border border-[#1A1A1A]/40">
         
             <div className="relative w-full max-w-md mx-auto">
                 <form onSubmit={handleSearch}>
@@ -85,11 +85,12 @@ function Community() {
                 </div>
                 <button
                   type="submit"
-                  className="absolute inset-y-0 right-0 flex items-center px-4 text-white bg-[#FFFFF] rounded-r-lg hover:bg-black"
+                  className="absolute inset-y-0 right-0 flex items-center px-4 text-white bg-[#FFFFF] rounded-full hover:bg-black/50 rounded-full
+                  transition-all duration-200 active:scale-90"
                 >
                    {/* Ícono de micrófono */}
                   <svg
-                    className="size-5 stroke-current text-black hover:text-white"
+                    className="size-5 stroke-current text-black"
                     fill="none"
                     //stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -117,10 +118,41 @@ function Community() {
         </div>
         
         {/* Particion 3 (derecha) */}
-        <div className="w-full md:w-1/5 p-8 bg-gray-200 shadow-lg border border-[#1A1A1A]/40">
+        <div className="grid justify-items-center w-full md:w-1/5 p-8 bg-[#E0E0E0] shadow-lg">
           {/* Contenido para la partición derecha */}
-          <p>Contenido derecho</p>
+          {/*panel 2 (hurto y homicidio)*/}
+          <div className='grid justify-items-center gap-10'>
+            {/*panel Homicidio*/}
+            <div className='w-20 gap-0'>
+            <Link to="/reports">
+              <button
+                  type="button"
+                  className="w-20 mt-20 bg-black text-[#D32F2F] py-3 rounded rounded-xl transition-all duration-500
+                  active:scale-90 active:bg-[#D32F2F] active:text-[#1A1A1A] shadow-lg hover:bg-[#D32F2F] hover:text-black font-Roboto-bold"
+                >
+                Reportar Homicidios
+                </button>
+              </Link>
+            </div>
+
+            {/*panel hurto*/}
+            <div className='w-20'>
+              <Link to="/reports">
+                <button
+                    type="button"
+                    className="w-20 mt-20 bg-[#FFA000]  text-black py-3 rounded rounded-xl transition-all duration-500 
+                    active:scale-90 active:bg-[#FFA000] active:text-black shadow-lg hover:bg-black hover:text-[#FFA000] font-Roboto-bold "
+                  >
+                  Reportar Hurtos
+                  </button>
+              </Link>
+            </div>
+          </div>
         </div>
+
+
+
+
       </div>
     </div>
   );
