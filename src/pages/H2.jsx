@@ -90,9 +90,9 @@ function H2() {
          </ul>
          </div>
     </aside>
-    <aside id="sidebar-multi-level-sidebar" class="fixed top-0 left-full z-40 w-100 h-screen transition-transform -translate-x-full sm:translate-x-0 shadow-lg" aria-label="Sidebar">
-        <div class="h-full px-0 py-10 overflow-y-auto bg-white">
-         <button className="absolute bottom-10 right-4 bg-white p-2 rounded shadow-lg">
+    <aside id="sidebar-multi-level-sidebar" className="fixed top-0 left-full z-40 w-100 h-screen transition-transform -translate-x-full sm:translate-x-0 shadow-lg" aria-label="Sidebar">
+        <div className="h-full px-0 py-10 overflow-y-auto bg-white">
+         <button className="absolute bottom-16 right-4 bg-white p-2 rounded shadow-lg">
           <svg
             className="w-6 h-6 text-black"
             fill="none"
@@ -104,12 +104,11 @@ function H2() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d="M12 4v16m8-8H4"
+              d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
             ></path>
           </svg>
         </button>
 
-        {/* Botón de Zoom Out */}
         <button className="absolute bottom-4 right-4 bg-white p-2 rounded shadow-lg">
           <svg
             className="w-6 h-6 text-black"
@@ -127,7 +126,7 @@ function H2() {
           </svg>
         </button>
         </div>
-        </aside>
+    </aside>
 
 
 
