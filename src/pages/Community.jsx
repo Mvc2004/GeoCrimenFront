@@ -44,7 +44,7 @@ function Community() {
             <div className="mt-20 w-10 h-10">
                 <img src={imagen4} alt="Mapa" />
             </div>
-            <p className="mt-20 text-black font-roboto-medium">Mapa de Calor</p>
+            <Link to="/h"><p className="mt-20 text-black font-roboto-medium">Mapa de Calor</p></Link>
 
 
           </div>
@@ -53,7 +53,7 @@ function Community() {
 
 
         {/* Particion 2 (centro) */}
-        <div className="w-full md:w-3/5 p-8 bg-[#E0E0E0] border border-[#1A1A1A]/40">
+        <div className="w-full md:w-3/5 p-8 bg-[#E0E0E0] shadow-lg">
         
             <div className="relative w-full max-w-md mx-auto">
                 <form onSubmit={handleSearch}>
@@ -85,7 +85,7 @@ function Community() {
                 </div>
                 <button
                   type="submit"
-                  className="absolute inset-y-0 right-0 flex items-center px-4 text-white bg-[#FFFFF] rounded-full hover:bg-black/50 rounded-full
+                  className="absolute inset-y-0 right-0 flex items-center px-4 text-white bg-[#FFFFF] rounded-full hover:bg-black/50
                   transition-all duration-200 active:scale-90"
                 >
                    {/* Ícono de micrófono */}
@@ -108,13 +108,6 @@ function Community() {
                 </form>
 
             </div>
-
-            <div className='bg-white'>
-              <div className='w-10 bg-black'>
-                
-              </div>
-            </div>
-          
         </div>
         
         {/* Particion 3 (derecha) */}
