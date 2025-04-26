@@ -19,7 +19,7 @@ export default function Login() {
           <h2 className="text-2xl font-bold mt-2">Sign in to GeoCrimen</h2>
         </div>
 
-        <form className="mt-6 w-full max-w-sm">
+        <form className="mt-6 w-full max-w-sm"> //Usuario 
           <div>
             <label className="block text-sm font-medium">Username</label>
             <input
@@ -28,7 +28,7 @@ export default function Login() {
             />
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4">//PASSWORD
             <label className="block text-sm font-medium">Password</label>
             <input
               type="password"
