@@ -1,10 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import imagen1 from "../images/logo.png";
 import imagen2 from "../images/imagensign-up.jpeg";
 
 function Register() {
+  const [paises, setPaises] = useState([]);
+  const [ciudades, setCiudades] = useState([]);
+  const [paisSeleccionado, setPaisSeleccionado] = useState("");
+
+  useEffect(() => {
+    // Al iniciar, traer países
+    const cargarPaises = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/paises");
+        const data = await res.json();
+        setPaises(data.data); // Asegúrate de que el backend responde con { data: [...] }
+      } catch (error) {
+        console.error("Error al cargar países:", error);
+      }
+    };
+    cargarPaises();
+  }, []);
+
+  useEffect(() => {
+    // Cada vez que cambie el país seleccionado, traer ciudades
+    if (paisSeleccionado) {
+      const cargarCiudades = async () => {
+        try {
+          const res = await fetch(`http://localhost:3000/api/ciudades/${paisSeleccionado}`);
+          const data = await res.json();
+          setCiudades(data.data);
+        } catch (error) {
+          console.error("Error al cargar ciudades:", error);
+        }
+      };
+      cargarCiudades();
+    }
+  }, [paisSeleccionado]);
+
+
   const [step, setStep] = useState(1); // Paso actual del formulario
   const [formData, setFormData] = useState({
     nombre: "",
@@ -12,7 +47,10 @@ function Register() {
     email: "",
     contrasenia: "",
     rol: 1,
-    fechaNacimiento: ""
+    fechaNacimiento: "",
+    pais: "",
+    ciudad: "",
+    barrio: ""
   });
 
   const navigate = useNavigate();
@@ -77,9 +115,8 @@ function Register() {
             {[1, 2, 3].map((n) => (
               <div
                 key={n}
-                className={`w-4 h-4 rounded-full ${
-                  step === n ? "bg-blue-600" : "bg-gray-300"
-                }`}
+                className={`w-4 h-4 rounded-full ${step === n ? "bg-blue-600" : "bg-gray-300"
+                  }`}
               ></div>
             ))}
           </div>
@@ -155,8 +192,58 @@ function Register() {
                   className="w-full p-2 border border-black/50 rounded mt-1"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium">País</label>
+                <select
+                  name="pais"
+                  value={formData.pais}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setPaisSeleccionado(e.target.value);
+                    setFormData(prev => ({ ...prev, ciudad: "", barrio: "" })); // Reiniciar ciudad/barrio
+                  }}
+                  required
+                  className="w-full p-2 border border-black/50 rounded mt-1"
+                >
+                  <option value="">Seleccione un país</option>
+                  {paises.map((pais) => (
+                    <option key={pais.id} value={pais.id}>{pais.nombre}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium">Ciudad</label>
+                <select
+                  name="ciudad"
+                  value={formData.ciudad}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-2 border border-black/50 rounded mt-1"
+                  disabled={!paisSeleccionado}
+                >
+                  <option value="">Seleccione una ciudad</option>
+                  {ciudades.map((ciudad) => (
+                    <option key={ciudad.id} value={ciudad.id}>{ciudad.nombre}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium">Barrio</label>
+                <input
+                  type="text"
+                  name="barrio"
+                  value={formData.barrio}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-2 border border-black/50 rounded mt-1"
+                />
+              </div>
             </>
           )}
+
 
           <div className="flex justify-between items-center mt-6">
             {step > 1 && (
