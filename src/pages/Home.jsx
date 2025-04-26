@@ -88,20 +88,20 @@ function Home() {
     setHeatmap(heatmapInstance);
   };
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-500 via-gray-900 to-black">
-      <header className="flex justify-between items-center p-4 transition delay-150 duration-300 hover:bg-gray-500">
+    <div className="min-h-screen bg-gradient-to-b from-white via-gay-400 to-gray-800">
+      <header className="flex justify-between items-center p-4 transition delay-150 duration-300 hover:bg-gray-400 hover:shadow-lg">
         <h1 className="text-xl font-bold flex items-center text-black">
-          <span className="text-indigo-100 text-2xl mr-2">
+          <span className="text-2xl mr-2">
             <img src={logo} alt="Logo" className="w-11 " />
           </span> GeoCrimen
         </h1>
         <div>
-          <Link to="/login" className="mr-4 text-gray-100 hover:underline">
+          <Link to="/login" className="mr-10 font-bold text-black underline  hover:text-white">
             Sign in
           </Link>
           <Link
             to="/register"
-            className="px-4 py-2 bg-black text-white rounded-md"
+            className="px-4 py-2 bg-black text-white font-bold rounded-md"
           >
             Sign up
           </Link>
@@ -120,7 +120,7 @@ function Home() {
       {/* Controles del mapa */}
       <div className="flex justify-center space-x-4 mb-8 mt-20">
         <button 
-          className="px-4 py-2 text-white rounded-md border-2 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-white/50 hover:text-black"
+          className="px-4 py-2 text-white font-bold rounded-md border-2 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-white/50 hover:text-black"
           onClick={() => heatmap && heatmap.setMap(heatmap.getMap() ? null : map)}
         >
           Mostrar/Ocultar Mapa de Calor
