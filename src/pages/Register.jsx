@@ -7,7 +7,9 @@ import imagen2 from "../images/imagensign-up.jpeg";
 function Register() {
   const [paises, setPaises] = useState([]);
   const [ciudades, setCiudades] = useState([]);
+  const [barrios, setBarrios] = useState([]);
   const [paisSeleccionado, setPaisSeleccionado] = useState("");
+  const [ciudadSeleccionada, setCiudadSeleccionada] = useState("");
 
   useEffect(() => {
     // Al iniciar, traer países
@@ -22,6 +24,7 @@ function Register() {
     };
     cargarPaises();
   }, []);
+  
 
   useEffect(() => {
     // Cada vez que cambie el país seleccionado, traer ciudades
@@ -38,6 +41,23 @@ function Register() {
       cargarCiudades();
     }
   }, [paisSeleccionado]);
+
+  useEffect(() => {
+    if (ciudadSeleccionada){
+      const cargarBarrios = async () => {
+        try {
+          const res = await fetch(`http://localhost:3000/api/barrios/${ciudadSeleccionada}`)
+          const data = await res.json();
+          setBarrios(data.data);
+        } catch (error) {
+          console.error('Error al cargar Barrios');
+        }
+      };
+      cargarBarrios();
+      
+    }
+  }, [ciudadSeleccionada]);
+
 
 
   const [step, setStep] = useState(1); // Paso actual del formulario
@@ -193,6 +213,8 @@ function Register() {
                 />
               </div>
 
+
+
               <div>
                 <label className="block text-sm font-medium">País</label>
                 <select
@@ -208,7 +230,7 @@ function Register() {
                 >
                   <option value="">Seleccione un país</option>
                   {paises.map((pais) => (
-                    <option key={pais.id} value={pais.id}>{pais.nombre}</option>
+                    <option key={pais.Id_pais} value={pais.Id_pais}>{pais.nombre}</option>
                   ))}
                 </select>
               </div>
@@ -218,28 +240,39 @@ function Register() {
                 <select
                   name="ciudad"
                   value={formData.ciudad}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setCiudadSeleccionada(e.target.value);
+                    setFormData(prev => ({ ...prev, barrio: "" })) //Reinicia barrio
+                  }}
                   required
                   className="w-full p-2 border border-black/50 rounded mt-1"
                   disabled={!paisSeleccionado}
                 >
                   <option value="">Seleccione una ciudad</option>
                   {ciudades.map((ciudad) => (
-                    <option key={ciudad.id} value={ciudad.id}>{ciudad.nombre}</option>
+                    <option key={ciudad.Id_ciudad} value={ciudad.Id_ciudad}>{ciudad.nombre}</option>
                   ))}
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Barrio</label>
-                <input
+                <select
                   type="text"
                   name="barrio"
                   value={formData.barrio}
                   onChange={handleChange}
                   required
+                  disabled={!ciudadSeleccionada}
                   className="w-full p-2 border border-black/50 rounded mt-1"
-                />
+                >
+                  <option value="">Seleccione un barrio</option>
+                  {barrios.map((barrio) => (
+                    <option key={barrio.Id_barrio} value={barrio.Id_barrio}>{barrio.nombre}</option>
+                  ))}
+                </select>
+
               </div>
             </>
           )}
