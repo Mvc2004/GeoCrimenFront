@@ -1,8 +1,17 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link, useNavigate} from "react-router-dom";
 import imagen1 from "../images/imagensign-in.jpg"
 import imagen2 from "../images/logo.png"
 
 export default function Login() {
+
+   // Estado para manejar errores
+  const navigate = useNavigate();
+  const handleLogin = async (event) => {
+    event.preventDefault(); // <-- evita que se recargue
+    navigate('/community');
+  };
+
   return (
     <div className="flex min-h-screen rounded-xl">
       {/* Imagen a la izquierda */}
@@ -45,7 +54,7 @@ export default function Login() {
             <button
               type="submit"
               className="w-20 mt-20 mx-40 bg-white border border-black text-black py-2 rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-black hover:text-white"
-            >
+              onClick={handleLogin}>
               Sign in
             </button>
           </form>

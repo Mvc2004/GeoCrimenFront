@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Radio, RadioGroup } from '@headlessui/react'
+import { UserIcon, BellIcon, MapIcon } from '@heroicons/react/24/solid'
+
 import imagen1 from "../images/logo.png";
 import imagen2 from "../images/usuario.png";
 import imagen3 from "../images/notificacion.png";
@@ -7,10 +10,14 @@ import imagen5 from "../images/Homicidio.png";
 import imagen6 from "../images/Hurto.png";
 
 import { Link } from 'react-router-dom';
-
-
+const plans = [
+  { name: 'Perfil'},
+  { name: 'Notificaciones'},
+  { name: 'Mapa de Calor' },
+]
 function Community() {
     const [searchTerm, setSearchTerm] = useState('');
+    let [selected, setSelected] = useState(plans[0])
 
     const handleSearch = (e) => {
       e.preventDefault();
@@ -23,12 +30,39 @@ function Community() {
       {/* Contenedor principal con flex-row para organizar las particiones horizontalmente */}
       <div className="flex flex-col md:flex-row min-h-screen">
         {/* Particion 1 (izquierda) */}
-        <div className="flex flex-col w-full md:w-1/5 p-8 bg-[#E0E0E0] shadow-lg">
+        <div className="flex flex-col w-full md:w-1/5 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500 shadow-lg">
           <div className="grid justify-items-center">
             <img src={imagen1} alt="Logo" className="w-20" />
         </div>
 
-        <div className="mt-40 grid grid-cols-2 content-start gap-0" >
+
+        <div className="mt-40 w-full px-1">
+          <div className="mx-auto w-full max-w-md">
+            <RadioGroup by="name" value={selected} onChange={setSelected} aria-label="Server size" className="space-y-10">
+              {plans.map((plan) => (
+                <Radio
+                  key={plan.name}
+                  value={plan}
+                  className="group relative flex cursor-pointer rounded-lg bg-white/5 py-5 pl-6 pr-4 text-white shadow-xl transition focus:not-data-focus:outline-none data-checked:bg-white/10 data-focus:outline data-focus:outline-white">
+                  <div className="flex w-full items-center">
+                    {/* ICONO */}
+                    <div className="flex-shrink-0 mr-4">
+                    {plan.name === "Perfil" && <UserIcon className="h-6 w-6 text-black" />}
+                    {plan.name === "Notificaciones" && <BellIcon className="h-6 w-6 text-black" />}
+                    {plan.name === "Mapa de Calor" && <MapIcon className="h-6 w-6 text-black" />}
+                    </div>
+                    {/* TEXTO */}
+                    <div className="flex-1">
+                      <p className="font-bold text-black">{plan.name}</p>
+                    </div>
+                  </div>
+              </Radio>
+              ))}
+            </RadioGroup>
+          </div>
+        </div>
+
+        {/*<div className="mt-40 grid grid-cols-2 content-start gap-0" >
             <div className="w-10 h-10">
                 <img src={imagen2} alt="Perfil" />
             </div>
@@ -45,15 +79,14 @@ function Community() {
                 <img src={imagen4} alt="Mapa" />
             </div>
             <Link to="/h"><p className="mt-20 text-black font-roboto-medium">Mapa de Calor</p></Link>
-
-
           </div>
+        */}
         </div>
         
 
 
         {/* Particion 2 (centro) */}
-        <div className="w-full md:w-3/5 p-8 bg-[#E0E0E0] shadow-lg">
+        <div className="w-full md:w-3/5 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500 shadow-lg">
         
             <div className="relative w-full max-w-md mx-auto">
                 <form onSubmit={handleSearch}>
@@ -111,7 +144,7 @@ function Community() {
         </div>
         
         {/* Particion 3 (derecha) */}
-        <div className="grid justify-items-center w-full md:w-1/5 p-8 bg-[#E0E0E0] shadow-lg">
+        <div className="grid justify-items-center w-full md:w-1/5 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500 shadow-lg">
           {/* Contenido para la partición derecha */}
           {/*panel 2 (hurto y homicidio)*/}
           <div className='grid justify-items-center gap-10'>
@@ -120,21 +153,18 @@ function Community() {
             <Link to="/reports">
               <button
                   type="button"
-                  className="w-20 mt-20 bg-black text-[#D32F2F] py-3 rounded rounded-xl transition-all duration-500
-                  active:scale-90 active:bg-[#D32F2F] active:text-[#1A1A1A] shadow-lg hover:bg-[#D32F2F] hover:text-black font-Roboto-bold"
+                  className="w-20 mt-20 bg-black text-[#D32F2F] shadow-xl text-sm font-bold py-3 rounded rounded-xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
                 >
                 Reportar Homicidios
                 </button>
               </Link>
             </div>
-
             {/*panel hurto*/}
             <div className='w-20'>
               <Link to="/reports">
                 <button
                     type="button"
-                    className="w-20 mt-20 bg-[#FFA000]  text-black py-3 rounded rounded-xl transition-all duration-500 
-                    active:scale-90 active:bg-[#FFA000] active:text-black shadow-lg hover:bg-black hover:text-[#FFA000] font-Roboto-bold "
+                    className="w-20 mt-20 bg-[#FFA000] shadow-xl text-black text-sm font-bold py-3 rounded rounded-xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
                   >
                   Reportar Hurtos
                   </button>
