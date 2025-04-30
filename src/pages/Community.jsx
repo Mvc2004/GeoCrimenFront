@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Radio, RadioGroup } from '@headlessui/react'
 import { UserIcon, BellIcon, MapIcon } from '@heroicons/react/24/solid'
 
 import imagen1 from "../images/logo.png";
@@ -9,15 +8,18 @@ import imagen4 from "../images/tulua.png";
 import imagen5 from "../images/Homicidio.png";
 import imagen6 from "../images/Hurto.png";
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
+
 const plans = [
-  { name: 'Perfil'},
-  { name: 'Notificaciones'},
-  { name: 'Mapa de Calor' },
-]
+  { name: "Perfil", path: "/profile" },
+  { name: "Notificaciones", path: "/notificaciones" },
+  { name: "Mapa de Calor", path: "/h" },
+];
 function Community() {
+
     const [searchTerm, setSearchTerm] = useState('');
-    let [selected, setSelected] = useState(plans[0])
+
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
       e.preventDefault();
@@ -36,52 +38,37 @@ function Community() {
         </div>
 
 
-        <div className="mt-40 w-full px-1">
-          <div className="mx-auto w-full max-w-md">
-            <RadioGroup by="name" value={selected} onChange={setSelected} aria-label="Server size" className="space-y-10">
-              {plans.map((plan) => (
-                <Radio
-                  key={plan.name}
-                  value={plan}
-                  className="group relative flex cursor-pointer rounded-lg bg-white/5 py-5 pl-6 pr-4 text-white shadow-xl transition focus:not-data-focus:outline-none data-checked:bg-white/10 data-focus:outline data-focus:outline-white">
-                  <div className="flex w-full items-center">
-                    {/* ICONO */}
-                    <div className="flex-shrink-0 mr-4">
-                    {plan.name === "Perfil" && <UserIcon className="h-6 w-6 text-black" />}
-                    {plan.name === "Notificaciones" && <BellIcon className="h-6 w-6 text-black" />}
-                    {plan.name === "Mapa de Calor" && <MapIcon className="h-6 w-6 text-black" />}
-                    </div>
-                    {/* TEXTO */}
-                    <div className="flex-1">
-                      <p className="font-bold text-black">{plan.name}</p>
-                    </div>
-                  </div>
-              </Radio>
-              ))}
-            </RadioGroup>
-          </div>
-        </div>
+         <div className="mt-40 w-full px-1">
+          <div className="mx-auto w-full max-w-md space-y-10">
+            {plans.map((plan) => (
+              <button
+                key={plan.name}
+                onClick={() => navigate(plan.path)}
+                className="group relative flex w-full items-center rounded-lg py-5 pl-6 pr-4 transition hover:bg-white/30"
+              >
+              {/* ICONO */}
+              <div className="flex-shrink-0 mr-4">
+                {plan.name === "Perfil" && (
+                  <UserIcon className="h-6 w-6 text-black" />
+                )}
+                {plan.name === "Notificaciones" && (
+                  <BellIcon className="h-6 w-6 text-black" />
+                )}
+                {plan.name === "Mapa de Calor" && (
+                  <MapIcon className="h-6 w-6 text-black" />
+                )}
+              </div>
 
-        {/*<div className="mt-40 grid grid-cols-2 content-start gap-0" >
-            <div className="w-10 h-10">
-                <img src={imagen2} alt="Perfil" />
+            {/* TEXTO */}
+            <div className="flex-1 text-left">
+              <p className="font-bold text-black">{plan.name}</p>
             </div>
-            <Link to="/profile"><p className="mt-2 text-black font-roboto-medium">Perfil</p></Link>
-        </div>
+          </button>
+        ))}
+      </div>
+    </div>
 
-          <div className="mt-20 grid grid-cols-2 content-start" >
-            <div className="w-10 h-10">
-                <img src={imagen3} alt="Notificacion" />
-            </div>
-            <p className="mt-2 text-black font-roboto-medium">Notificaciones</p>
-
-            <div className="mt-20 w-10 h-10">
-                <img src={imagen4} alt="Mapa" />
-            </div>
-            <Link to="/h"><p className="mt-20 text-black font-roboto-medium">Mapa de Calor</p></Link>
-          </div>
-        */}
-        </div>
+    </div>
         
 
 
