@@ -24,7 +24,7 @@ function Register() {
     };
     cargarPaises();
   }, []);
-  
+
 
   useEffect(() => {
     // Cada vez que cambie el país seleccionado, traer ciudades
@@ -43,7 +43,7 @@ function Register() {
   }, [paisSeleccionado]);
 
   useEffect(() => {
-    if (ciudadSeleccionada){
+    if (ciudadSeleccionada) {
       const cargarBarrios = async () => {
         try {
           const res = await fetch(`http://localhost:3000/api/barrios/${ciudadSeleccionada}`)
@@ -54,7 +54,7 @@ function Register() {
         }
       };
       cargarBarrios();
-      
+
     }
   }, [ciudadSeleccionada]);
 
@@ -132,7 +132,7 @@ function Register() {
 
           {/* Indicador de pasos */}
           <div className="flex mt-4 space-x-2">
-            {[1, 2, 3].map((n) => (
+            {[1, 2, 3, 4].map((n) => (
               <div
                 key={n}
                 className={`w-4 h-4 rounded-full ${step === n ? "bg-blue-600" : "bg-gray-300"
@@ -234,8 +234,12 @@ function Register() {
                   ))}
                 </select>
               </div>
+            </>
+          )}
 
-              <div>
+          {step === 4 && (
+            <>
+            <div>
                 <label className="block text-sm font-medium">Ciudad</label>
                 <select
                   name="ciudad"
@@ -289,7 +293,7 @@ function Register() {
               </button>
             )}
 
-            {step < 3 && (
+            {step < 4 && (
               <button
                 type="button"
                 onClick={() => setStep((prev) => prev + 1)}
@@ -299,7 +303,7 @@ function Register() {
               </button>
             )}
 
-            {step === 3 && (
+            {step === 4 && (
               <button
                 type="submit"
                 className="ml-auto px-4 py-2 bg-green-600 text-white rounded"
