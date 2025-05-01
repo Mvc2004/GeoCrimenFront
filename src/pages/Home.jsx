@@ -128,7 +128,7 @@ function Home() {
       {/* Información de denuncias */}
       <div className="mt-20 flex flex-col m-auto p-auto">
         <div className="flex overflow-x-scroll pb-10 hide-scroll-bar">
-          <div className="flex flex-nowrap min-w-[150%] lg:ml-10 md:ml-20 ml-10 ">
+          <div className="flex flex-nowrap min-w-[150%] lg:ml-1 md:ml-20 ml-10">
             <div className="inline-block px-6">
               <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
                 <img src={im1} alt="Imagen 1 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
