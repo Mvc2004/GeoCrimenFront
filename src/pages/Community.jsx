@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { UserIcon,BellIcon, MapIcon, MicrophoneIcon } from '@heroicons/react/24/solid'
-
 import imagen1 from "../images/logo.png";
-import imagen2 from "../images/usuario.png";
-import imagen3 from "../images/notificacion.png";
-import imagen4 from "../images/tulua.png";
-import imagen5 from "../images/Homicidio.png";
-import imagen6 from "../images/Hurto.png";
-
-import { Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const plans = [
   { name: "Perfil", path: "/profile" },
   { name: "Notificaciones", path: "/notificaciones" },
-  { name: "Mapa de Calor", path: "/h" },
+  { name: "Mapa de Calor", path: "/heatmap" },
 ];
 function Community() {
 

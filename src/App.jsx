@@ -7,7 +7,6 @@ import Community from "./pages/Community";
 import ForgotPassword1 from "./pages/ForgotPassword1";
 import ForgotPassword2 from "./pages/ForgotPassword2";
 import Profile from "./pages/Profile";
-import HeatMap from "./pages/HeatMap";
 import H2 from "./pages/H2";
 
 
@@ -24,12 +23,7 @@ function App() {
         <Route path="/forgotP1" element={<ForgotPassword1 />} />
         <Route path="/forgotP2" element={<ForgotPassword2 />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/h" element={<H2 />} />
-
-        <Route path="/heatmap" element={<HeatMap />} />
-
-
-
+        <Route path="/heatmap" element={<H2 />} />
       </Routes>
     </Router>
   );

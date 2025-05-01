@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import imagen1 from "../images/usuario.png";
 import { PencilSquareIcon, UserCircleIcon} from '@heroicons/react/24/solid'
 
 function Profile() {
