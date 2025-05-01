@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
+import { UserIcon,BellIcon, MapIcon, MicrophoneIcon } from '@heroicons/react/24/solid'
 import imagen1 from "../images/logo.png";
-import imagen2 from "../images/usuario.png";
-import imagen3 from "../images/notificacion.png";
-import imagen4 from "../images/tulua.png";
-import imagen5 from "../images/Homicidio.png";
-import imagen6 from "../images/Hurto.png";
+import {useNavigate} from 'react-router-dom';
 
-import { Link } from 'react-router-dom';
-
-
+const plans = [
+  { name: "Perfil", path: "/profile" },
+  { name: "Notificaciones", path: "/notificaciones" },
+  { name: "Mapa de Calor", path: "/heatmap" },
+];
 function Community() {
+
     const [searchTerm, setSearchTerm] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
       e.preventDefault();
-      if (onSearch) {
-        onSearch(searchTerm);
+      if (searchTerm.trim()) {
+        navigate(`/${searchTerm}`);
       }
     };
   return (
@@ -23,129 +25,106 @@ function Community() {
       {/* Contenedor principal con flex-row para organizar las particiones horizontalmente */}
       <div className="flex flex-col md:flex-row min-h-screen">
         {/* Particion 1 (izquierda) */}
-        <div className="flex flex-col w-full md:w-1/5 p-8 bg-[#E0E0E0] shadow-lg">
+        <div className="flex flex-col w-full md:w-1/5 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500 shadow-lg">
           <div className="grid justify-items-center">
             <img src={imagen1} alt="Logo" className="w-20" />
         </div>
 
-        <div className="mt-40 grid grid-cols-2 content-start gap-0" >
-            <div className="w-10 h-10">
-                <img src={imagen2} alt="Perfil" />
+
+         <div className="mt-40 w-full px-1">
+          <div className="mx-auto w-full max-w-md space-y-10">
+            {plans.map((plan) => (
+              <button
+                key={plan.name}
+                onClick={() => navigate(plan.path)}
+                className="group relative flex w-full items-center rounded-lg py-5 pl-6 pr-4 transition hover:bg-white/30"
+              >
+              {/* ICONO */}
+              <div className="flex-shrink-0 mr-4">
+                {plan.name === "Perfil" && (
+                  <UserIcon className="h-6 w-6 text-black" />
+                )}
+                {plan.name === "Notificaciones" && (
+                  <BellIcon className="h-6 w-6 text-black" />
+                )}
+                {plan.name === "Mapa de Calor" && (
+                  <MapIcon className="h-6 w-6 text-black" />
+                )}
+              </div>
+
+            {/* TEXTO */}
+            <div className="flex-1 text-left">
+              <p className="font-bold text-black">{plan.name}</p>
             </div>
-            <Link to="/profile"><p className="mt-2 text-black font-roboto-medium">Perfil</p></Link>
-        </div>
+          </button>
+        ))}
+      </div>
+    </div>
 
-          <div className="mt-20 grid grid-cols-2 content-start" >
-            <div className="w-10 h-10">
-                <img src={imagen3} alt="Notificacion" />
-            </div>
-            <p className="mt-2 text-black font-roboto-medium">Notificaciones</p>
-
-            <div className="mt-20 w-10 h-10">
-                <img src={imagen4} alt="Mapa" />
-            </div>
-            <Link to="/h"><p className="mt-20 text-black font-roboto-medium">Mapa de Calor</p></Link>
-
-
-          </div>
-        </div>
+    </div>
         
-
 
         {/* Particion 2 (centro) */}
-        <div className="w-full md:w-3/5 p-8 bg-[#E0E0E0] shadow-lg">
+        <div className="w-full md:w-3/5 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500 shadow-lg">
         
-            <div className="relative w-full max-w-md mx-auto">
-                <form onSubmit={handleSearch}>
-                    <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="Buscar..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-full focus:outline-none focus:ring-2 focus:ring-black-500"/>
-
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                    {/* Icono de lupa */}
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <svg
-                            className="w-5 h-5 text-black"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            ></path>
-                        </svg>
-                    </div>
-                </div>
-                <button
-                  type="submit"
-                  className="absolute inset-y-0 right-0 flex items-center px-4 text-white bg-[#FFFFF] rounded-full hover:bg-black/50
-                  transition-all duration-200 active:scale-90"
-                >
-                   {/* Ícono de micrófono */}
-                  <svg
-                    className="size-5 stroke-current text-black"
-                    fill="none"
-                    //stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 1v8m0 0a3 3 0 01-3-3V4a3 3 0 016 0v2a3 3 0 01-3 3zm6 3v1a6 6 0 01-12 0v-1m6 6v3m-4 0h8"
-                    ></path>
-                  </svg> 
-                </button>
-                    </div>
-                </form>
-
+        <form onSubmit={handleSearch} className="max-w-md mx-auto">
+          <div className="relative flex items-center">
+            <div className="absolute flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+              <div className="h-6 border-l border-slate-200 ml-2.5"></div>
             </div>
-        </div>
+
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-400 rounded-md pr-3 pl-14 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+              placeholder="Buscar"
+            />
+            <button
+              type="submit"
+              className="rounded-md ml-2 bg-black p-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow-lg focus:bg-grey-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
+                <path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" />
+                <path d="M5.5 9.643a.75.75 0 0 0-1.5 0V10c0 3.06 2.29 5.585 5.25 5.954V17.5h-1.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-1.5v-1.546A6.001 6.001 0 0 0 16 10v-.357a.75.75 0 0 0-1.5 0V10a4.5 4.5 0 0 1-9 0v-.357Z" />
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
         
         {/* Particion 3 (derecha) */}
-        <div className="grid justify-items-center w-full md:w-1/5 p-8 bg-[#E0E0E0] shadow-lg">
+        <div className="grid justify-items-center w-full md:w-1/5 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500 shadow-lg">
           {/* Contenido para la partición derecha */}
           {/*panel 2 (hurto y homicidio)*/}
           <div className='grid justify-items-center gap-10'>
             {/*panel Homicidio*/}
             <div className='w-20 gap-0'>
-            <Link to="/reports">
               <button
                   type="button"
-                  className="w-20 mt-20 bg-black text-[#D32F2F] py-3 rounded rounded-xl transition-all duration-500
-                  active:scale-90 active:bg-[#D32F2F] active:text-[#1A1A1A] shadow-lg hover:bg-[#D32F2F] hover:text-black font-Roboto-bold"
+                  className="w-20 mt-20 bg-black text-[#D32F2F] shadow-xl text-sm font-bold py-3 rounded rounded-xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                  onClick={() => navigate("/reports")}
                 >
                 Reportar Homicidios
                 </button>
-              </Link>
+             
             </div>
-
             {/*panel hurto*/}
             <div className='w-20'>
-              <Link to="/reports">
+              
                 <button
                     type="button"
-                    className="w-20 mt-20 bg-[#FFA000]  text-black py-3 rounded rounded-xl transition-all duration-500 
-                    active:scale-90 active:bg-[#FFA000] active:text-black shadow-lg hover:bg-black hover:text-[#FFA000] font-Roboto-bold "
+                    className="w-20 mt-20 bg-[#FFA000] shadow-xl text-black text-sm font-bold py-3 rounded rounded-xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                    onClick={() => navigate("/reports")}
                   >
                   Reportar Hurtos
                   </button>
-              </Link>
             </div>
           </div>
         </div>
-
-
-
-
       </div>
     </div>
   );

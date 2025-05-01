@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import homicidio from '../images/homicidio.jpeg';
 import im1 from '../images/im1.jpeg'
 import im2 from '../images/im2.jpeg'
 import im3 from '../images/im3.jpeg'
@@ -8,7 +7,6 @@ import im4 from '../images/im4.jpeg'
 import im5 from '../images/im5.jpeg'
 import im6 from '../images/im6.jpeg'
 import im7 from '../images/im7.jpeg'
-import hurto from '../images/hurto.jpeg';
 import logo from '../images/logo.png';
 
 function Home() {
