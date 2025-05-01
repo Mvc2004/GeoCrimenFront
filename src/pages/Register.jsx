@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import imagen1 from "../images/logo.png";
-import imagen2 from "../images/imagensign-up.jpeg";
+import imagen2 from "../images/imagensign-up.jpg";
 
 function Register() {
   const [paises, setPaises] = useState([]);
@@ -128,15 +128,16 @@ function Register() {
       <div className="flex flex-col items-center justify-center w-full md:w-3/5 p-8 bg-white shadow-lg">
         <div className="flex flex-col items-center">
           <img src={imagen1} alt="Logo" className="w-20" />
-          <h2 className="text-2xl font-bold mt-2">Sign up to GeoCrimen</h2>
+          <h2 className="text-4xl font-bold mt-2">Sign up to GeoCrimen</h2>
 
           {/* Indicador de pasos */}
           <div className="flex mt-4 space-x-2">
             {[1, 2, 3, 4].map((n) => (
               <div
                 key={n}
-                className={`w-4 h-4 rounded-full ${step === n ? "bg-blue-600" : "bg-gray-300"
-                  }`}
+                className={`w-4 h-4 rounded-full ${
+                  step === n ? "bg-[#2E8B57]" : "bg-gray-300"
+                }`}
               ></div>
             ))}
           </div>
@@ -287,7 +288,7 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setStep((prev) => prev - 1)}
-                className="px-4 py-2 bg-gray-200 rounded"
+                className="px-4 py-2 bg-gray-200 rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
                 Atrás
               </button>
@@ -297,7 +298,7 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setStep((prev) => prev + 1)}
-                className="ml-auto px-4 py-2 bg-blue-600 text-white rounded"
+                className="ml-auto px-4 py-2 bg-black text-white transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded"
               >
                 Siguiente
               </button>
@@ -306,7 +307,7 @@ function Register() {
             {step === 4 && (
               <button
                 type="submit"
-                className="ml-auto px-4 py-2 bg-green-600 text-white rounded"
+                className="ml-auto px-4 py-2 bg-[#2E8B57] text-white rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
                 Registrarse
               </button>

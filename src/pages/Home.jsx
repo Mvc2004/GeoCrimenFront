@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import homicidio from '../images/homicidio.jpeg';
+import im1 from '../images/im1.jpeg'
+import im2 from '../images/im2.jpeg'
+import im3 from '../images/im3.jpeg'
+import im4 from '../images/im4.jpeg'
+import im5 from '../images/im5.jpeg'
+import im6 from '../images/im6.jpeg'
+import im7 from '../images/im7.jpeg'
 import hurto from '../images/hurto.jpeg';
 import logo from '../images/logo.png';
 
@@ -58,7 +65,7 @@ function Home() {
     const heatmapInstance = new window.google.maps.visualization.HeatmapLayer({
       data: crimeData,
       map: mapInstance,
-      radius: 30,
+      radius: 200,
       opacity: 0.7,
       gradient: [
         'rgba(0, 255, 255, 0)',
@@ -80,22 +87,21 @@ function Home() {
 
     setHeatmap(heatmapInstance);
   };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-900 to-black">
-      <header className="flex justify-between items-center p-4 bg-gray-400">
-        <h1 className="text-xl font-bold flex items-center">
-          <span className="text-red-500 text-2xl mr-2">
-            <img src={logo} alt="Logo" className="w-11" />
+    <div className="min-h-screen bg-gradient-to-b from-white via-gay-400 to-gray-800">
+      <header className="flex justify-between items-center p-4 transition delay-150 duration-300 hover:bg-gray-400 hover:shadow-lg">
+        <h1 className="text-xl font-bold flex items-center text-black">
+          <span className="text-2xl mr-2">
+            <img src={logo} alt="Logo" className="w-11 " />
           </span> GeoCrimen
         </h1>
         <div>
-          <Link to="/login" className="mr-4 text-gray-700 hover:underline">
+          <Link to="/login" className="mr-10 font-bold text-black underline  hover:text-white">
             Sign in
           </Link>
           <Link
             to="/register"
-            className="px-4 py-2 bg-black text-white rounded-md"
+            className="px-4 py-2 bg-black text-white font-bold rounded-md"
           >
             Sign up
           </Link>
@@ -106,44 +112,87 @@ function Home() {
       <div className="flex justify-center my-10">
         <div 
           id="map" 
-          className="w-4/5 h-96 rounded-md shadow-lg" 
+          className="w-4/5 h-100 rounded-md shadow-lg" 
           style={{ height: "500px" }}
         />
       </div>
 
       {/* Controles del mapa */}
-      <div className="flex justify-center space-x-4 mb-8">
+      <div className="flex justify-center space-x-4 mb-8 mt-20">
         <button 
-          className="px-4 py-2 bg-blue-600 text-white rounded-md"
+          className="px-4 py-2 text-white font-bold rounded-md border-2 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-white/50 hover:text-black"
           onClick={() => heatmap && heatmap.setMap(heatmap.getMap() ? null : map)}
         >
           Mostrar/Ocultar Mapa de Calor
         </button>
       </div>
 
-      {/* Botones de denuncias */}
-      <div className="flex justify-center space-x-20 mt-8">
-        <Link to="/reports">
-          <div className="text-center cursor-pointer">
-            <img src={homicidio} alt="Denuncia Homicidios" className="w-45 h-40 rounded-md shadow-md" />
-            <p className="mt-2 font-semibold">Denuncia Homicidios</p>
+      {/* Información de denuncias */}
+      <div className="mt-20 flex flex-col m-auto p-auto">
+        <div className="flex overflow-x-scroll pb-10 hide-scroll-bar">
+          <div className="flex flex-nowrap min-w-[150%] lg:ml-10 md:ml-20 ml-10 ">
+            <div className="inline-block px-6">
+              <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
+                <img src={im1} alt="Imagen 1 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
+              </div>
+            </div>
+            <div className="inline-block px-6">
+              <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
+                <img src={im2} alt="Imagen 2 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
+              </div>
+            </div>
+            <div className="inline-block px-6">
+              <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
+                <img src={im3} alt="Imagen 3 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
+              </div>
+            </div>
+            <div className="inline-block px-6">
+              <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
+                <img src={im4} alt="Imagen 4 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
+              </div>
+            </div>
+            <div className="inline-block px-6">
+              <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
+                <img src={im5} alt="Imagen 5 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
+              </div>
+            </div>
+            <div className="inline-block px-6">
+              <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
+                <img src={im6} alt="Imagen 6 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
+              </div>
+            </div>
+            <div className="inline-block px-6">
+              <div className="mt-10 w-lg max-w-xs overflow-hidden transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-xl hover:shadow-xl">
+                <img src={im7} alt="Imagen 7 Carrusel" className="w-80 h-64 rounded-md shadow-md"/>
+              </div>
+            </div>
           </div>
-        </Link>
+        </div>
+      </div>
+      <style>
+        {`
+          .hide-scroll-bar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .hide-scroll-bar::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
+      
+      <div className="grid grid-rows-2 flex justify-center space-x-20 mt-40 mb-4">
+        <h3 class="text-balance text-white font-bold text-4xl">!LOCALIZA EL CRIMEN</h3>
+        <h4 class="text-balance text-white font-bold text-4xl">Y REPORTALO!</h4>
 
-        <Link to="/reports">
-          <div className="text-center cursor-pointer">
-            <img src={hurto} alt="Denuncia Hurtos" className="w-45 h-40 rounded-md shadow-md" />
-            <p className="mt-2 font-semibold">Denuncia Hurtos</p>
-          </div>
-        </Link>
       </div>
 
-      <div className="flex justify-center space-x-20 mt-10 mb-4">
+      <div className="flex justify-center space-x-20 mt-40 mb-4">
         <img src={logo} alt="Logo" className="w-11" />
       </div>
 
       {/* Footer */}
-      <footer className="text-center mt-4 pb-4 text-gray-600 text-sm">
+      <footer className="text-center mt-4 pb-4 text-gray-500 text-sm">
         <p>© 2025 GeoCrimen. All rights reserved.</p>
       </footer>
     </div>
