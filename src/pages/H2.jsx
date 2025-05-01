@@ -1,11 +1,157 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {MagnifyingGlassIcon, MapPinIcon,EyeIcon} from '@heroicons/react/24/solid'
+import {ChevronRightIcon, ChevronLeftIcon, ChevronUpIcon} from '@heroicons/react/24/outline'
+import imagen5 from "../images/Homicidio.jpeg";
+import imagen6 from "../images/Hurto.jpeg";
+
+const images = [imagen5, imagen6];
 
 function H2() {
 
-    return(
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false); // abrir y cerrar informacion
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); //abrir y cerrar barra lateral
 
-        <div className="bg-black">
+
+  const navigate = useNavigate();
+
+
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % images.length);
+  };
+
+
+  return (
+    <div className="relative bg-indigo-500 min-h-screen">
+      {/* Botón para abrir */}
+      <button
+        onClick={() => setIsSidebarOpen(true)}
+        className="p-2 m-5 bg-blue-500 text-white rounded-md z-50 relative"
+      ><ChevronLeftIcon className="w-5 h-5 text-white" strokeWidth={4.5} />
+      </button>
+
+      {/* Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 z-40 h-screen max-w-[20rem] w-full bg-white shadow-xl transition-transform duration-300 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        
+        <div className="flex flex-col h-full p-4 text-gray-700">
+          {/* Buscador */}
+          <div className="mb-4">
+            <div className="relative h-10 w-full">
+              <div className="absolute grid w-5 h-5 top-2/4 right-3 -translate-y-2/4 place-items-center text-blue-gray-500">
+                <MagnifyingGlassIcon className="h-5 w-5 text-black" />
+              </div>
+              <input
+                className="peer h-full w-full rounded-md border border-slate-400 bg-transparent px-3 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-300 focus:border-slate-400 hover:border-slate-300 focus:shadow"
+                placeholder="Buscar"
+              />
+            </div>
+          </div>
+
+          {/* Carrusel */}
+          <div className="relative h-40 overflow-hidden rounded-lg mb-4">
+            {images.map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                className={`absolute block w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-700 ${
+                  i === activeIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+                }`}
+                alt={`Slide ${i + 1}`}
+              />
+            ))}
+            <button
+              onClick={handlePrev}
+              className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 group"
+            >
+              <ChevronLeftIcon className="w-5 h-5 text-white" strokeWidth={4.5} />
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 group"
+            >
+              <ChevronRightIcon className="w-5 h-5 text-white" strokeWidth={4.5} />
+            </button>
+          </div>
+
+          {/* Menús */}
+          <hr className="my-2 border-blue-gray-50" />
+          <nav className="p-3 text-xl font-semibold text-black">
+            <p>Reportes</p>
+          </nav>
+          <hr className="my-2 border-blue-gray-50" />
+
+          {/* Acordeón */}
+          <nav className="flex flex-col gap-1 p-2 text-base text-blue-gray-700">
+            <div className="w-full rounded-md">
+              <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center justify-between w-full p-3 text-xl font-semibold text-blue-gray-700 hover:text-blue-gray-900"
+              >
+                <div className="flex items-center gap-5 font-bold text-black">
+                  <MapPinIcon className="h-5 w-5" />
+                  <p>Información</p>
+                </div>
+                <ChevronUpIcon
+                  className={`w-5 h-5 text-black transition-transform ${
+                    isOpen ? "rotate-180" : ""
+                  }`}
+                  strokeWidth={3}
+                />
+              </button>
+              {isOpen && (
+                <div className="p-3 bg-blue-100 text-blue-800 rounded-md">
+                  Aquí va el contenido del Dashboard.
+                </div>
+              )}
+            </div>
+          </nav>
+
+          <nav className="flex flex-col gap-1 p-2 text-base text-blue-gray-700">
+            <div className="w-full rounded-md">
+              <button
+                type="button"
+                onClick={() => alert("Ir a Reportes")}
+                className="flex items-center justify-between w-full p-3 text-xl font-semibold text-blue-gray-700 hover:text-blue-gray-900"
+              >
+                <div className="flex items-center gap-5 font-bold text-black">
+                  <EyeIcon className="h-5 w-5" />
+                  <p>Reportes</p>
+                </div>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  );
+
+}export default H2;
+
+
+
+
+
+
+
+{/*<div className="bg-black">
             
             <button 
                 data-drawer-target="sidebar-multi-level-sidebar" 
@@ -51,10 +197,6 @@ function H2() {
           </nav>
 
 
-
-
-
-              {/***** */} 
             </li>
          <li>
          <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-[#E0E0E0]">
@@ -130,7 +272,4 @@ function H2() {
 
 
 
-        </div>
-    );
-
-}export default H2;
+        </div>*/}

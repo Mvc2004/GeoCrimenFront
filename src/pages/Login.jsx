@@ -53,7 +53,7 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-20 mt-20 mx-40 bg-white border border-black text-black py-2 rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-black hover:text-white"
+              className="w-20 mt-20 mx-40 bg-white border border-black text-black font-bold py-2 rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-black hover:text-white"
               onClick={handleLogin}>
               Sign in
             </button>

@@ -163,7 +163,7 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setStep((prev) => prev - 1)}
-                className="px-4 py-2 bg-gray-200 rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                className="px-4 py-2 bg-gray-200 font-bold rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
                 Atrás
               </button>
@@ -173,7 +173,7 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setStep((prev) => prev + 1)}
-                className="ml-auto px-4 py-2 bg-black text-white transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded"
+                className="ml-auto px-4 py-2 bg-black text-white font-bold transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded"
               >
                 Siguiente
               </button>
@@ -182,7 +182,7 @@ function Register() {
             {step === 3 && (
               <button
                 type="submit"
-                className="ml-auto px-4 py-2 bg-[#2E8B57] text-white rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                className="ml-auto px-4 py-2 bg-[#2E8B57] text-white font-bold rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
                 Registrarse
               </button>

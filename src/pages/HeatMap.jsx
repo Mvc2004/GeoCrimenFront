@@ -75,22 +75,9 @@ function HeatMap() {
         </div>
 
         {/* Sección 3: Opciones de Reportes e Información */}
-        <div className="bg-blue-500 flex w-screen py-20 shadow-md p-4 mt-0 flex flex-col gap-2">
-          <button className="flex items-center space-x-2">
-            <svg
-              className="w-5 h-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 16l-4-4m0 0l4-4m-4 4h16"
-              ></path>
-            </svg>
+        <div className=" flex w-screen py-20 shadow-md p-4 mt-0 flex flex-col gap-2">
+          <button className="flex items-center space-x-2 bg-red-500">
+
             <span>Información</span>
           </button>
 
