@@ -23,8 +23,8 @@ function Community() {
 
     const handleSearch = (e) => {
       e.preventDefault();
-      if (onSearch) {
-        onSearch(searchTerm);
+      if (searchTerm.trim()) {
+        navigate(`/${searchTerm}`);
       }
     };
   return (
@@ -74,30 +74,33 @@ function Community() {
         {/* Particion 2 (centro) */}
         <div className="w-full md:w-3/5 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500 shadow-lg">
         
-          <div class="max-w-md mx-auto">
-            <div class="relative flex items-center">
-              <div class="absolute flex items-center">
+        <form onSubmit={handleSearch} className="max-w-md mx-auto">
+          <div className="relative flex items-center">
+            <div className="absolute flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>
-              <div class="h-6 border-l border-slate-200 ml-2.5"></div>
+              <div className="h-6 border-l border-slate-200 ml-2.5"></div>
             </div>
- 
+
             <input
-              class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-400 rounded-md pr-3 pl-14 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-              placeholder="Buscar" 
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-400 rounded-md pr-3 pl-14 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+              placeholder="Buscar"
             />
             <button
-              class="rounded-md ml-2 bg-black p-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow-lg focus:bg-grey-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
+              type="submit"
+              className="rounded-md ml-2 bg-black p-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow-lg focus:bg-grey-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
                 <path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" />
                 <path d="M5.5 9.643a.75.75 0 0 0-1.5 0V10c0 3.06 2.29 5.585 5.25 5.954V17.5h-1.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-1.5v-1.546A6.001 6.001 0 0 0 16 10v-.357a.75.75 0 0 0-1.5 0V10a4.5 4.5 0 0 1-9 0v-.357Z" />
               </svg>
-            </button> 
+            </button>
           </div>
-        </div>
+        </form>
       </div>
         
         {/* Particion 3 (derecha) */}
@@ -129,10 +132,6 @@ function Community() {
             </div>
           </div>
         </div>
-
-
-
-
       </div>
     </div>
   );
