@@ -1,23 +1,86 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegImage } from "react-icons/fa";
 
 function Reports() {
   const [report, setReport] = useState("");
+  const [latitud, setLatitud] = useState(null);
+  const [longitud, setLongitud] = useState(null);
   const navigate = useNavigate();
 
-  const handleReport = () => {
-    if (report.trim()) {
-      alert("Reporte enviado con éxito.");
-      setReport("");
+  useEffect(() => {
+    // Obtener ubicación apenas carga el componente
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLatitud(position.coords.latitude);
+          setLongitud(position.coords.longitude);
+        },
+        (error) => {
+          console.error("Error al obtener ubicación:", error);
+          alert("No se pudo obtener la ubicación. Asegúrate de permitir el acceso.");
+        }
+      );
     } else {
+      alert("Geolocalización no soportada por este navegador.");
+    }
+  }, []);
+
+  const handleReport = async () => {
+    if (report.trim() === "") {
       alert("No puedes enviar un reporte vacío.");
+      return;
+    }
+
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!usuario) {
+      alert("Inicia sesión para hacer un reporte");
+      return;
+    }
+
+    if (latitud === null || longitud === null) {
+      alert("La ubicación aún no está disponible. Intenta nuevamente.");
+      return;
+    }
+
+    const nuevoReporte = {
+      descripcion: report,
+      id_usuario: usuario.id_usuario,
+      id_crimen: 1,            // o el valor que tengas por defecto
+      Id_estado: 1,            // puedes cambiarlo según la lógica real
+      Id_ubicacion: 1,         // este campo es obligatorio en tu query
+      ubi_lat: latitud,
+      ubi_lng: longitud,
+      Id_barrio: 582
+    };
+    
+
+    try {
+      const res = await fetch("http://localhost:3000/api/reportes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(nuevoReporte)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Reporte enviado con éxito.");
+        setReport("");
+        navigate("/");
+      } else {
+        alert("Error al enviar reporte: " + (data.mensaje || "Error desconocido"));
+      }
+    } catch (error) {
+      console.error("Error al enviar reporte:", error);
+      alert("Hubo un problema con el servidor");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gray-200 p-6">
-      {/* Botón Report en la esquina superior derecha */}
       <div className="flex justify-end">
         <button
           onClick={handleReport}
@@ -27,7 +90,6 @@ function Reports() {
         </button>
       </div>
 
-      {/* Área de Reporte */}
       <div className="flex flex-1 items-center justify-center">
         <textarea
           className="w-3/4 h-40 p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none resize-none"
@@ -37,7 +99,6 @@ function Reports() {
         />
       </div>
 
-      {/* Botón Cancelar y Subir Imagen */}
       <div className="flex justify-between items-center px-6 pb-4">
         <button
           onClick={() => navigate("/")}
