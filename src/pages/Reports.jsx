@@ -43,15 +43,14 @@ function Reports() {
       return;
     }
 
+    console.log("Usuario:", usuario)//TESTING
+
     const nuevoReporte = {
       descripcion: report,
-      id_usuario: usuario.id_usuario,
-      id_crimen: 1,            // o el valor que tengas por defecto
-      Id_estado: 1,            // puedes cambiarlo según la lógica real
-      Id_ubicacion: 1,         // este campo es obligatorio en tu query
+      Id_usuario: usuario.Id_usuario,
       ubi_lat: latitud,
       ubi_lng: longitud,
-      Id_barrio: 582
+      Id_barrio: usuario.Id_barrio
     };
     
 
