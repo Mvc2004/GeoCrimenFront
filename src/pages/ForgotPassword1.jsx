@@ -1,49 +1,68 @@
-import React from 'react';
-import { Link } from "react-router-dom";
-
+import React, {useState} from 'react';
+import { useNavigate } from "react-router-dom";
 import imagen1 from "../images/logo.png"
 
 
 function ForgotPassword1(){
 
+    const [formData, setFormData] = useState({
+      username: "Usuario123",
+      pin: "23 45",
+    });
+    const navigate = useNavigate();
+  
+    const handleChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     return(
 
-    <div className="flex flex-col grid justify-items-center content-start md:w-100 p-8 bg-white">
+    <div className="flex flex-col grid justify-items-center h-screen content-start md:w-100 p-8 bg-gradient-to-b from-white via-gay-400 to-gray-500">
         <div className="flex flex-col items-center">
-          <span className="mt-10 text-red-500 text-4xl"><img src={imagen1} alt="Logo" className="w-20" /></span>
-          <h2 className="text-2xl font-Roboto-bold mt-2">¿Olvidaste tu contraseña?</h2>
+          <span className="mt-20 text-red-500 text-4xl"><img src={imagen1} alt="Logo" className="w-20" /></span>
+          <h2 className="text-2xl font-bold mt-2">¿Olvidaste tu contraseña?</h2>
         </div>
 
-        <form className="mt-20 w-full max-w-sm">
-          <div>
-            <label className="block text-sm font-medium">Username/Email</label>
-            <input
-              type="text"
-              className="w-full p-2 border border-black/50 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+        <div className="mt-10 relative flex flex-col rounded-xl bg-white/50 backdrop-blur-lg">
+              <form className="mt-5 ml-5 mr-5 mb-5 w-80 max-w-screen-lg sm:w-96">
+                <div className="mb-1 flex flex-col gap-6">
+                  {/* Username */}
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label className="block mb-2 text-sm text-black">Username/email</label>
+                    <input
+                      type="text"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      placeholder="Your Username or Email"
+                      className="w-full bg-white/50 placeholder:text-gray-400 text-gray-700 text-sm border border-gray-500 rounded-md px-3 py-2 pr-10 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                    />
+                  </div>
 
-          <div className="mt-20">
-            <label className="block text-sm font-medium">Pin</label>
-            <input
-              type="pin"
-              className="w-full p-2 border border-black/50 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+                  {/* Pin */}
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label className="block mb-2 text-sm text-black">Pin</label>
+                    <input
+                      type="pin"
+                      name="pin"
+                      value={formData.pin}
+                      onChange={handleChange}
+                      placeholder="XX XX"
+                      className="w-full bg-white/50 placeholder:text-gray-400 text-gray-700 text-sm border border-gray-500 rounded-md px-3 py-2 pr-10 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                    />
+                  </div>
+                </div>
 
-          <Link to="/forgotP2">
-            <div className= "flex flex-col items-center justify-center">
-            
-              <button
-                type="button"
-                className="w-60 mt-20 bg-[#FFFFFF] text-[#1A1A1A] py-2 rounded border border-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-[#FFFFFF]"
-              >
-              Listo
-              </button>
+                {/* Botón */}
+                <button
+                  type="button"
+                  className="mt-8 w-full rounded-md bg-black font-bold py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-500 focus:shadow-none active:bg-[#2E8B57]-700 hover:bg-[#2E8B57]-900 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-100"
+                  onClick={() => navigate("/forgotP2")}
+                >
+                  Siguiente
+                </button>
+              </form>
             </div>
-          </Link>
-        </form>
-
       </div>
       )
 
