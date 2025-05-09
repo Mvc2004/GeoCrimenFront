@@ -8,6 +8,7 @@ import im5 from '../images/im5.jpeg'
 import im6 from '../images/im6.jpeg'
 import im7 from '../images/im7.jpeg'
 import logo from '../images/logo.png';
+import color1 from '../images/color1.png';
 
 function Home() {
   {/*const [map, setMap] = useState(null);
@@ -125,7 +126,7 @@ function Home() {
         </button>
       </div>*/}
 
-      {/* Información de denuncias */}
+      {/* Información de denuncias 
       <div className="mt-20 flex flex-col m-auto p-auto">
         <div className="flex overflow-x-scroll pb-10 hide-scroll-bar">
           <div className="flex flex-nowrap min-w-[150%] lg:ml-1 md:ml-20 ml-10">
@@ -178,6 +179,77 @@ function Home() {
           }
         `}
       </style>
+      */}
+<div class="flex justify-center items-center gap-6 flex-wrap mt-10">
+  {/*-- Tarjeta 1 -->*/}
+  <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"  style={{ backgroundColor: '#003049' }}>
+    <a href="#">
+    <img class="rounded-t-2xl" src={color1} alt="color1" style={{border: ' 20px solid #003049',borderRadius: '1.7 rem' }}></img>
+    </a>
+    <div class="p-5">
+      <a href="#">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Noteworthy technology acquisitions 2021
+        </h5>
+      </a>
+      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+      </p>
+      
+    </div>
+  </div>
+
+  {/*-- Tarjeta 2 (*/}
+  <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    <a href="#">
+      <img class="rounded-t-lg" src="/docs/images/blog/image-2.jpg" alt="" />
+    </a>
+    <div class="p-5">
+      <a href="#">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Another cool tech news
+        </h5>
+      </a>
+      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        Explore recent innovations and partnerships in the tech industry.
+      </p>
+      <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        Read more
+        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  {/*!-- Tarjeta 3 -->*/}
+  <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    <a href="#">
+      <img class="rounded-t-lg" src="/docs/images/blog/image-3.jpg" alt="" />
+    </a>
+    <div class="p-5">
+      <a href="#">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Startup trends 2025
+        </h5>
+      </a>
+      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        These are the top startup sectors attracting investment this year.
+      </p>
+      <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        Read more
+        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+      
+
+
+
       
       <div className="grid grid-rows-2 flex justify-center space-x-20 mt-40 mb-4">
         <h3 class="text-balance text-white font-bold text-4xl">!LOCALIZA EL CRIMEN</h3>
