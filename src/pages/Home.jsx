@@ -86,8 +86,8 @@ function Home() {
     setHeatmap(heatmapInstance);
   };
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gay-400 to-gray-800">
-      <header className="flex justify-between items-center p-4 transition delay-150 duration-300 hover:bg-gray-400 hover:shadow-lg">
+    <div className="min-h-screen bg-white">
+      <header className="flex justify-between items-center p-4 transition delay-150 duration-300 hover:bg-[#003049]/70 hover:shadow-lg">
         <h1 className="text-xl font-bold flex items-center text-black">
           <span className="text-2xl mr-2">
             <img src={logo} alt="Logo" className="w-11 " />
