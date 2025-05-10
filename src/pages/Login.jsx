@@ -27,12 +27,12 @@ export default function Login() {
       <div className="flex flex-col items-center justify-center w-full md:w-3/5 p-8 bg-white shadow-lg">
           <div className="flex flex-col items-center mt-10">
             <img src={imagen2} alt="Logo" className="w-20" />            
-            <h2 className="text-4xl font-bold mt-2">Sign in to GeoCrimen</h2>
+            <h2 className="text-4xl font-bold mt-2">Inicia sesión en GeoCrimen</h2>
           </div>
 
-          <form className="mt-10 w-full max-w-sm space-y-4">
+          <form className="mt-10 w-full max-w-sm space-y-10">
             <div>
-              <label className="mt-5 block text-sm font-medium">Username</label>
+              <label className="mt-5 block text-sm font-medium">Usuario</label>
               <input
                 type="text"
                 className="w-full p-2 border border-black/50 rounded mt-1"
@@ -40,7 +40,7 @@ export default function Login() {
             </div>
 
             <div className="mt-20">
-              <label className="block text-sm font-medium">Password</label>
+              <label className="block text-sm font-medium">Contraseña</label>
               <input
                 type="password"
                 className="w-full p-2 border border-black/50 rounded mt-1"
@@ -48,19 +48,19 @@ export default function Login() {
             </div>
             <Link to="/forgotP1">
               <p className="grid justify-items-end mt-4 text-sm underline underline-offset-1">
-                Forgot Password?</p>
+                ¿Olvidaste tu contraseña?</p>
             </Link>
 
             <button
               type="submit"
-              className="w-20 mt-20 mx-40 bg-white border border-black text-black font-bold py-2 rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-black hover:text-white"
+              className="w-[110px]  mt-80 mx-[140px] bg-white border border-[#003049] text-[#003049] font-bold py-2 rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#003049] hover:text-white"
               onClick={handleLogin}>
-              Sign in
+              Inicia Sesión
             </button>
           </form>
 
-          <p className="mt-4 text-sm">
-            Don't have an account? <Link to="/register" className="text-blue-600">Sign up</Link>
+          <p className="mt-[30px] text-sm">
+            ¿No tienes cuenta? <Link to="/register" className="text-blue-600 underline">Registrate</Link>
           </p>
       </div>
     </div>
