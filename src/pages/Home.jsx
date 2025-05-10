@@ -10,7 +10,7 @@ import im7 from '../images/im7.jpeg'
 import logo from '../images/logo.png';
 
 function Home() {
-  const [map, setMap] = useState(null);
+  {/*const [map, setMap] = useState(null);
   const [heatmap, setHeatmap] = useState(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function Home() {
     };
   }, []);
 
-  const initMap = () => {
+  """const initMap = () => {
     // Coordenadas iniciales (puedes ajustarlas según tu ubicación deseada)
     const initialLocation = { lat: 4.084722, lng: -76.198611 }; // Tuluá, Colombia como ejemplo
 
@@ -84,29 +84,29 @@ function Home() {
     });
 
     setHeatmap(heatmapInstance);
-  };
+  };*/}
   return (
     <div className="min-h-screen bg-white">
-      <header className="flex justify-between items-center p-4 transition delay-150 duration-300 hover:bg-[#003049]/70 hover:shadow-lg">
-        <h1 className="text-xl font-bold flex items-center text-black">
+      <header className="flex justify-between items-center p-4 bg-[#003049] shadow-lg">
+        <h1 className="text-xl font-bold flex items-center text-white">
           <span className="text-2xl mr-2">
             <img src={logo} alt="Logo" className="w-11 " />
           </span> GeoCrimen
         </h1>
         <div>
-          <Link to="/login" className="mr-10 font-bold text-black underline  hover:text-white">
+          <Link to="/login" className="mr-10 font-bold text-white underline">
             Sign in
           </Link>
           <Link
             to="/register"
-            className="px-4 py-2 bg-black text-white font-bold rounded-md"
+            className="px-4 py-2 bg-white text-[#003049] font-bold rounded-md"
           >
             Sign up
           </Link>
         </div>
       </header>
 
-      {/* Mapa interactivo */}
+      {/* Mapa interactivo 
       <div className="flex justify-center my-10">
         <div 
           id="map" 
@@ -115,7 +115,7 @@ function Home() {
         />
       </div>
 
-      {/* Controles del mapa */}
+      {/* Controles del mapa 
       <div className="flex justify-center space-x-4 mb-8 mt-20">
         <button 
           className="px-4 py-2 text-white font-bold rounded-md border-2 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-white/50 hover:text-black"
@@ -123,7 +123,7 @@ function Home() {
         >
           Mostrar/Ocultar Mapa de Calor
         </button>
-      </div>
+      </div>*/}
 
       {/* Información de denuncias */}
       <div className="mt-20 flex flex-col m-auto p-auto">
