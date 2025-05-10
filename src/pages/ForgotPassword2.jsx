@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import imagen1 from "../images/6.jpg";
-import imagen2 from "../images/logo.png"
+import imagen2 from "../images/logo/logo.png"
 
 
 

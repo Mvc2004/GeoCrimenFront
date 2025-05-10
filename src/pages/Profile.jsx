@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { PencilSquareIcon, UserCircleIcon} from '@heroicons/react/24/solid'
-import imagen1 from "../images/imgfondo1.jpg";
+import imagen1 from "../images/imgfondo/perfil.jpg";
 
 function Profile() {
   
@@ -28,11 +28,12 @@ function Profile() {
   return (
     
 <div
-  className="w-full min-h-screen bg-cover bg-center relative"
-  style={{ backgroundImage: `url(${imagen1})` }} // Usa tu import de imagen
->
-  {/* Capa con fondo semitransparente opcional */}
-  <div className="absolute inset-0 z-0"></div>
+  className="w-full min-h-screen bg-cover bg-center relative bg-opacity backdrop-blur-lg"
+><img
+    src={imagen1}
+    alt="Fondo"
+    className="absolute inset-0 w-full h-full object-cover blur-md"
+  />
 
   {/* Contenido encima de la imagen */}
   <div className="flex flex-col md:flex-row w-full min-h-screen relative z-10">
@@ -48,7 +49,7 @@ function Profile() {
           </span>
         </div>
 
-        <div className="mt-10 relative flex flex-col rounded-xl bg-[#003049] bg-opacity-70 backdrop-blur-lg p-5">
+        <div className="mt-10 relative flex flex-col rounded-xl bg-[#003049] p-5">
           <form className="w-80 max-w-screen-lg sm:w-96">
             <div className="mb-1 flex flex-col gap-6">
               {/* Username */}

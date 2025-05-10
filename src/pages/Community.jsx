@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserIcon,BellIcon, MapIcon, MicrophoneIcon } from '@heroicons/react/24/solid'
-import imagen1 from "../images/logo.png";
+import imagen1 from "../images/logo/logo.png";
 import {useNavigate} from 'react-router-dom';
 
 const plans = [

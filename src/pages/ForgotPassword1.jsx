@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { useNavigate } from "react-router-dom";
-import imagen1 from "../images/6.jpg";
-import imagen2 from "../images/logo.png"
+import imagen1 from "../images/b.jpg";
+import imagen2 from "../images/logo/logo.png"
 
 
 
@@ -19,27 +19,31 @@ function ForgotPassword1(){
 
     return(
 
-    <div
-  className="flex flex-col grid justify-items-center h-screen content-start md:w-full p-8 bg-white"
-  style={{
-    backgroundImage: `url(${imagen1})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-  }}
->
-  <div className="flex flex-col items-center">
-    <span className="mt-20 text-red-500 text-4xl">
-      <img src={imagen2} alt="Logo" className="w-20" />
-    </span>
-    <h2 className="text-2xl text-white font-bold mt-2">¿Olvidaste tu contraseña?</h2>
-  </div>
+    <div className="relative w-full h-screen overflow-hidden">
+  {/* Imagen de fondo desenfocada */}
+  <img
+    src={imagen1}
+    alt="Fondo"
+    className="absolute inset-0 w-full h-full object-cover blur-sm"
+  />
 
-  <div className="mt-10 relative flex flex-col rounded-xl bg-white/50 backdrop-blur-lg">
-    <form className="mt-5 ml-5 mr-5 mb-5 w-80 max-w-screen-lg sm:w-96">
-      <div className="mb-1 flex flex-col gap-6">
-        {/* Username */}
-        <div className="w-full max-w-sm min-w-[200px] relative">
+  {/* Overlay semitransparente opcional para mejorar contraste */}
+  <div className="absolute inset-0 bg-black/30" />
+
+  {/* Contenido principal */}
+  <div className="relative z-10 flex flex-col items-center justify-start h-full p-8">
+    {/* Logo */}
+    <div className="mt-20">
+      <img src={imagen2} alt="Logo" className="w-20 mx-auto" />
+    </div>
+
+    {/* Título */}
+    <h2 className="text-2xl text-white font-bold mt-4">¿Olvidaste tu contraseña?</h2>
+
+    {/* Formulario */}
+    <div className="mt-10 flex flex-col rounded-xl bg-white/50 backdrop-blur-lg p-6 shadow-lg">
+      <form className="w-80 max-w-screen-lg sm:w-96">
+        <div className="mb-6">
           <label className="block mb-2 text-sm text-black">Usuario/email</label>
           <input
             type="text"
@@ -47,12 +51,11 @@ function ForgotPassword1(){
             value={formData.username}
             onChange={handleChange}
             placeholder="Your Username or Email"
-            className="w-full bg-white/50 placeholder:text-gray-400 text-gray-700 text-sm border border-gray-500 rounded-md px-3 py-2 pr-10 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+            className="w-full bg-white/50 placeholder:text-gray-400 text-gray-700 text-sm border border-gray-500 rounded-md px-3 py-2 transition duration-300 ease-in-out focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm"
           />
         </div>
 
-        {/* Pin */}
-        <div className="w-full max-w-sm min-w-[200px] relative">
+        <div className="mb-6">
           <label className="block mb-2 text-sm text-black">Pin</label>
           <input
             type="text"
@@ -60,22 +63,25 @@ function ForgotPassword1(){
             value={formData.pin}
             onChange={handleChange}
             placeholder="XX XX"
-            className="w-full bg-white/50 placeholder:text-gray-400 text-gray-700 text-sm border border-gray-500 rounded-md px-3 py-2 pr-10 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+            className="w-full bg-white/50 placeholder:text-gray-400 text-gray-700 text-sm border border-gray-500 rounded-md px-3 py-2 transition duration-300 ease-in-out focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm"
           />
         </div>
-      </div>
 
-      {/* Botón */}
-      <button
-        type="button"
-        className="mt-8 ml-[132px] w-[110px] rounded-md bg-[#003049] font-bold py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-500 focus:shadow-none active:bg-[#2E8B57]-700 hover:bg-[#2E8B57]-900 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-100"
-        onClick={() => navigate("/forgotP2")}
-      >
-        Siguiente
-      </button>
-    </form>
+        {/* Botón */}
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={() => navigate("/forgotP2")}
+            className="w-[110px] rounded-md bg-[#003049] font-bold py-2 px-4 text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-500 focus:shadow-none hover:bg-[#2E8B57] duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
+          >
+            Siguiente
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
+
   );
 
 }export default ForgotPassword1;
