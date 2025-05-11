@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { UserIcon,BellIcon, MapIcon, MicrophoneIcon } from '@heroicons/react/24/solid'
+import { UserIcon,BellIcon, MapIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import imagen1 from "../images/logo/logo.png";
 import {useNavigate} from 'react-router-dom';
+
 
 const plans = [
   { name: "Perfil", path: "/profile" },
@@ -11,8 +12,11 @@ const plans = [
 function Community() {
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [report, setReport] = useState("");
+
 
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
 
     const handleSearch = (e) => {
       e.preventDefault();
@@ -20,6 +24,15 @@ function Community() {
         navigate(`/${searchTerm}`);
       }
     };
+
+    const handleReport = () => {
+    if (report.trim()) {
+      alert("Reporte enviado con éxito.");
+      setReport("");
+    } else {
+      alert("No puedes enviar un reporte vacío.");
+    }
+  };
   return (
     <div className="min-64-screen ">
       {/* Contenedor principal con flex-row para organizar las particiones horizontalmente */}
@@ -87,17 +100,62 @@ function Community() {
           {/*panel 2 (hurto y homicidio)*/}
           <div className='grid justify-items-center gap-10'>
             <div className='w-40 gap-0 ml-10 text-center'>
-              <p className='text-white text-3xl font-bold'>Reporta Facilmente</p>
-              <p className='mt-2 text-white text-sm'>!Solo undele al boton!</p>
+              <p className='text-white text-3xl font-bold'>Reporta Fácilmente</p>
+              <p className='mt-2 text-white text-sm'>!Solo presiona el botón!</p>
             </div>
             <div className='w-20 gap-0 mr-5'>
               <button
                   type="button"
                   className="w-[150px] h-[90px] mt-2 text-[#D62828] border-2 border-[#003049]/50 bg-white shadow-xl text-2xl font-bold py-3 rounded rounded-2xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                  onClick={() => navigate("/reports")}
+                  onClick={() => setShowModal(true)}
                 >
                 Homicidio
               </button>
+
+              {showModal && (
+                <div
+                  className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50"
+                  role="dialog"
+                  aria-modal="true"
+                >
+                  <form className="relative w-[700px] mb-4 border-white/50 rounded-lg bg-white/90">
+                    <textarea
+                      id="comment"
+                      value={report}
+                      onChange={(e) => setReport(e.target.value)}
+                      rows="4"
+                      className="w-[700px] h-[200px] px-3 py-2 rounded-t-md text-sm text-black bg-white/20 backdrop-blur-lg"
+                      placeholder="Escribe tu reporte..."
+                      required
+                    ></textarea>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowModal(false)}
+                      className="absolute top-2 right-[10px] hover:bg-gray-300 rounded-md text-sm w-8 h-8 flex justify-center items-center"
+                      ><XMarkIcon className="w-7 h-7 text-black"/>
+                    </button>
+                    <div className="flex items-center justify-between px-3 py-2 border-t border-gray-500">
+                      <button
+                        type="submit"
+                        onClick={handleReport}
+                        className="inline-flex items-center py-2.5 px-4 text-xs font-bold text-center text-white bg-[#003049] rounded-lg focus:ring-4 focus:ring-gray-700 hover:bg-gray-700"
+                      >
+                        Reportar
+                      </button>
+                      <div className="flex space-x-1">
+                        <button
+                          type="button"
+                          className="inline-flex justify-center items-center p-2 text-gray-500 rounded-md hover:bg-gray-300"
+                        >
+                          <PhotoIcon className="w-6 h-6 text-black" />
+                          <span className="sr-only">Subir imagen</span>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              )}
             </div>
             {/*panel hurto*/}
             <div className='w-20 mr-5'>

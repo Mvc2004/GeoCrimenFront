@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useNavigate } from "react-router-dom";
-import imagen1 from "../images/b.jpg";
+import imagen1 from "../images/imgfondo/forgot.jpeg";
 import imagen2 from "../images/logo/logo.png"
 
 
@@ -44,7 +44,7 @@ function ForgotPassword1(){
     <div className="mt-10 flex flex-col rounded-xl bg-white/50 backdrop-blur-lg p-6 shadow-lg">
       <form className="w-80 max-w-screen-lg sm:w-96">
         <div className="mb-6">
-          <label className="block mb-2 text-sm text-black">Usuario/email</label>
+          <label className="block mb-2 text-sm text-black font-bold">Usuario/Email</label>
           <input
             type="text"
             name="username"
@@ -56,7 +56,7 @@ function ForgotPassword1(){
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2 text-sm text-black">Pin</label>
+          <label className="block mb-2 text-sm text-black font-bold">Pin</label>
           <input
             type="text"
             name="pin"

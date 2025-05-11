@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {useNavigate} from 'react-router-dom';
 import { PencilSquareIcon, UserCircleIcon} from '@heroicons/react/24/solid'
 import imagen1 from "../images/imgfondo/perfil.jpg";
 
+
 function Profile() {
-  
+
+  const navigate = useNavigate();
+
   const [isEditable, setIsEditable] = useState({
     username: false,
     email: false,
@@ -116,7 +119,7 @@ function Profile() {
             {/* Botón */}
             <button
               type="button"
-              className="mt-8 ml-[132px] w-[110px] rounded-md bg-[#FCBF49] font-bold py-2 border border-transparent text-center text-sm text-[#003049] transition-all shadow-md hover:shadow-lg focus:bg-[#FCBF49] active:bg-[#FCBF49]/80 hover:bg-[#FCBF49]/80"
+              className="mt-8 ml-[132px] w-[110px] rounded-md bg-[#FCBF49] font-bold py-2 border border-transparent text-center text-sm text-[#003049] transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#FCBF49]/85"
             >
               Actualizar
             </button>
@@ -127,16 +130,14 @@ function Profile() {
 
     {/* Partición derecha */}
     <div className="w-full md:w-1/5 p-10">
-      <Link to="/">
         <div className="flex flex-col items-center justify-center">
           <button
             type="button"
-            className="w-[130px] bg-[#D62828] text-white font-bold py-2 rounded-md text-center text-sm transition-all shadow-md hover:shadow-lg focus:bg-[#D62828] active:bg-[#D62828]/80 hover:bg-[#D62828]/80"
-          >
+            className="w-[130px] bg-[#D62828] text-white font-bold py-2 rounded-md text-center text-sm transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#D62828]/85"
+            onClick={() => navigate("/")}>
             Eliminar Cuenta
           </button>
         </div>
-      </Link>
     </div>
   </div>
 </div>
