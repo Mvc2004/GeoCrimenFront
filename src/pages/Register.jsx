@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import imagen1 from "../images/logo.png";
-import imagen2 from "../images/imagensign-up.jpg";
+import imagen1 from "../images/logo/logo.png";
+import imagen2 from "../images/in-up/sign-up.jpg";
 
 function Register() {
   const [step, setStep] = useState(1); // Paso actual del formulario
@@ -62,7 +62,7 @@ function Register() {
         <img
           src={imagen2}
           alt="Escena del crimen"
-          className="w-full h-full object-cover rounded-lg shadow-md"
+          className="w-full h-full object-cover shadow-md"
         />
       </div>
 
@@ -70,7 +70,7 @@ function Register() {
       <div className="flex flex-col items-center justify-center w-full md:w-3/5 p-8 bg-white shadow-lg">
         <div className="flex flex-col items-center">
           <img src={imagen1} alt="Logo" className="w-20" />
-          <h2 className="text-4xl font-bold mt-2">Sign up to GeoCrimen</h2>
+          <h2 className="text-4xl font-bold mt-2">Registrate en GeoCrimen</h2>
 
           {/* Indicador de pasos */}
           <div className="flex mt-4 space-x-2">
@@ -78,7 +78,7 @@ function Register() {
               <div
                 key={n}
                 className={`w-4 h-4 rounded-full ${
-                  step === n ? "bg-[#2E8B57]" : "bg-gray-300"
+                  step === n ? "bg-[#FCBF49]" : "bg-gray-300"
                 }`}
               ></div>
             ))}
@@ -96,19 +96,19 @@ function Register() {
                   value={formData.nombre}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border border-black/50 rounded mt-1"
+                  className="w-full p-2 border border-black/50 rounded-md mt-1"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Apellido</label>
+                <label className="mt-10 block text-sm font-medium">Apellido</label>
                 <input
                   type="text"
                   name="apellido"
                   value={formData.apellido}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border border-black/50 rounded mt-1"
+                  className="w-full p-2 border border-black/50 rounded-md mt-1"
                 />
               </div>
             </>
@@ -124,19 +124,19 @@ function Register() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border border-black/50 rounded mt-1"
+                  className="w-full p-2 border border-black/50 rounded-md mt-1"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Contraseña</label>
+                <label className="mt-10 block text-sm font-medium">Contraseña</label>
                 <input
                   type="password"
                   name="contrasenia"
                   value={formData.contrasenia}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border border-black/50 rounded mt-1"
+                  className="w-full p-2 border border-black/50 rounded-md mt-1"
                 />
               </div>
             </>
@@ -152,7 +152,7 @@ function Register() {
                   value={formData.fechaNacimiento}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border border-black/50 rounded mt-1"
+                  className="w-full p-2 border border-black/50 rounded-md mt-1"
                 />
               </div>
             </>
@@ -163,7 +163,7 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setStep((prev) => prev - 1)}
-                className="px-4 py-2 bg-gray-200 font-bold rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                className="px-4 py-2 bg-gray-200 font-bold rounded-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
                 Atrás
               </button>
@@ -173,7 +173,7 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setStep((prev) => prev + 1)}
-                className="ml-auto px-4 py-2 bg-black text-white font-bold transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded"
+                className="ml-auto px-4 py-2 bg-[#003049] text-white font-bold transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-md"
               >
                 Siguiente
               </button>
@@ -182,7 +182,7 @@ function Register() {
             {step === 3 && (
               <button
                 type="submit"
-                className="ml-auto px-4 py-2 bg-[#2E8B57] text-white font-bold rounded transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                className="ml-auto px-4 py-2 bg-[#2E8B57] text-white font-bold rounded-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
                 Registrarse
               </button>
@@ -192,7 +192,7 @@ function Register() {
           <div className="flex flex-col items-center justify-center">
             <p className="mt-10 text-sm">
               ¿Ya tienes cuenta?{" "}
-              <Link to="/" className="text-blue-600 underline">
+              <Link to="/login" className="text-blue-600 underline underline-offset-2 ">
                 Inicia sesión
               </Link>
             </p>
