@@ -1,7 +1,5 @@
-"use client"
-
-import { useState } from "react"
-import { UserIcon, BellIcon, MapIcon, PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid"
+import { useState, useEffect } from "react"
+import { UserIcon, BellIcon, MapIcon, PhotoIcon, XMarkIcon,MagnifyingGlassIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/logo/logo.png"
 import { useNavigate } from "react-router-dom"
 
@@ -12,6 +10,7 @@ const plans = [
 ]
 
 function Community() {
+
   const [searchTerm, setSearchTerm] = useState("")
   const [reportData, setReportData] = useState({
     crimeType: "",
@@ -24,6 +23,39 @@ function Community() {
 
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
+
+  const [isListening, setIsListening] = useState(false)
+  const [recognition, setRecognition] = useState(null)
+
+  useEffect(() => {
+    // Initialize speech recognition
+    if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+      const recognitionInstance = new SpeechRecognition()
+
+      recognitionInstance.continuous = false
+      recognitionInstance.interimResults = false
+      recognitionInstance.lang = "es-ES" // You can change this to match your preferred language
+
+      recognitionInstance.onresult = (event) => {
+        const transcript = event.results[0][0].transcript
+        setSearchTerm(transcript)
+        setIsListening(false)
+      }
+
+      recognitionInstance.onerror = (event) => {
+        console.error("Speech recognition error", event.error)
+        setIsListening(false)
+      }
+
+      recognitionInstance.onend = () => {
+        setIsListening(false)
+      }
+
+      setRecognition(recognitionInstance)
+    }
+  }, [])
+
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -86,6 +118,17 @@ function Community() {
     setImagePreview(null)
   }
 
+  const toggleListening = () => {
+    if (!recognition) return
+
+    if (isListening) {
+      recognition.stop()
+      setIsListening(false)
+    } else {
+      recognition.start()
+      setIsListening(true)
+    }
+  }
   return (
     <div className="min-64-screen ">
       {/* Contenedor principal con flex-row para organizar las particiones horizontalmente */}
@@ -122,20 +165,7 @@ function Community() {
           <form onSubmit={handleSearch} className="max-w-md mx-auto">
             <div className="relative flex items-center">
               <div className="absolute flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-5 text-[#003049] ml-2.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                  />
-                </svg>
+                <MagnifyingGlassIcon className="size-5 text-[#003049] ml-2.5" strokeWidth={1.5} />
                 <div className="h-6 border-l border-[#003049]/50 ml-2.5"></div>
               </div>
 
@@ -143,19 +173,58 @@ function Community() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-400 rounded-md pr-3 pl-14 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-400 rounded-md pr-3 pl-14 py-2 transition duration-300 ease-in-out focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                 placeholder="Buscar"
               />
+
+              {/* Microphone Button */}
               <button
-                type="submit"
-                className="rounded-md ml-2 bg-[#003049] p-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow-lg focus:bg-grey-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+                onClick={toggleListening}
+                className={`rounded-md ml-2 p-2.5 border border-transparent text-center text-sm text-white transition-all duration-300 shadow-sm hover:shadow-lg focus:outline-none ${
+                  isListening
+                    ? "bg-red-600 hover:bg-red-700 active:bg-red-800 animate-pulse"
+                    : "bg-[#003049] hover:bg-slate-700 active:bg-slate-800"
+                }`}
+                aria-label={isListening ? "Stop listening" : "Start voice search"}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
                   <path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" />
                   <path d="M5.5 9.643a.75.75 0 0 0-1.5 0V10c0 3.06 2.29 5.585 5.25 5.954V17.5h-1.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-1.5v-1.546A6.001 6.001 0 0 0 16 10v-.357a.75.75 0 0 0-1.5 0V10a4.5 4.5 0 0 1-9 0v-.357Z" />
                 </svg>
               </button>
+
+              {/* Search Button */}
+              <button
+                type="submit"
+                className="rounded-md ml-2 bg-[#003049] p-2.5 border border-transparent text-center text-sm text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:bg-slate-700 active:bg-slate-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
+                  <path
+                    fillRule="evenodd"
+                    d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 14 0A7 7 0 0 1 2 9Z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    d="M12.293 12.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1-1.414 1.414l-4-4a1 1 0 0 1 0-1.414Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
             </div>
+
+            {/* Listening Indicator */}
+            {isListening && (
+              <div className="flex items-center justify-center mt-3 space-x-2">
+                <div className="text-sm font-medium text-red-600">Escuchando...</div>
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                  <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                  <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                </div>
+              </div>
+            )}
           </form>
         </div>
 
@@ -167,10 +236,10 @@ function Community() {
               <p className="text-white text-3xl font-bold">Reporta Fácilmente</p>
               <p className="mt-2 text-white text-sm">!Solo presiona el botón!</p>
             </div>
-            <div className="flex justify-center w-full">
+            <div className="flex justify-center w-full mb-[50px]">
               <button
                 type="button"
-                className="w-[200px] h-[90px] text-[#D62828] border-2 border-[#003049]/50 bg-white shadow-xl text-2xl font-bold py-3 rounded rounded-2xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                className="w-[200px] h-[90px] text-[#D62828] border-2 border-[#003049]/50 bg-white text-2xl font-bold py-3 rounded rounded-2xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
                 onClick={() => setShowModal(true)}
               >
                 Reportar Delito
@@ -197,7 +266,7 @@ function Community() {
             </button>
 
             <div className="px-4 py-4">
-              <h2 className="text-xl font-bold mb-4 text-center">Reporte Anónimo de Delito</h2>
+              <h2 className="text-xl font-bold mb-4 text-center">Reporte Anónimo de Delitos</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
@@ -212,13 +281,8 @@ function Community() {
                     required
                   >
                     <option value="">Seleccionar tipo</option>
-                    <option value="robo">Robo</option>
-                    <option value="asalto">Asalto</option>
-                    <option value="vandalismo">Vandalismo</option>
-                    <option value="fraude">Fraude</option>
                     <option value="hurto">Hurto</option>
                     <option value="homicidio">Homicidio</option>
-                    <option value="otro">Otro</option>
                   </select>
                 </div>
 

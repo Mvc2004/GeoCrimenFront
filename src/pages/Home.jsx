@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
@@ -20,6 +18,7 @@ import im5 from "../images/home-carrusel/im5.jpeg"
 import logo from "../images/logo/logo.png"
 
 function Home() {
+
   const [activeIndex, setActiveIndex] = useState(0)
   const images = [im1, im2, im3, im4, im5]
   const carouselTexts = [
@@ -32,7 +31,7 @@ function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % images.length)
+      setActiveIndex((prev) => (prev + 5) % images.length)
     }, 5000)
     return () => clearInterval(interval)
   }, [images.length])
@@ -45,19 +44,19 @@ function Home() {
       title: "Reportes Anónimos",
       description: "Reporta incidentes sin revelar tu identidad, garantizando tu seguridad y privacidad.",
       icon: <ShieldCheckIcon className="h-12 w-12 text-white" />,
-      color: "#bf001f",
+      color: "#D62828",
     },
     {
-      title: "Mapas de Calor",
+      title: "Mapa de Calor",
       description: "Visualiza las zonas con mayor incidencia de delitos para tomar decisiones informadas.",
       icon: <MapPinIcon className="h-12 w-12 text-white" />,
-      color: "#003fff",
+      color: "#FCBF49",
     },
     {
       title: "Estadísticas",
       description: "Accede a datos actualizados sobre la situación de seguridad en tu comunidad.",
       icon: <ChartBarIcon className="h-12 w-12 text-white" />,
-      color: "#00ffff",
+      color: "#3a86ff",
     },
   ]
 
@@ -66,19 +65,19 @@ function Home() {
     {
       color: "#bf001f",
       level: "Alto",
-      description: "Alta presencia de delitos y hurtos",
+      description: "Incidencia alta de homicidios y hurtos en la zona.",
       icon: <ExclamationTriangleIcon className="h-10 w-10 text-white" />,
     },
     {
       color: "#003fff",
       level: "Medio",
-      description: "Presencia media de delitos y hurtos",
+      description: "Incidencia moderada de homicidios y hurtos en la zona.",
       icon: <ShieldExclamationIcon className="h-10 w-10 text-white" />,
     },
     {
       color: "#00ffff",
       level: "Bajo",
-      description: "Presencia baja de delitos y hurtos",
+      description: "Incidencia baja de homicidios y hurtos en la zona.",
       icon: <ShieldCheckIcon className="h-10 w-10 text-white" />,
     },
   ]
@@ -166,22 +165,15 @@ function Home() {
                 <span className="text-[#003049]">Sobre</span> <span className="text-[#D62828]">Nosotros</span>
               </h2>
             </div>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-gray-700 leading-relaxed font-roboto text-justify">
               GeoCrimen es una plataforma que permite a los ciudadanos reportar y visualizar delitos en cualquier parte
               de Colombia. Utilizando tecnología de mapas de calor, los usuarios podrán observar la ubicación y
               naturaleza de los delitos, lo que ayuda a crear conciencia y fomentar la seguridad comunitaria.
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-gray-700 leading-relaxed font-roboto text-justify">
               Nuestra misión es empoderar a las comunidades con información valiosa para tomar decisiones informadas
               sobre su seguridad, mientras facilitamos la colaboración ciudadana en la prevención del delito.
             </p>
-            <Link
-              to="/about"
-              className="inline-flex items-center text-[#003049] font-semibold hover:text-[#D62828] transition-colors"
-            >
-              Conoce más sobre nosotros
-              <ArrowRightIcon className="ml-2 h-4 w-4" />
-            </Link>
           </div>
           <div className="flex justify-center">
             <div className="relative">
