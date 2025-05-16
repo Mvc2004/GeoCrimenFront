@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { UserIcon,BellIcon, MapIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { UserIcon,BellIcon, MapIcon, PhotoIcon, XMarkIcon, PhoneIcon } from '@heroicons/react/24/solid'
 import imagen1 from "../images/logo/logo.png";
 import {useNavigate} from 'react-router-dom';
-
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 const plans = [
   { name: "Perfil", path: "/profile" },
@@ -28,6 +28,14 @@ function Community() {
     const handleReport = () => {
     if (report.trim()) {
       alert("Reporte enviado con éxito.");
+      navigate("/formatos", {
+        state: {
+          delito: "Homicidio",
+          fecha: "18 DE ABRIL DE 2025",
+          hora: "4:00 p-m",
+          ubicacion: "carrera 28 d 11-66",
+        },
+      });
       setReport("");
     } else {
       alert("No puedes enviar un reporte vacío.");
@@ -92,7 +100,35 @@ function Community() {
             </button>
           </div>
         </form>
-      </div>
+        <div className="absolute bottom-10 left-[1150px]">
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
+              <MenuButton className="w-[50px] h-[50px] rounded-full bg-[#003049] hover:bg-[#003049]/80 transition transform hover:-translate-y-1 hover:scale-110 flex items-center justify-center">
+                <PhoneIcon className="w-[25px] h-[25px] text-white" />
+              </MenuButton>
+            </div>
+            <MenuItems className="absolute bottom-full mb-2 space-y-2">
+              <div className="bg-white rounded-md shadow-lg py-2 px-2 border border-[#003049]">
+
+              <MenuItem>
+                {({ e }) => (
+                  <button className={`w-[150px] px-4 py-2 text-[#003049] rounded-md font-bold hover:bg-gray-200  ${e ? 'bg-[#003049]' : ''}`}>
+                    321 567 89 10
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ e }) => (
+                  <button className={`w-[150px] px-4 py-2 text-[#003049] rounded-md font-bold hover:bg-gray-200 ${e ? 'bg-[#D62828]' : ''}`}>
+                    345 678 90 12
+                  </button>
+                )}
+              </MenuItem>
+              </div>
+            </MenuItems>
+          </Menu>
+        </div>
+        </div>
         
         {/* Particion 3 (derecha) */}
         <div className="grid justify-items-center w-full md:w-1/5 p-8 bg-[#003049]">
@@ -142,6 +178,7 @@ function Community() {
                         className="inline-flex items-center py-2.5 px-4 text-xs font-bold text-center text-white bg-[#003049] rounded-lg focus:ring-4 focus:ring-gray-700 hover:bg-gray-700"
                       >
                         Reportar
+                        
                       </button>
                       <div className="flex space-x-1">
                         <button

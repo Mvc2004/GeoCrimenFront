@@ -8,6 +8,7 @@ import ForgotPassword1 from "./pages/ForgotPassword1";
 import ForgotPassword2 from "./pages/ForgotPassword2";
 import Profile from "./pages/Profile";
 import H2 from "./pages/H2";
+import FormatosR from "./pages/formatosR";
 
 
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/forgotP2" element={<ForgotPassword2 />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/heatmap" element={<H2 />} />
+        <Route path="/formatos" element={<FormatosR />} />
       </Routes>
     </Router>
   );
