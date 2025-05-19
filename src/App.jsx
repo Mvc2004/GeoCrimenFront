@@ -8,7 +8,7 @@ import ForgotPassword1 from "./pages/ForgotPassword1";
 import ForgotPassword2 from "./pages/ForgotPassword2";
 import Profile from "./pages/Profile";
 import H2 from "./pages/H2";
-import FormatosR from "./pages/formatosR";
+import FormatosR from "./pages/FormatosR";
 
 
 

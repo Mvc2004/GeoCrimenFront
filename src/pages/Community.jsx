@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
-import { UserIcon, BellIcon, MapIcon, PhotoIcon, XMarkIcon,MagnifyingGlassIcon } from "@heroicons/react/24/solid"
+import { useState, useEffect, useRef } from "react"
+import { UserIcon, BellIcon, MapIcon, PhotoIcon, XMarkIcon,MagnifyingGlassIcon, VideoCameraIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/logo/logo.png"
 import { useNavigate } from "react-router-dom"
+import FormatosR from "./FormatosR"
 
 const plans = [
   { name: "Perfil", path: "/profile" },
@@ -11,6 +12,7 @@ const plans = [
 
 function Community() {
 
+
   const [searchTerm, setSearchTerm] = useState("")
   const [reportData, setReportData] = useState({
     crimeType: "",
@@ -18,8 +20,12 @@ function Community() {
     location: "",
     description: "",
   })
+  
   const [image, setImage] = useState(null)
-  const [imagePreview, setImagePreview] = useState(null)
+  const [mediaFiles, setMediaFiles] = useState([])
+  const fileInputRef = useRef(null)
+
+
 
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
@@ -27,15 +33,28 @@ function Community() {
   const [isListening, setIsListening] = useState(false)
   const [recognition, setRecognition] = useState(null)
 
+  const [reportList, setReportList] = useState([])
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+    reader.readAsDataURL(file)
+  })
+}
+
+
   useEffect(() => {
-    // Initialize speech recognition
     if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       const recognitionInstance = new SpeechRecognition()
 
       recognitionInstance.continuous = false
       recognitionInstance.interimResults = false
-      recognitionInstance.lang = "es-ES" // You can change this to match your preferred language
+      recognitionInstance.lang = "es-ES"
 
       recognitionInstance.onresult = (event) => {
         const transcript = event.results[0][0].transcript
@@ -44,7 +63,7 @@ function Community() {
       }
 
       recognitionInstance.onerror = (event) => {
-        console.error("Speech recognition error", event.error)
+        console.error("no se reconoce el dialogo", event.error)
         setIsListening(false)
       }
 
@@ -68,42 +87,88 @@ function Community() {
     const { id, value } = e.target
     setReportData((prev) => ({
       ...prev,
+      
       [id]: value,
+
+      
     }))
   }
 
-  const handleReport = () => {
-    if (reportData.description.trim()) {
-      alert("Reporte anónimo enviado con éxito.")
-      setReportData({
-        crimeType: "",
-        date: "",
-        location: "",
-        description: "",
+const handleReport = async () => {
+  // Validación primero
+  if (
+    !reportData.crimeType ||
+    !reportData.date ||
+    !reportData.location ||
+    !reportData.description
+  ) {
+    alert("Por favor completa todos los campos requeridos.")
+    return
+  }
+
+  // Convertir los archivos a base64
+  const base64MediaFiles = await Promise.all(
+    mediaFiles.map(async (media) => ({
+      base64: await fileToBase64(media.file),
+      type: media.type,
+    }))
+  )
+
+  const storedReports = localStorage.getItem("communityReports")
+  const report = storedReports ? JSON.parse(storedReports) : []
+
+  const newReport = {
+    ...reportData,
+    media: base64MediaFiles,
+    timestamp: new Date().toISOString(),
+  }
+
+  report.unshift(newReport)
+  localStorage.setItem("communityReports", JSON.stringify(report))
+
+  alert("Reporte anónimo enviado con éxito.")
+
+  // Reset
+  setReportData({
+    crimeType: "",
+    date: "",
+    location: "",
+    description: "",
+  })
+  setMediaFiles([])
+  setShowModal(false)
+}
+
+  useEffect(() => {
+    return () => {
+      mediaFiles.forEach((media) => URL.revokeObjectURL(media.preview))
+    }
+  }, [mediaFiles])
+  
+  const handleMediaChange = (e) => {
+    if (!e.target.files || e.target.files.length === 0) return
+
+    const newFiles = []
+
+    Array.from(e.target.files).forEach((file) => {
+      const fileType = file.type.startsWith("image/") ? "image" : "video"
+      newFiles.push({
+        file,
+        preview: URL.createObjectURL(file),
+        type: fileType,
       })
-      setImage(null)
-      setImagePreview(null)
-      setShowModal(false)
-    } else {
-      alert("La descripción del reporte no puede estar vacía.")
-    }
+    })
+
+    setMediaFiles((prev) => [...prev, ...newFiles])
   }
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      setImage(file)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const removeImage = () => {
-    setImage(null)
-    setImagePreview(null)
+  const removeMedia = (index) => {
+    setMediaFiles((prev) => {
+      const newFiles = [...prev]
+      URL.revokeObjectURL(newFiles[index].preview)
+      newFiles.splice(index, 1)
+      return newFiles
+    })
   }
 
   const handleCancel = () => {
@@ -161,8 +226,8 @@ function Community() {
           </div>
         </div>
         {/* Particion 2 (centro) */}
-        <div className="w-full md:w-3/5 p-8 bg-white">
-          <form onSubmit={handleSearch} className="max-w-md mx-auto">
+        <div className="w-full md:w-3/5 p-0 bg-white">
+          <form onSubmit={handleSearch} className="mt-5 max-w-md mx-auto">
             <div className="relative flex items-center">
               <div className="absolute flex items-center">
                 <MagnifyingGlassIcon className="size-5 text-[#003049] ml-2.5" strokeWidth={1.5} />
@@ -226,6 +291,9 @@ function Community() {
               </div>
             )}
           </form>
+
+          <FormatosR />
+
         </div>
 
         {/* Particion 3 (derecha) */}
@@ -331,20 +399,40 @@ function Community() {
                 ></textarea>
               </div>
 
-              {imagePreview && (
-                <div className="mb-4">
-                  <div className="relative inline-block">
-                    <img src={imagePreview || "/placeholder.svg"} alt="Vista previa" className="max-h-40 rounded-md" />
+              {mediaFiles.length > 0 && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Evidencia adjunta</label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                {mediaFiles.map((media, index) => (
+                  <div key={index} className="relative group">
+                    {media.type === "image" ? (
+                      <img
+                        src={media.preview || "/placeholder.svg"}
+                        alt={`Evidencia ${index + 1}`}
+                        className="h-24 w-full object-cover rounded-md"
+                      />
+                    ) : (
+                      <div className="h-24 w-full relative bg-gray-200 rounded-md flex items-center justify-center">
+                        <VideoCameraIcon className="w-8 h-8 text-gray-500" />
+                        <video
+                          src={media.preview}
+                          className="absolute inset-0 w-full h-full object-cover rounded-md opacity-0 group-hover:opacity-100"
+                          controls
+                        />
+                      </div>
+                    )}
                     <button
                       type="button"
-                      onClick={removeImage}
+                      onClick={() => removeMedia(index)}
                       className="absolute top-1 right-1 bg-black/70 text-white rounded-full p-1 hover:bg-black"
                     >
                       <XMarkIcon className="w-4 h-4" />
                     </button>
                   </div>
-                </div>
-              )}
+                ))}
+              </div>
+            </div>
+          )}
             </div>
 
             <div className="flex items-center justify-between px-3 py-2 border-t border-gray-500">
@@ -365,12 +453,23 @@ function Community() {
                 </button>
               </div>
               <div className="flex space-x-1">
-                <input type="file" id="image-upload" accept="image/*" onChange={handleImageChange} className="hidden" />
+                <input
+                  type="file"
+                  id="media-upload"
+                  ref={fileInputRef}
+                  accept="image/*,video/*"
+                  onChange={handleMediaChange}
+                  multiple
+                  className="hidden"
+                />
                 <label
-                  htmlFor="image-upload"
+                  htmlFor="media-upload"
                   className="inline-flex justify-center items-center p-2 text-gray-500 rounded-md hover:bg-gray-300"
                 >
-                  <PhotoIcon className="w-6 h-6 text-black" />
+                  <div className="flex items-center">
+                    <PhotoIcon className="w-6 h-6 text-black" />
+                    <VideoCameraIcon className="w-6 h-6 text-black ml-1" />
+                  </div>
                   <span className="sr-only">Subir evidencia</span>
                 </label>
               </div>
