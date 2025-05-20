@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import ReporteModal from "./VentanaReporte"
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import {
   EllipsisVerticalIcon,
@@ -12,10 +13,20 @@ import {
 } from "@heroicons/react/24/outline"
 
 function FormatosR() {
+
   const [report, setReports] = useState([])
   const [activeIndexes, setActiveIndexes] = useState({}) // índice por reporte
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showDeleteConfirmIndex, setShowDeleteConfirmIndex] = useState(null)
+  const [showModal, setShowModal] = useState(false);
+  const [editData, setEditData] = useState(null)
 
+
+  const deleteReport = (indexToDelete) => {
+  const updatedReports = report.filter((_, i) => i !== indexToDelete)
+  localStorage.setItem("communityReports", JSON.stringify(updatedReports))
+  setReports(updatedReports)
+  setShowDeleteConfirmIndex(null)
+}
 
   useEffect(() => {
     const storedReports = JSON.parse(localStorage.getItem("communityReports")) || []
@@ -57,13 +68,13 @@ function FormatosR() {
             return (
               <div
                 key={index}
-                className="p-4 border border-t-[#003049]"
+                className="p-4 border border-t-[#003049] border-b-[#003049]"
               >
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-lg font-semibold text-[#D62828] capitalize">
+                  <span className="text-lg font-semibold text-black capitalize">
                     <strong>¡Atención Comunidad!</strong>
                   </span>
-                  <span className="text-sm text-black ml-[480px] font-bold">{reportItem.date}</span>
+                  <span className="text-sm text-black ml-[550px] font-bold">{reportItem.date}</span>
                   <Menu as="div" className="relative inline-block text-left">
                     <div>
                       <MenuButton className="inline-flex w-full justify-center rounded px-0 py-1 text-sm font-semibold text-black hover:bg-gray-200">
@@ -77,27 +88,32 @@ function FormatosR() {
                     >
                       <div className="py-0">
                         <MenuItem>
-                        {!showDeleteConfirm ? (
+                        {!showDeleteConfirmIndex &&(
                           <button
                             type="button"
-                            onClick={() => setShowDeleteConfirm(true)}
+                            onClick={() => deleteReport(index)}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           >
                             Eliminar
                           </button>
-                        ) : (localStorage.removeItem(reportItem))}
+                        )}
                         </MenuItem>
                         <MenuItem>
-                          <a
-                            href="#"
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditData(reportItem) // solo este reporte, no todos
+                              setShowModal(true)
+                            }}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           >
                             Editar
-                          </a>
+                          </button>
+                        
                         </MenuItem>
-                        </div>
-                        </MenuItems>
-                      </Menu>
+                      </div>
+                    </MenuItems>
+                  </Menu>
                 </div>
 
                 <span className="text-md text-black mb-2">
@@ -160,7 +176,29 @@ function FormatosR() {
                   </button>
                   </div>
                 </div>
+                {showModal && (
+                  <ReporteModal
+                    initialData={editData}
+                    onClose={() => setShowModal(false)}
+                    onSubmit={(updatedReport) => {
+                      const updatedReports = [...report]
+                      const index = report.findIndex(
+                        (r) => r.timestamp === updatedReport.timestamp
+                      )
+
+                      if (index !== -1) {
+                        updatedReports[index] = updatedReport
+                        localStorage.setItem("communityReports", JSON.stringify(updatedReports))
+                        setReports(updatedReports)
+                      }
+
+                      setShowModal(false)
+                    }}
+                  />
+                )}
               </div>
+
+              
           
             )
           })}
