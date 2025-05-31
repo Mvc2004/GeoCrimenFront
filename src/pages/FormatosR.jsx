@@ -5,12 +5,13 @@ import { EllipsisVerticalIcon } from "@heroicons/react/24/solid"
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon, CheckIcon } from "@heroicons/react/24/outline"
 import { CalendarIcon, MapPinIcon, ShieldExclamationIcon, VideoCameraIcon, HandRaisedIcon} from "@heroicons/react/24/outline"
 
-function FormatosR() {
-  const [report, setReports] = useState([])
+function FormatosR({ onEdit }) {
+  //const [report, setReports] = useState([])
   const [activeIndexes, setActiveIndexes] = useState({}) // índice por reporte
   const [showDeleteConfirmIndex, setShowDeleteConfirmIndex] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [editData, setEditData] = useState(null)
+  const [reports, setReports] = useState([]);
 
   const deleteReport = (indexToDelete) => {
     const updatedReports = report.filter((_, i) => i !== indexToDelete)
@@ -20,11 +21,19 @@ function FormatosR() {
   }
 
   //nuevos metodos
-  const aprobarReporte = async (id) => {
+  const aprobarReporte = async (id_reporte) => {
     try {
-      await fetch(`http://localhost:3000/api/reportes/${id}/aprobar`, {
-        method: "PATCH",
+      const response = await fetch(`http://localhost:3000/api/reportes/${id_reporte}/aprobar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        //body: JSON.stringify(comentario),
       });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Error al aprobar el reporte");
+      }
       alert("Reporte aprobado");
     } catch (error) {
       console.error("Error al aprobar:", error);
@@ -33,26 +42,59 @@ function FormatosR() {
   
   const rechazarReporte = async (id) => {
     try {
-      await fetch(`http://localhost:3000/api/reportes/${id}/rechazar`, {
-        method: "PATCH",
+      const response = fetch(`http://localhost:3000/api/reportes/${id_reporte}/rechazar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Error al rechazar el reporte");
+      }
       alert("Reporte rechazado");
     } catch (error) {
       console.error("Error al rechazar:", error);
     }
   };
 
-  useEffect(() => {
-    const storedReports = JSON.parse(localStorage.getItem("communityReports")) || []
-    setReports(storedReports)
+  // useEffect(() => {
+  //   const storedReports = JSON.parse(localStorage.getItem("communityReports")) || []
+  //   setReports(storedReports)
 
-    // Inicializar índice 0 por cada reporte
-    const initialIndexes = {}
-    storedReports.forEach((_, i) => {
-      initialIndexes[i] = 0
-    })
-    setActiveIndexes(initialIndexes)
-  }, [])
+  //   // Inicializar índice 0 por cada reporte
+  //   const initialIndexes = {}
+  //   storedReports.forEach((_, i) => {
+  //     initialIndexes[i] = 0
+  //   })
+  //   setActiveIndexes(initialIndexes)
+  // }, [])
+
+  // 
+  
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/reportes/reportesPendientes");
+        const data = await response.json();
+        if (response.ok) {
+          setReports(data.data || []);
+          const initialIndexes = {};
+          (data.data || []).forEach((_, i) => {
+            initialIndexes[i] = 0;
+          });
+          setActiveIndexes(initialIndexes);
+        } else {
+          console.error("Error al cargar reportes pendientes:", data.error);
+        }
+      } catch (error) {
+        console.error("Error al obtener reportes pendientes:", error);
+      }
+    };
+  
+    fetchReports();
+  }, []);
+  
 
   const handlePrev = (reportIndex, mediaLength) => {
     setActiveIndexes((prev) => ({
@@ -95,7 +137,7 @@ function FormatosR() {
 
   return (
     <div className="mt-6 space-y-6 overscroll-none overflow-y-auto max-h-[calc(100vh-99px)] px-4">
-      {report.length === 0 ? (
+      {reports.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
           <div className="bg-gray-100 rounded-full p-4 mb-4">
             <ShieldExclamationIcon className="h-12 w-12 text-gray-400" />
@@ -107,7 +149,7 @@ function FormatosR() {
         </div>
       ) : (
         <div className="space-y-6">
-          {report.map((reportItem, index) => {
+          {reports.map((reportItem, index) => {
             const media = reportItem.media || []
             const activeIndex = activeIndexes[index] || 0
             const activeMedia = media[activeIndex]
@@ -200,7 +242,7 @@ function FormatosR() {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500 mb-0.5">Tipo de incidente</p>
-                        <p className="text-md font-medium capitalize">{reportItem.crimeType}</p>
+                        <p className="text-md font-medium capitalize">{ reportItem.id_crimen == 1 ? 'Hurto': reportItem.id_crimen == 2 ? 'Homicidio' : 'otro'}</p>
                       </div>
                     </div>
 
@@ -210,7 +252,7 @@ function FormatosR() {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500 mb-0.5">Ubicación</p>
-                        <p className="text-md font-medium">{reportItem.location}</p>
+                        <p className="text-md font-medium">{reportItem.ubicacion_reporte}</p>
                       </div>
                     </div>
 
@@ -220,7 +262,13 @@ function FormatosR() {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500 mb-0.5">Fecha y hora</p>
-                        <p className="text-md font-medium">{formattedDate}</p>
+                        <p className="text-md font-medium">{new Date(reportItem.fecha_reporte).toLocaleString('es-CO', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}</p>
                       </div>
                     </div>
                   </div>
@@ -229,7 +277,7 @@ function FormatosR() {
                   <div className="mt-5 mb-4">
                     <h3 className="text-md font-semibold text-gray-700 mb-2">Detalles del delito:</h3>
                     <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                      {reportItem.description}
+                      {reportItem.descripcion}
                     </p>
                   </div>
 
@@ -295,13 +343,13 @@ function FormatosR() {
                   {/* Actions */}
                   <div className="flex justify-end items-center mt-4 space-x-2">
                     <button 
-                      onClick={() => aprobarReporte(reportItem.id)}
+                      onClick={() => rechazarReporte(reportItem.id)}
                       className="flex items-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
                       <XMarkIcon className="h-4 w-4 mr-1" strokeWidth={2.5} />
                      
                     </button>
                     <button 
-                      onClick={() => rechazarReporte(reportItem.id)}
+                      onClick={() => aprobarReporte(reportItem.id_reporte)}
                       className="flex items-center px-3 py-1.5 rounded-md bg-green-100 text-green-600 hover:bg-green-100 transition-colors">
                       <CheckIcon className="h-4 w-4 mr-1" strokeWidth={2.5} />
                       

@@ -29,7 +29,7 @@ function ReporteModal({ initialData, onClose, onSubmit }) {
         date: date || "",
         time: time || "",
         location: initialData.location || "",
-        description: initialData.description || "",
+        description: initialData.descripcion || "",
       })
       setMediaFiles(initialData.media || [])
     }
@@ -134,41 +134,42 @@ const getLocation = () => {
     }
 
 setIsGettingLocation(true)
-
+    const apiKey = "590f7aa7ad8496782ccda3353b3c6e4";
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords
-
+        // const latitude = 4.0847;
+        // const longitude = -76.1954;
+        console.log("Ubicación obtenida:", latitude, longitude);
         // Attempt to get address from coordinates using Nominatim (OpenStreetMap)
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
-          .then((response) => response.json())
+        //fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=es`)
+        fetch(`http://localhost:3000/api/geocoding?lat=${latitude}&lng=${longitude}`)
+        .then((response) => response.json())
           .then((data) => {
-            const address = data.display_name || `Lat: ${latitude}, Lng: ${longitude}`
-            setReportData((prev) => ({
-              ...prev,
-              location: address,
-              latitude,
-              longitude,
-            }))
-            setIsGettingLocation(false)
+            if (data && data.address) {
+              setReportData((prev) => ({
+                ...prev,
+                location: data.address,
+                latitude,
+                longitude,
+              }));
+            } else {
+              alert("No se pudo encontrar la dirección exacta");
+            }
           })
           .catch((error) => {
-            console.error("Error getting address:", error)
-            setReportData((prev) => ({
-              ...prev,
-              location: `Lat: ${latitude}, Lng: ${longitude}`,
-              latitude,
-              longitude,
-            }))
-            setIsGettingLocation(false)
+            console.error("Error al obtener dirección:", error);
+            alert("Error al obtener la dirección desde el backend");
           })
+          .finally(() => {
+            setIsGettingLocation(false);
+          });
       },
       (error) => {
-        console.error("Error getting location:", error)
-        alert("No se pudo obtener tu ubicación. Por favor, ingrésala manualmente.")
-        setIsGettingLocation(false)
-      },
-    )
+        console.error("Error al obtener ubicación:", error);
+        alert("No se pudo obtener tu ubicación");
+      }
+    );
   }
 
   return (

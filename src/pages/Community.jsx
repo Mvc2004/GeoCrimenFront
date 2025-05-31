@@ -98,9 +98,10 @@ function Community() {
       const data = await response.json();
       console.log("Reporte creado:", data);
 
-      setReportList((prev) => [...prev, {report, id: data.id_reporte_insertado}]);
+      setReportList((prev) => [...prev, { ...report, id_reporte: data.id_reporte_insertado }]);
       setShowModal(false);
       setEditData(null);
+      
     } catch (error) {
       console.error("Error al guardar el reporte:", error);
       alert("No se pudo enviar el reporte");
