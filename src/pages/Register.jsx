@@ -45,6 +45,7 @@ function Register() {
 
       if (res.ok) {
         alert("Usuario creado correctamente");
+        localStorage.setItem("id_usuario", data.id_insertado);
         navigate("/");
       } else {
         alert("Error al registrar: " + data.message);

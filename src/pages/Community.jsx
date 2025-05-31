@@ -64,20 +64,48 @@ function Community() {
     }
   }
 
-const handleSaveReport = (report) => {
-  if (editData) {
-    // Editando un reporte existente
-    setReportList(prev =>
-      prev.map((r) => (r.id === report.id ? report : r))
-    )
-  } else {
-    // Creando un nuevo reporte
-    setReportList(prev => [...prev, { ...report, id: Date.now() }])
-  }
+  const handleSaveReport = async (report) => {
+    const id_usuario = localStorage.getItem("id_usuario");
+    const id_crimen = (crimeType) => {
+      switch(crimeType){
+        case 'hurto':
+          return 1;
+        case 'homicidio':
+          return 2;
+      }
+    }
+    const reporteUsuario = {
+      ...report,
+      id_usuario,
+      id_crimen: id_crimen(report.crimeType),
+      ubicacion_reporte: report.location,
+      fecha_reporte: report.date,
+      ubi_lat: report.latitude,
+      ubi_lng: report.longitude
 
-  setShowModal(false)
-  setEditData(null)
-}
+    }
+    try {
+      const response = await fetch("http://localhost:3000/api/reportes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reporteUsuario),
+      });
+      console.log("Enviando reporte:", reporteUsuario);
+      if (!response.ok) throw new Error("Error al enviar el reporte");
+
+      const data = await response.json();
+      console.log("Reporte creado:", data);
+
+      setReportList((prev) => [...prev, report]);
+      setShowModal(false);
+      setEditData(null);
+    } catch (error) {
+      console.error("Error al guardar el reporte:", error);
+      alert("No se pudo enviar el reporte");
+    }
+  };
 
 
   const toggleListening = () => {

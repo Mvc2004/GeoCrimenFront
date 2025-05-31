@@ -6,7 +6,7 @@ function ReporteModal({ initialData, onClose, onSubmit }) {
     crimeType: "",
     date: "",
     location: "",
-    description: "",
+    descripcion: "",
   });
   const [mediaFiles, setMediaFiles] = useState([]);
   const fileInputRef = useRef(null);
@@ -82,7 +82,7 @@ const handleReport = async () => {
     !reportData.crimeType ||
     !reportData.date ||
     !reportData.location ||
-    !reportData.description
+    !reportData.descripcion
   ) {
     alert("Por favor completa todos los campos requeridos.");
     return;
@@ -259,10 +259,10 @@ setIsGettingLocation(true)
           </div>
 
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium mb-1">Descripción</label>
+            <label htmlFor="descripcion" className="block text-sm font-medium mb-1">Descripción</label>
             <textarea
-              id="description"
-              value={reportData.description}
+              id="descripcion"
+              value={reportData.descripcion}
               onChange={handleInputChange}
               rows="4"
               placeholder="Escribe una breve descripción del incidente..."
