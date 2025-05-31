@@ -98,7 +98,7 @@ function Community() {
       const data = await response.json();
       console.log("Reporte creado:", data);
 
-      setReportList((prev) => [...prev, report]);
+      setReportList((prev) => [...prev, {report, id: data.id_reporte_insertado}]);
       setShowModal(false);
       setEditData(null);
     } catch (error) {

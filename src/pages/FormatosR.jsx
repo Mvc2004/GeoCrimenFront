@@ -19,6 +19,29 @@ function FormatosR() {
     setShowDeleteConfirmIndex(null)
   }
 
+  //nuevos metodos
+  const aprobarReporte = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/api/reportes/${id}/aprobar`, {
+        method: "PATCH",
+      });
+      alert("Reporte aprobado");
+    } catch (error) {
+      console.error("Error al aprobar:", error);
+    }
+  };
+  
+  const rechazarReporte = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/api/reportes/${id}/rechazar`, {
+        method: "PATCH",
+      });
+      alert("Reporte rechazado");
+    } catch (error) {
+      console.error("Error al rechazar:", error);
+    }
+  };
+
   useEffect(() => {
     const storedReports = JSON.parse(localStorage.getItem("communityReports")) || []
     setReports(storedReports)
@@ -271,11 +294,15 @@ function FormatosR() {
 
                   {/* Actions */}
                   <div className="flex justify-end items-center mt-4 space-x-2">
-                    <button className="flex items-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
+                    <button 
+                      onClick={() => aprobarReporte(reportItem.id)}
+                      className="flex items-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
                       <XMarkIcon className="h-4 w-4 mr-1" strokeWidth={2.5} />
                      
                     </button>
-                    <button className="flex items-center px-3 py-1.5 rounded-md bg-green-100 text-green-600 hover:bg-green-100 transition-colors">
+                    <button 
+                      onClick={() => rechazarReporte(reportItem.id)}
+                      className="flex items-center px-3 py-1.5 rounded-md bg-green-100 text-green-600 hover:bg-green-100 transition-colors">
                       <CheckIcon className="h-4 w-4 mr-1" strokeWidth={2.5} />
                       
                     </button>
