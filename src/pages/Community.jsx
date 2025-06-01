@@ -1,14 +1,17 @@
 import { useState, useEffect, useRef } from "react"
-import { UserIcon, BellIcon, MapIcon, PhotoIcon, XMarkIcon,MagnifyingGlassIcon, VideoCameraIcon } from "@heroicons/react/24/solid"
+import { UserIcon, BellIcon, MapIcon, PhotoIcon, XMarkIcon,MagnifyingGlassIcon, VideoCameraIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/logo/logo.png"
 import { useNavigate } from "react-router-dom"
 import FormatosR from "./FormatosR"
 import ReporteModal from "./VentanaReporte"
 
-const plans = [
+
+
+const plans = [ 
   { name: "Perfil", path: "/profile" },
   { name: "Notificaciones", path: "/notificaciones" },
   { name: "Mapa de Calor", path: "/heatmap" },
+  { name: "Informe de Crímenes", path: "/informe" },
 ]
 
 function Community() {
@@ -143,6 +146,8 @@ function Community() {
                   {plan.name === "Perfil" && <UserIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Notificaciones" && <BellIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Mapa de Calor" && <MapIcon className="h-8 w-8 text-white" />}
+                  {plan.name === "Informe de Crímenes" && <ClipboardDocumentListIcon className="h-8 w-8 text-white" />}
+
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{plan.name}</p>

@@ -138,8 +138,8 @@ setIsGettingLocation(true)
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords
-        // const latitude = 4.0847;
-        // const longitude = -76.1954;
+        // const latitude = 4.081200;
+        // const longitude = -76.192800;
         console.log("Ubicación obtenida:", latitude, longitude);
         // Attempt to get address from coordinates using Nominatim (OpenStreetMap)
         //fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=es`)
