@@ -4,6 +4,8 @@ import {MapPinIcon,EyeIcon} from '@heroicons/react/24/solid'
 import {ChevronRightIcon, ChevronLeftIcon, ChevronUpIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon} from '@heroicons/react/24/outline'
 import imagen5 from "../images/Homicidio.jpeg";
 import imagen6 from "../images/Hurto.jpeg";
+import { AccessibilityProvider } from './AccessibilityContext';
+import AccesibilidadButton from './AccesibilidadButton';
 
 // Cambio de idioma
 
@@ -171,6 +173,9 @@ useEffect(() => {
     };
 
   return (
+  
+    <AccessibilityProvider>
+      <AccesibilidadButton/>
 
     <div className="relative bg-indigo-500">
       <div className="bg-black flex justify-center">
@@ -367,6 +372,7 @@ useEffect(() => {
   )}
 </div>
       </div>
+      </AccessibilityProvider>
   );
 
 }export default H2;

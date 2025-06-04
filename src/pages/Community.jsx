@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom"
 import FormatosR from "./FormatosR"
 import ReporteModal from "./VentanaReporte"
 import { useTranslation } from 'react-i18next';
+import { AccessibilityProvider } from './AccessibilityContext';
+import AccesibilidadButton from './AccesibilidadButton';
 
 
 const plans = [
@@ -101,6 +103,10 @@ function Community() {
   )
 
   return (
+
+    <AccessibilityProvider>
+      <AccesibilidadButton/>
+
     <div className="min-h-screen">
       <div className="flex flex-col md:flex-row min-h-screen">
         {/* Panel izquierdo */}
@@ -250,6 +256,7 @@ function Community() {
         </div>
       </div>
     </div>
+    </AccessibilityProvider>
   )
 }
 

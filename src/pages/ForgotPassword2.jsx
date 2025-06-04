@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import imagen1 from "../images/imgfondo/forgot.jpeg";
 import imagen2 from "../images/logo/logo.png"
 import { useTranslation } from 'react-i18next';
-
+import { AccessibilityProvider } from './AccessibilityContext';
+import AccesibilidadButton from './AccesibilidadButton';
 
 
 function ForgotPassword2(){
@@ -13,6 +14,8 @@ function ForgotPassword2(){
     const navigate = useNavigate();
   
     return(
+      <AccessibilityProvider>
+              <AccesibilidadButton/>
 
     <div className="relative w-full h-screen overflow-hidden">
   {/* Imagen de fondo desenfocada */}
@@ -60,6 +63,7 @@ function ForgotPassword2(){
     </div>
   </div>
 </div>
+</AccessibilityProvider>
 
       )
 

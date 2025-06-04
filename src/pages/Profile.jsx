@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { PencilSquareIcon, UserCircleIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/imgfondo/perfil.jpg"
 import { useTranslation } from 'react-i18next';
+import { AccessibilityProvider } from './AccessibilityContext';
+import AccesibilidadButton from './AccesibilidadButton';
 
 
 
@@ -120,6 +122,9 @@ export default function Profile() {
   }
 
   return (
+    <AccessibilityProvider>
+            <AccesibilidadButton/>
+
     <div className="w-full min-h-screen">
       <img src={imagen1} alt = "Fondo" className="absolute inset-0 w-full h-full object-cover blur-sm"/>
       {/* Background pattern */}
@@ -399,5 +404,6 @@ export default function Profile() {
         </div>
       </div>
     </div>
+    </AccessibilityProvider>
   )
 }

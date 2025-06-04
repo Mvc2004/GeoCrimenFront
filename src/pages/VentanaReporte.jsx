@@ -184,15 +184,15 @@ setIsGettingLocation(true)
           onClick={onClose}
           className="absolute top-2 right-[10px] hover:bg-gray-300 rounded-md text-sm w-8 h-8 flex justify-center items-center"
         >
-          <XMarkIcon className="w-7 h-7 text-black" />
+          <XMarkIcon className="w-7 h-7 text-gray-500" />
         </button>
 
         <div className="px-4 py-4">
-          <h2 className="text-xl font-bold mb-4 text-center">{t("anonimoReport")}</h2>
+          <h2 className="text-xl font-bold text-gray-500 mb-4 text-center">{t("anonimoReport")}</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label htmlFor="crimeType" className="block text-sm font-medium mb-1">{t("crimeType")}</label>
+              <label htmlFor="crimeType" className="block text-sm text-gray-500 font-medium mb-1">{t("crimeType")}</label>
               <select
                 id="crimeType"
                 value={reportData.crimeType}
@@ -207,7 +207,7 @@ setIsGettingLocation(true)
             </div>
 
             <div>
-              <label htmlFor="date" className="block text-sm font-medium mb-1">{t("date")}</label>
+              <label htmlFor="date" className="block text-sm text-gray-500 font-medium mb-1">{t("date")}</label>
               <input
                 id="date"
                 type="date"
@@ -218,7 +218,7 @@ setIsGettingLocation(true)
               />
             </div>
             <div>
-                <label htmlFor="time" className="block text-sm font-medium mb-1">
+                <label htmlFor="time" className="block text-sm text-gray-500 font-medium mb-1">
                   {t("hour")}
                 </label>
                 <input
@@ -232,7 +232,7 @@ setIsGettingLocation(true)
           </div>
 
           <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium mb-1">{t("ubication")}</label>
+            <label htmlFor="location" className="block text-sm text-gray-500 font-medium mb-1">{t("ubication")}</label>
             <div className="flex">
               <input
                 id="location"
@@ -264,7 +264,7 @@ setIsGettingLocation(true)
           </div>
 
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium mb-1">{t("description")}</label>
+            <label htmlFor="description" className="block text-sm text-gray-500 font-medium mb-1">{t("description")}</label>
             <textarea
               id="description"
               value={reportData.description}
@@ -278,7 +278,7 @@ setIsGettingLocation(true)
 
           {mediaFiles.length > 0 && (
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">{t("evidence")}</label>
+              <label className="block text-sm text-gray-500 font-medium mb-2">{t("evidence")}</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 {mediaFiles.map((media, index) => (
                   <div key={index} className="relative group">

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import imagen1 from "../images/logo/logo.png";
 import imagen2 from "../images/in-up/sign-up.jpg";
 import { useTranslation } from 'react-i18next';
+import { AccessibilityProvider } from './AccessibilityContext';
+import AccesibilidadButton from './AccesibilidadButton';
 
 
 function Register() {
@@ -60,6 +62,9 @@ function Register() {
   };
 
   return (
+    <AccessibilityProvider>
+            <AccesibilidadButton/>
+
     <div className="flex min-h-screen">
       {/* Imagen a la izquierda */}
       <div className="hidden md:flex md:w-2/5 items-center justify-center p-0">
@@ -204,6 +209,7 @@ function Register() {
         </form>
       </div>
     </div>
+    </AccessibilityProvider>
   );
 }
 

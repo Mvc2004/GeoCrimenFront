@@ -97,7 +97,7 @@ const AccesibilidadButton = () => {
   }, [isOpen])
 
   return (
-    <div className="accessibility-panel fixed right-0 top-1/2 transform -translate-y-1/2 z-50 flex items-center">
+    <div className="accessibility-panel fixed right-0 top-[200px] transform -translate-y-1/2 z-50 flex items-center">
   {/* Botón de accesibilidad siempre visible */}
   <button
     onClick={() => setIsOpen(!isOpen)}
@@ -142,7 +142,7 @@ const AccesibilidadButton = () => {
               className="w-full flex items-center justify-between px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-pressed={settings.language === "en"}
             >
-              <span className="text-sm text-gray-900">{settings.language === "es" ? "🇪🇸 Español" : "🇺🇸 English"}</span>
+              <span className="text-sm text-gray-500">{settings.language === "es" ? "🇪🇸 Español" : "🇺🇸 English"}</span>
               <ArrowsRightLeftIcon className=" h-4 w-4" strokeWidth={2}/>
             </button>
           </div>
