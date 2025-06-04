@@ -3,8 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import imagen1 from "../images/logo/logo.png";
 import imagen2 from "../images/in-up/sign-up.jpg";
+import { useTranslation } from 'react-i18next';
+
 
 function Register() {
+  
+  const { t, i18n } = useTranslation();
   const [step, setStep] = useState(1); // Paso actual del formulario
   const [formData, setFormData] = useState({
     nombre: "",
@@ -44,14 +48,14 @@ function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Usuario creado correctamente");
+        alert(t("userCreated"));
         navigate("/");
       } else {
-        alert("Error al registrar: " + data.message);
+        alert(t("signUpError") + data.message);
       }
     } catch (error) {
-      console.error("Error al conectar con backend:", error);
-      alert("Hubo un problema con el servidor");
+      console.error(t("backendError"), error);
+      alert(t("servidorError"));
     }
   };
 
@@ -70,7 +74,7 @@ function Register() {
       <div className="flex flex-col items-center justify-center w-full md:w-3/5 p-8 bg-white shadow-lg">
         <div className="flex flex-col items-center">
           <img src={imagen1} alt="Logo" className="w-20" />
-          <h2 className="text-4xl font-bold mt-2">Registrate en GeoCrimen</h2>
+          <h2 className="text-4xl font-bold mt-2">{t("SignUpText")}</h2>
 
           {/* Indicador de pasos */}
           <div className="flex mt-4 space-x-2">
@@ -89,7 +93,7 @@ function Register() {
           {step === 1 && (
             <>
               <div>
-                <label className="block text-sm font-medium">Nombre</label>
+                <label className="block text-sm font-medium">{t("name")}</label>
                 <input
                   type="text"
                   name="nombre"
@@ -101,7 +105,7 @@ function Register() {
               </div>
 
               <div>
-                <label className="mt-10 block text-sm font-medium">Apellido</label>
+                <label className="mt-10 block text-sm font-medium">{t("lastname")}</label>
                 <input
                   type="text"
                   name="apellido"
@@ -117,7 +121,7 @@ function Register() {
           {step === 2 && (
             <>
               <div>
-                <label className="block text-sm font-medium">Email</label>
+                <label className="block text-sm font-medium">{t("email")}</label>
                 <input
                   type="email"
                   name="email"
@@ -129,7 +133,7 @@ function Register() {
               </div>
 
               <div>
-                <label className="mt-10 block text-sm font-medium">Contraseña</label>
+                <label className="mt-10 block text-sm font-medium">{t("password")}</label>
                 <input
                   type="password"
                   name="contrasenia"
@@ -145,7 +149,7 @@ function Register() {
           {step === 3 && (
             <>
               <div>
-                <label className="block text-sm font-medium">Fecha de nacimiento</label>
+                <label className="block text-sm font-medium">{t("birthdate")}</label>
                 <input
                   type="date"
                   name="fechaNacimiento"
@@ -165,7 +169,7 @@ function Register() {
                 onClick={() => setStep((prev) => prev - 1)}
                 className="px-4 py-2 bg-gray-200 font-bold rounded-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
-                Atrás
+                {t("back")}
               </button>
             )}
 
@@ -175,7 +179,7 @@ function Register() {
                 onClick={() => setStep((prev) => prev + 1)}
                 className="ml-auto px-4 py-2 bg-[#003049] text-white font-bold transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 rounded-md"
               >
-                Siguiente
+                {t("next")}
               </button>
             )}
 
@@ -184,16 +188,16 @@ function Register() {
                 type="submit"
                 className="ml-auto px-4 py-2 bg-[#2E8B57] text-white font-bold rounded-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
-                Registrarse
+                {t("Sign Up")}
               </button>
             )}
           </div>
 
           <div className="flex flex-col items-center justify-center">
             <p className="mt-10 text-sm">
-              ¿Ya tienes cuenta?{" "}
+              {t("youHaveaccount")}{" "}
               <Link to="/login" className="text-blue-600 underline underline-offset-2 ">
-                Inicia sesión
+                {t("Sign In")}
               </Link>
             </p>
           </div>

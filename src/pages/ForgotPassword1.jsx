@@ -2,11 +2,13 @@ import React, {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import imagen1 from "../images/imgfondo/forgot.jpeg";
 import imagen2 from "../images/logo/logo.png"
+import { useTranslation } from 'react-i18next';
 
 
 
 function ForgotPassword1(){
 
+    const { t, i18n } = useTranslation();
     const [formData, setFormData] = useState({
       username: "Usuario123",
       pin: "23 45",
@@ -38,19 +40,19 @@ function ForgotPassword1(){
     </div>
 
     {/* Título */}
-    <h2 className="text-2xl text-white font-bold mt-4">¿Olvidaste tu contraseña?</h2>
+    <h2 className="text-2xl text-white font-bold mt-4">{t("forgotPass")}</h2>
 
     {/* Formulario */}
     <div className="mt-10 flex flex-col rounded-xl bg-white/50 backdrop-blur-lg p-6 shadow-lg">
       <form className="w-80 max-w-screen-lg sm:w-96">
         <div className="mb-6">
-          <label className="block mb-2 text-sm text-black font-bold">Usuario/Email</label>
+          <label className="block mb-2 text-sm text-black font-bold">{t("u/e")}</label>
           <input
             type="text"
             name="username"
             value={formData.username}
             onChange={handleChange}
-            placeholder="Your Username or Email"
+            placeholder={t("optionFP")}
             className="w-full bg-white/50 placeholder:text-gray-400 text-gray-700 text-sm border border-gray-500 rounded-md px-3 py-2 transition duration-300 ease-in-out focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm"
           />
         </div>
@@ -74,7 +76,7 @@ function ForgotPassword1(){
             onClick={() => navigate("/forgotP2")}
             className="w-[110px] rounded-md bg-[#003049] font-bold py-2 px-4 text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-500 focus:shadow-none hover:bg-[#2E8B57] duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
           >
-            Siguiente
+            {t("next")}
           </button>
         </div>
       </form>

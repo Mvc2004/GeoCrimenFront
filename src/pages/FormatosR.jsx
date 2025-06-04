@@ -4,8 +4,11 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid"
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon, CheckIcon } from "@heroicons/react/24/outline"
 import { CalendarIcon, MapPinIcon, ShieldExclamationIcon, VideoCameraIcon, HandRaisedIcon} from "@heroicons/react/24/outline"
+import { useTranslation } from 'react-i18next';
+
 
 function FormatosR() {
+  const { t, i18n } = useTranslation();
   const [report, setReports] = useState([])
   const [activeIndexes, setActiveIndexes] = useState({}) // índice por reporte
   const [showDeleteConfirmIndex, setShowDeleteConfirmIndex] = useState(null)
@@ -176,8 +179,8 @@ function FormatosR() {
                         <ShieldExclamationIcon className="h-8 w-8 text-red-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500 mb-0.5">Tipo de incidente</p>
-                        <p className="text-md font-medium capitalize">{reportItem.crimeType}</p>
+                        <p className="text-sm text-gray-500 mb-0.5">{t("crimeType")}</p>
+                        <p className="text-md font-medium capitalize">{t(reportItem.crimeType)}</p>
                       </div>
                     </div>
 
@@ -186,7 +189,7 @@ function FormatosR() {
                         <MapPinIcon className="h-8 w-8 text-blue-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500 mb-0.5">Ubicación</p>
+                        <p className="text-sm text-gray-500 mb-0.5">{t("ubication")}</p>
                         <p className="text-md font-medium">{reportItem.location}</p>
                       </div>
                     </div>
@@ -196,7 +199,7 @@ function FormatosR() {
                         <CalendarIcon className="h-8 w-8 text-amber-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500 mb-0.5">Fecha y hora</p>
+                        <p className="text-sm text-gray-500 mb-0.5">{t("time")}</p>
                         <p className="text-md font-medium">{formattedDate}</p>
                       </div>
                     </div>
@@ -204,7 +207,7 @@ function FormatosR() {
 
                   {/* Description */}
                   <div className="mt-5 mb-4">
-                    <h3 className="text-md font-semibold text-gray-700 mb-2">Detalles del delito:</h3>
+                    <h3 className="text-md font-semibold text-gray-700 mb-2">{t("detail")}</h3>
                     <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
                       {reportItem.description}
                     </p>

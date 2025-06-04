@@ -1,301 +1,14 @@
-import { useState, useEffect, createContext, useContext } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { PencilSquareIcon, UserCircleIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/imgfondo/perfil.jpg"
+import { useTranslation } from 'react-i18next';
 
-// Internationalization context and translations
-const translations = {
-  es: {
-    user: "Usuario",
-    email: "Email",
-    password: "Contraseña",
-    update: "Actualizar",
-    updating: "Actualizando",
-    deleteAccount: "Eliminar Cuenta",
-    cancel: "Cancelar",
-    confirm: "Confirmar",
-    deleting: "Eliminando",
-    profileUpdated: "Perfil actualizado correctamente",
-    updateError: "Error al actualizar el perfil",
-    deleteError: "Error al eliminar la cuenta",
-    deleteConfirmation: "¿Estás seguro que deseas eliminar tu cuenta? Esta acción no se puede deshacer.",
-    invalidEmail: "Email inválido",
-    passwordMinLength: "La contraseña debe tener al menos 8 caracteres",
-    usernameMinLength: "El nombre de usuario debe tener al menos 3 caracteres",
-    editUsername: "Editar nombre de usuario",
-    editEmail: "Editar email",
-    editPassword: "Editar contraseña",
-    showPassword: "Mostrar contraseña",
-    hidePassword: "Ocultar contraseña",
-    accessibility: "Accesibilidad",
-    language: "Idioma",
-    fontSize: "Tamaño de fuente",
-    highContrast: "Alto contraste",
-    reduceMotion: "Reducir movimiento",
-    screenReader: "Lector de pantalla",
-    accessibilitySettings: "Configuración de accesibilidad",
-    close: "Cerrar",
-    apply: "Aplicar",
-    skipToContent: "Saltar al contenido principal",
-  },
-  en: {
-    user: "User",
-    email: "Email",
-    password: "Password",
-    update: "Update",
-    updating: "Updating",
-    deleteAccount: "Delete Account",
-    cancel: "Cancel",
-    confirm: "Confirm",
-    deleting: "Deleting",
-    profileUpdated: "Profile updated successfully",
-    updateError: "Error updating profile",
-    deleteError: "Error deleting account",
-    deleteConfirmation: "Are you sure you want to delete your account? This action cannot be undone.",
-    invalidEmail: "Invalid email",
-    passwordMinLength: "Password must be at least 8 characters",
-    usernameMinLength: "Username must be at least 3 characters",
-    editUsername: "Edit username",
-    editEmail: "Edit email",
-    editPassword: "Edit password",
-    showPassword: "Show password",
-    hidePassword: "Hide password",
-    accessibility: "Accessibility",
-    language: "Language",
-    fontSize: "Font size",
-    highContrast: "High contrast",
-    reduceMotion: "Reduce motion",
-    screenReader: "Screen reader",
-    accessibilitySettings: "Accessibility settings",
-    close: "Close",
-    apply: "Apply",
-    skipToContent: "Skip to main content",
-  },
-}
 
-// Accessibility Context
-const AccessibilityContext = createContext(null)
 
-const useAccessibility = () => {
-  const context = useContext(AccessibilityContext)
-  if (!context) {
-    throw new Error("useAccessibility must be used within AccessibilityProvider")
-  }
-  return context
-}
-
-// Accessibility Provider Component
-function AccessibilityProvider({ children }) {
-  const [settings, setSettings] = useState({
-    fontSize: 16,
-    highContrast: false,
-    reduceMotion: false,
-    screenReaderEnabled: false,
-    language: "es",
-  })
-
-  const updateSettings = (newSettings) => {
-    setSettings((prev) => ({ ...prev, ...newSettings }))
-
-    // Apply settings to document
-    document.documentElement.style.fontSize = `${newSettings.fontSize || settings.fontSize}px`
-    document.documentElement.classList.toggle(
-      "high-contrast",
-      newSettings.highContrast !== undefined ? newSettings.highContrast : settings.highContrast,
-    )
-    document.documentElement.classList.toggle(
-      "reduce-motion",
-      newSettings.reduceMotion !== undefined ? newSettings.reduceMotion : settings.reduceMotion,
-    )
-  }
-
-  const t = (key) => {
-    return translations[settings.language][key] || key
-  }
-
-  // Apply accessibility settings to document
-  useEffect(() => {
-    document.documentElement.style.fontSize = `${settings.fontSize}px`
-    document.documentElement.classList.toggle("high-contrast", settings.highContrast)
-    document.documentElement.classList.toggle("reduce-motion", settings.reduceMotion)
-  }, [settings])
-
-  return (
-    <AccessibilityContext.Provider value={{ settings, updateSettings, t }}>{children}</AccessibilityContext.Provider>
-  )
-}
-
-// Slider Component
-function Slider({ value, onChange, min, max, step, className, id, ariaLabel }) {
-  return (
-    <input
-      type="range"
-      id={id}
-      min={min}
-      max={max}
-      step={step}
-      value={value}
-      onChange={(e) => onChange(Number.parseInt(e.target.value))}
-      className={`w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider ${className}`}
-      aria-label={ariaLabel}
-    />
-  )
-}
-
-// Switch Component
-function Switch({ checked, onChange, id, ariaLabel }) {
-  return (
-    <button
-      type="button"
-      id={id}
-      role="switch"
-      aria-checked={checked}
-      aria-label={ariaLabel}
-      onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-        checked ? "bg-blue-600" : "bg-gray-200"
-      }`}
-    >
-      <span
-        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-          checked ? "translate-x-6" : "translate-x-1"
-        }`}
-      />
-    </button>
-  )
-}
-
-// Accessibility Settings Panel Component
-function AccessibilityPanel({ isOpen, onClose }) {
-  const { settings, updateSettings, t } = useAccessibility()
-  const [tempSettings, setTempSettings] = useState(settings)
-
-  useEffect(() => {
-    if (isOpen) {
-      setTempSettings(settings)
-    }
-  }, [isOpen, settings])
-
-  if (!isOpen) return null
-
-  const handleApply = () => {
-    updateSettings(tempSettings)
-    onClose()
-  }
-
-  return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-      role="dialog"
-      aria-labelledby="a11y-title"
-      aria-modal="true"
-    >
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 id="a11y-title" className="text-xl font-bold text-gray-900">
-            {t("accessibilitySettings")}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
-            aria-label={t("close")}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <div className="space-y-6">
-          {/* Language Selection */}
-          <div className="space-y-2">
-            <label htmlFor="language-select" className="block text-sm font-medium text-gray-700">
-              {t("language")}
-            </label>
-            <select
-              id="language-select"
-              value={tempSettings.language}
-              onChange={(e) => setTempSettings({ ...tempSettings, language: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="es">Español</option>
-              <option value="en">English</option>
-            </select>
-          </div>
-
-          {/* Font Size */}
-          <div className="space-y-2">
-            <label htmlFor="font-size" className="block text-sm font-medium text-gray-700">
-              {t("fontSize")}: {tempSettings.fontSize}px
-            </label>
-            <Slider
-              id="font-size"
-              min={12}
-              max={24}
-              step={1}
-              value={tempSettings.fontSize}
-              onChange={(value) => setTempSettings({ ...tempSettings, fontSize: value })}
-              ariaLabel={t("fontSize")}
-            />
-          </div>
-
-          {/* High Contrast */}
-          <div className="flex items-center justify-between">
-            <label htmlFor="high-contrast" className="text-sm font-medium text-gray-700">
-              {t("highContrast")}
-            </label>
-            <Switch
-              id="high-contrast"
-              checked={tempSettings.highContrast}
-              onChange={(checked) => setTempSettings({ ...tempSettings, highContrast: checked })}
-              ariaLabel={t("highContrast")}
-            />
-          </div>
-
-          {/* Reduce Motion */}
-          <div className="flex items-center justify-between">
-            <label htmlFor="reduce-motion" className="text-sm font-medium text-gray-700">
-              {t("reduceMotion")}
-            </label>
-            <Switch
-              id="reduce-motion"
-              checked={tempSettings.reduceMotion}
-              onChange={(checked) => setTempSettings({ ...tempSettings, reduceMotion: checked })}
-              ariaLabel={t("reduceMotion")}
-            />
-          </div>
-
-          {/* Screen Reader */}
-          <div className="flex items-center justify-between">
-            <label htmlFor="screen-reader" className="text-sm font-medium text-gray-700">
-              {t("screenReader")}
-            </label>
-            <Switch
-              id="screen-reader"
-              checked={tempSettings.screenReaderEnabled}
-              onChange={(checked) => setTempSettings({ ...tempSettings, screenReaderEnabled: checked })}
-              ariaLabel={t("screenReader")}
-            />
-          </div>
-
-          <div className="flex justify-end pt-4">
-            <button
-              onClick={handleApply}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {t("apply")}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Profile() {
-  const { settings, t } = useAccessibility()
+export default function Profile() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate()
-  const [showA11yPanel, setShowA11yPanel] = useState(false)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -332,15 +45,15 @@ function Profile() {
     if (name === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!emailRegex.test(value)) {
-        error = t("invalidEmail")
+        error = t("noEmail")
       }
     } else if (name === "password" && isEditable.password) {
       if (value.length < 8) {
-        error = t("passwordMinLength")
+        error = t("8carac")
       }
     } else if (name === "username") {
       if (value.length < 3) {
-        error = t("usernameMinLength")
+        error = t("usercarac")
       }
     }
 
@@ -379,16 +92,9 @@ function Profile() {
           email: false,
           password: false,
         })
-
-        // Announce success for screen readers
-        if (settings.screenReaderEnabled) {
-          const utterance = new SpeechSynthesisUtterance(t("profileUpdated"))
-          utterance.lang = settings.language === "es" ? "es-ES" : "en-US"
-          speechSynthesis.speak(utterance)
-        }
       } catch (error) {
         console.error("Error updating profile:", error)
-        setErrors((prev) => ({ ...prev, general: t("updateError") }))
+        setErrors((prev) => ({ ...prev, general: t("profileNoUpdated") }))
       } finally {
         setIsLoading(false)
       }
@@ -406,301 +112,186 @@ function Profile() {
       navigate("/")
     } catch (error) {
       console.error("Error deleting account:", error)
-      setErrors((prev) => ({ ...prev, general: t("deleteError") }))
+      setErrors((prev) => ({ ...prev, general: t("accountDeleteError") }))
       setShowDeleteConfirm(false)
     } finally {
       setIsLoading(false)
     }
   }
 
-  // Keyboard shortcut for accessibility panel
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // Alt + A to open accessibility panel
-      if (e.altKey && e.key === "a") {
-        setShowA11yPanel((prev) => !prev)
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [])
-
-  const motionClasses = settings.reduceMotion ? "" : "transition delay-150 duration-300 ease-in-out"
-
   return (
-    <div
-      className={`w-full min-h-screen bg-cover bg-center relative bg-opacity backdrop-blur-lg ${settings.highContrast ? "high-contrast" : ""}`}
-    >
-      {/* Skip Link for Keyboard Navigation */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50"
-      >
-        {t("skipToContent")}
-      </a>
+    <div className="w-full min-h-screen">
+      <img src={imagen1} alt = "Fondo" className="absolute inset-0 w-full h-full object-cover blur-sm"/>
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fillRule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%239C92AC&quot; fillOpacity=&quot;0.05&quot;%3E%3Ccircle cx=&quot;30&quot; cy=&quot;30&quot; r=&quot;4&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
 
-      {/* Accessibility Button */}
-      <button
-        onClick={() => setShowA11yPanel(true)}
-        className={`fixed right-4 top-4 z-50 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${motionClasses}`}
-        aria-label={t("accessibility")}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
-          />
-        </svg>
-      </button>
-
-      {/* Background image with optimization */}
-      <img
-        src={imagen1 || "/placeholder.svg"}
-        alt="Fondo del perfil"
-        className="absolute inset-0 w-full h-full object-cover blur-md"
-      />
-      <div className="absolute inset-0 bg-blue-50 z-0"></div>
-
-      {/* Content above the image */}
+      {/* Content above the pattern */}
       <div className="flex flex-col md:flex-row w-full min-h-screen relative z-20">
         {/* Left partition (empty or decorative) */}
         <div className="hidden md:block w-1/5 p-8"></div>
 
         {/* Central partition */}
-        <div className="w-full md:w-3/5" id="main-content">
-          <div className="flex flex-col items-center justify-center h-screen">
+        <div className="w-full md:w-3/5">
+          <div className="flex flex-col items-center justify-center min-h-screen py-12">
             {/* Profile header */}
-            <div className="flex flex-col items-center">
-              <span className="text-black text-4xl">
-                <UserCircleIcon className="w-40 text-[#003049]" aria-hidden="true" />
-              </span>
+            <div className="flex flex-col items-center mb-8">
+              <div className="relative">
+                <UserCircleIcon className="w-32 h-32 text-[#003049] drop-shadow-sm" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#003049] to-[#003049] rounded-full opacity-40"></div>
+              </div>
+              <h1 className="mt-4 text-3xl font-bold text-slate-800">{t("myProfile")}</h1>
+              <p className="text-slate-600 text-sm">{t("text3")}</p>
             </div>
 
             {/* Profile form */}
-            <div className="mt-10 relative flex flex-col rounded-xl bg-[#003049] p-5 shadow-lg">
-              <form className="w-80 max-w-screen-lg sm:w-96" onSubmit={handleSubmit}>
-                <div className="mb-1 flex flex-col gap-6">
+            <div className="w-full max-w-md">
+              <div className="bg-[#003049] backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Username field */}
-                  <div className="w-full max-w-sm min-w-[200px] relative">
-                    <label htmlFor="username" className="block mb-2 text-sm text-white font-bold">
+                  <div className="space-y-2">
+                    <label htmlFor="username" className="block text-sm font-bold text-white">
                       {t("user")}
                     </label>
-                    <input
-                      id="username"
-                      type="text"
-                      name="username"
-                      value={formData.username}
-                      readOnly={!isEditable.username}
-                      onChange={handleChange}
-                      placeholder={t("user")}
-                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
-                        errors.username ? "border-red-500" : "border-gray-500"
-                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
-                        isEditable.username ? "bg-white" : "bg-gray-100"
-                      }`}
-                      aria-describedby={errors.username ? "username-error" : undefined}
-                    />
-                    <button
-                      type="button"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
-                      onClick={() => handleEditClick("username")}
-                      aria-label={t("editUsername")}
-                    >
-                      <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
-                    </button>
-                    {errors.username && (
-                      <p id="username-error" className="text-red-300 text-xs mt-1">
-                        {errors.username}
-                      </p>
-                    )}
+                    <div className="relative">
+                      <input
+                        id="username"
+                        type="text"
+                        name="username"
+                        value={formData.username}
+                        readOnly={!isEditable.username}
+                        onChange={handleChange}
+                        placeholder={t("yourUser")}
+                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                          errors.username
+                            ? "border-red-300 bg-red-50"
+                            : isEditable.username
+                              ? "border-blue-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                              : "border-slate-200 bg-slate-50"
+                        } text-slate-700 placeholder-slate-400 focus:outline-none`}
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+                        onClick={() => handleEditClick("username")}
+                        aria-label="Editar nombre de usuario"
+                      >
+                        <PencilSquareIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
+                      </button>
+                    </div>
+                    {errors.username && <p className="text-red-500 text-xs font-medium">{errors.username}</p>}
                   </div>
 
                   {/* Email field */}
-                  <div className="w-full max-w-sm min-w-[200px] relative">
-                    <label htmlFor="email" className="block mb-2 text-sm text-white font-bold">
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="block text-sm font-bold text-white">
                       {t("email")}
                     </label>
-                    <input
-                      id="email"
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      readOnly={!isEditable.email}
-                      onChange={handleChange}
-                      placeholder={t("email")}
-                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
-                        errors.email ? "border-red-500" : "border-gray-500"
-                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
-                        isEditable.email ? "bg-white" : "bg-gray-100"
-                      }`}
-                      aria-describedby={errors.email ? "email-error" : undefined}
-                    />
-                    <button
-                      type="button"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
-                      onClick={() => handleEditClick("email")}
-                      aria-label={t("editEmail")}
-                    >
-                      <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
-                    </button>
-                    {errors.email && (
-                      <p id="email-error" className="text-red-300 text-xs mt-1">
-                        {errors.email}
-                      </p>
-                    )}
+                    <div className="relative">
+                      <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        readOnly={!isEditable.email}
+                        onChange={handleChange}
+                        placeholder={t("yourEmail")}
+                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                          errors.email
+                            ? "border-red-300 bg-red-50"
+                            : isEditable.email
+                              ? "border-blue-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                              : "border-slate-200 bg-slate-50"
+                        } text-slate-700 placeholder-slate-400 focus:outline-none`}
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+                        onClick={() => handleEditClick("email")}
+                        aria-label="Editar email"
+                      >
+                        <PencilSquareIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
+                      </button>
+                    </div>
+                    {errors.email && <p className="text-red-500 text-xs font-medium">{errors.email}</p>}
                   </div>
 
                   {/* Password field */}
-                  <div className="w-full max-w-sm min-w-[200px] relative">
-                    <label htmlFor="password" className="block mb-2 text-sm text-white font-bold">
+                  <div className="space-y-2">
+                    <label htmlFor="password" className="block text-sm font-bold text-white">
                       {t("password")}
                     </label>
-                    <input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      value={formData.password}
-                      readOnly={!isEditable.password}
-                      onChange={handleChange}
-                      placeholder={t("password")}
-                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
-                        errors.password ? "border-red-500" : "border-gray-500"
-                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
-                        isEditable.password ? "bg-white" : "bg-gray-100"
-                      }`}
-                      aria-describedby={errors.password ? "password-error" : undefined}
-                    />
-                    {isEditable.password && (
-                      <button
-                        type="button"
-                        className="absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
-                        onClick={() => setShowPassword(!showPassword)}
-                        aria-label={showPassword ? t("hidePassword") : t("showPassword")}
-                      >
-                        {showPassword ? (
-                          <EyeSlashIcon className="h-5 w-5 text-gray-500 mt-5" />
-                        ) : (
-                          <EyeIcon className="h-5 w-5 text-gray-500 mt-5" />
+                    <div className="relative">
+                      <input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        readOnly={!isEditable.password}
+                        onChange={handleChange}
+                        placeholder={t("yourPass")}
+                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                          errors.password
+                            ? "border-red-300 bg-red-50"
+                            : isEditable.password
+                              ? "border-blue-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                              : "border-slate-200 bg-slate-50"
+                        } text-slate-700 placeholder-slate-400 focus:outline-none ${isEditable.password ? "pr-20" : "pr-12"}`}
+                      />
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1">
+                        {isEditable.password && (
+                          <button
+                            type="button"
+                            className="p-1 rounded-lg hover:bg-slate-100 transition-colors"
+                            onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                          >
+                            {showPassword ? (
+                              <EyeSlashIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
+                            ) : (
+                              <EyeIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
+                            )}
+                          </button>
                         )}
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
-                      onClick={() => handleEditClick("password")}
-                      aria-label={t("editPassword")}
-                    >
-                      <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
-                    </button>
-                    {errors.password && (
-                      <p id="password-error" className="text-red-300 text-xs mt-1">
-                        {errors.password}
-                      </p>
-                    )}
+                        <button
+                          type="button"
+                          className="p-1 rounded-lg hover:bg-slate-100 transition-colors"
+                          onClick={() => handleEditClick("password")}
+                          aria-label="Editar contraseña"
+                        >
+                          <PencilSquareIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
+                        </button>
+                      </div>
+                    </div>
+                    {errors.password && <p className="text-red-500 text-xs font-medium">{errors.password}</p>}
                   </div>
-                </div>
 
-                {/* General error message */}
-                {errors.general && (
-                  <div className="mt-4 p-2 bg-red-100 text-red-800 rounded-md text-center text-sm" role="alert">
-                    {errors.general}
-                  </div>
-                )}
-
-                {/* Success message */}
-                {successMessage && (
-                  <div className="mt-4 p-2 bg-green-100 text-green-800 rounded-md text-center text-sm" role="alert">
-                    {successMessage}
-                  </div>
-                )}
-
-                {/* Update button */}
-                <button
-                  type="submit"
-                  disabled={isLoading || (!isEditable.username && !isEditable.email && !isEditable.password)}
-                  className={`mt-8 mx-auto block w-[110px] rounded-md bg-[#FCBF49] font-bold py-2 border border-transparent text-center text-sm text-[#003049] hover:-translate-y-1 hover:scale-110 hover:bg-[#FCBF49]/85 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100 ${motionClasses}`}
-                >
-                  {isLoading ? (
-                    <span className="flex items-center justify-center">
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#003049]"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      {t("updating")}
-                    </span>
-                  ) : (
-                    t("update")
+                  {/* General error message */}
+                  {errors.general && (
+                    <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium">
+                      {errors.general}
+                    </div>
                   )}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
 
-        {/* Right partition - Delete account */}
-        <div className="w-full md:w-1/5 p-10">
-          <div className="flex flex-col items-center justify-center">
-            {!showDeleteConfirm ? (
-              <button
-                type="button"
-                className={`w-[130px] bg-[#D62828] text-white font-bold py-2 rounded-md text-center text-sm hover:-translate-y-1 hover:scale-110 hover:bg-[#D62828]/85 ${motionClasses}`}
-                onClick={() => setShowDeleteConfirm(true)}
-                disabled={isLoading}
-              >
-                {t("deleteAccount")}
-              </button>
-            ) : (
-              <div className="bg-white p-4 rounded-md shadow-md">
-                <p className="text-sm text-gray-800 mb-3">{t("deleteConfirmation")}</p>
-                <div className="flex justify-between">
+                  {/* Success message */}
+                  {successMessage && (
+                    <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm font-medium">
+                      {successMessage}
+                    </div>
+                  )}
+
+                  {/* Update button */}
                   <button
-                    type="button"
-                    className={`bg-gray-300 text-gray-800 px-3 py-1 rounded-md text-sm hover:bg-gray-400 ${motionClasses}`}
-                    onClick={() => setShowDeleteConfirm(false)}
-                    disabled={isLoading}
-                  >
-                    {t("cancel")}
-                  </button>
-                  <button
-                    type="button"
-                    className={`bg-[#D62828] text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 ${motionClasses}`}
-                    onClick={handleDeleteAccount}
-                    disabled={isLoading}
+                    type="submit"
+                    disabled={isLoading || (!isEditable.username && !isEditable.email && !isEditable.password)}
+                    className="w-[350px] rounded-md grid ml-4 bg-[#FCBF49] font-bold py-3 px-6 border border-transparent text-center text-sm text-[#003049] transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#FCBF49]/85 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center">
                         <svg
-                          className="animate-spin -ml-1 mr-1 h-3 w-3 text-white"
+                          className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
-                          aria-hidden="true"
                         >
                           <circle
                             className="opacity-25"
@@ -716,10 +307,89 @@ function Profile() {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
-                        {t("deleting")}
+                        {t("updating")}
                       </span>
                     ) : (
-                      t("confirm")
+                      t("updateProfile")
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right partition - Delete account */}
+        <div className="w-full md:w-1/5">
+          <div className="mt-10 flex flex-col items-center justify-start min-h-screen">
+            {!showDeleteConfirm ? (
+              <button
+                type="button"
+                className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
+                onClick={() => setShowDeleteConfirm(true)}
+                disabled={isLoading}
+              >
+                {t("delete")}
+              </button>
+            ) : (
+              <div className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-white/20 max-w-xs">
+                <div className="text-center mb-4">
+                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-800 mb-2">{t("askconfirmation")}</h3>
+                  <p className="text-sm text-slate-600 mb-4">
+                    {t("textConfirmation")}
+                  </p>
+                </div>
+                <div className="flex space-x-3">
+                  <button
+                    type="button"
+                    className="flex-1 px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+                    onClick={() => setShowDeleteConfirm(false)}
+                    disabled={isLoading}
+                  >
+                    {t("cancel")}
+                  </button>
+                  <button
+                    type="button"
+                    className="flex-1 px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+                    onClick={handleDeleteAccount}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="flex items-center justify-center">
+                        <svg
+                          className="animate-spin -ml-1 mr-1 h-4 w-4 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        {t("removing")}
+                      </span>
+                    ) : (
+                      t("confirmation")
                     )}
                   </button>
                 </div>
@@ -728,19 +398,6 @@ function Profile() {
           </div>
         </div>
       </div>
-
-      {/* Accessibility Panel */}
-      <AccessibilityPanel isOpen={showA11yPanel} onClose={() => setShowA11yPanel(false)} />
-
     </div>
-  )
-}
-
-// Main App Component with Provider
-export default function AccessibleProfile() {
-  return (
-    <AccessibilityProvider>
-      <Profile />
-    </AccessibilityProvider>
   )
 }

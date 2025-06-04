@@ -1,0 +1,174 @@
+{
+    "profile": "Perfil",
+    "notifications": "Notificaciones",
+    "settings": "Configuración",
+    "searchPlaceholder": "Busca el nombre de un delito o lugar",
+    "listening": "Escuchando...",
+    "reportEasily": "Reporta Fácilmente",
+    "reportButton": "¡Solo presiona el botón!",
+    "reportCrime": "Reportar Delito",
+    "loadingCrimes": "Cargando delitos...",
+    "noCrimesFound": "No se encontraron delitos.",
+    "anonimoReport": "Reporte Anónimo de Delitos",
+
+    "date": "Fecha del crimen",
+    "address": "Dirección",
+    "hour": "Hora",
+    "ubication": "Ubicación",
+    "description": "Descripción",
+
+    "language": "Idioma",
+    "fontSize": "Tamaño de fuente",
+    "highContrast": "Alto contraste",
+    "reduceMotion": "Reducir movimiento",
+    "voiceSearch": "Búsqueda por voz",
+    "search": "Buscar",
+    "stopListening": "Detener escucha",
+    "startVoiceSearch": "Iniciar búsqueda por voz",
+    "accessibility": "Accesibilidad",
+    "closeSettings": "Cerrar configuración",
+    "results": "Resultados",
+    "skipToContent": "Saltar al contenido principal",
+    "mainNavigation": "Navegación principal",
+    "quickActions": "Acciones rápidas",
+    "searchResults": "Resultados de búsqueda de delitos",
+    "crimeSearchAndReports": "Búsqueda de delitos y reportes",
+    "myReports": "Mis Reportes",
+    "editReport": "Editar reporte",
+    "crimeType": "Tipo de Delito",
+    "selectType": "Seleccionar tipo",
+    "time": "Fecha y Hora",
+    "robbery": "Hurto",
+    "homicide": "Homicidio",
+    "enterAddress": "Add the address by pressing the location icon",
+    "describeIncident": "Describa los detalles del crimen",
+    "details": "Detalles del Crimen",
+    "cancel": "Cancelar",
+    "submit": "Enviar reporte anónimo",
+    "evidence": "Evidencia adjunta",
+    "100": "Reporte 100% anónimo:",
+
+    "report": "Reportar",
+    "reportCreated": "Reporte creado exitosamente",
+    "reportUpdated": "Reporte actualizado exitosamente",
+    "closeModal": "Cerrar modal",
+    "editReportTitle": "Editar Reporte",
+    "required": "Requerido",
+    "reportRequired": "Por favor completa todos los campos requeridos.",
+    "noGeolocation": "La geolocalización no está disponible en tu navegador.",
+
+    "Sign Up":  "Registrarse",
+    "Sign In": "Iniciar Sesión",
+    "SignInText": "Inicia Sesión con Geocrimen",
+    "SignUpText": "Registrate con GeoCrimen",
+    "About": "Sobre",
+    "Us": "Nosotros",
+    "Text1": "GeoCrimen es una plataforma que permite a los ciudadanos reportar y visualizar delitos en cualquier parte de Colombia. Utilizando tecnología de mapas de calor, los usuarios podrán observar la ubicación y naturaleza de los delitos, lo que ayuda a crear conciencia y fomentar la seguridad comunitaria.",
+    "Text2": "Our mission is to empower communities with valuable information to make informed decisions about their safety, while facilitating citizen collaboration in crime prevention.",
+    "Get Started Now": "Comenzar Ahora",
+    "close": "Cerrar",
+    "location": "No se pudo obtener tu ubicación. Por favor, ingrésala manualmente.",
+    "carouselTexts":{
+      "carouselText1": "Juntos por una comunidad más segura",
+      "carouselText2": "Reporta delitos de manera anónima",
+      "carouselText3": "Visualiza zonas de riesgo en tiempo real",
+      "carouselText4": "Contribuye a la seguridad de tu vecindario",
+      "carouselText5": "Información que salva vidas"
+    },
+
+    
+  "features": {
+    "anonymousReports": {
+      "title": "Reportes Anónimos",
+      "description": "Reporta incidentes sin revelar tu identidad, garantizando tu seguridad y privacidad."
+    },
+    "heatMap": {
+      "title": "Mapa de Calor",
+      "description": "Visualiza las zonas con mayor incidencia de delitos para tomar decisiones informadas."
+    },
+    "stats": {
+      "title": "Estadísticas",
+      "description": "Accede a datos actualizados sobre la situación de seguridad en tu comunidad."
+    },
+    "dataVerification": {
+      "title": "Veracidad de Datos",
+      "description": "Verifica la autenticidad de los reportes mediante las valoraciones de otros usuarios."
+    },
+    "preciseLocation": {
+      "title": "Ubicación Precisa",
+      "description": "Reporta incidentes con ubicación exacta. Solo necesitas habilitar el GPS y presionar el botón de ubicación."
+    }
+  
+},
+  "heatmap_title": "Mapa de calor",
+  "heatmap_description": "Nuestro mapa de calor utiliza un sistema de colores para indicar los niveles de riesgo en diferentes zonas, permitiéndote identificar rápidamente las áreas más seguras y las que requieren mayor precaución.",
+  "heatmap_button": "Ver Mapa de Calor",
+  "footer_about": "Acerca de",
+  "footer_privacy": "Privacidad",
+  "footer_terms": "Términos",
+  "footer_contact": "Contactos",
+  "footer_rights": "© 2025 GeoCrimen. Todos los derechos reservados.",
+
+  "riskLevels": [
+    {
+      "level": "Alto",
+      "description": "Incidencia alta de homicidios y hurtos en la zona."
+    },
+    {
+      "level": "Medio",
+      "description": "Incidencia moderada de homicidios y hurtos en la zona."
+    },
+    {
+      "level": "Bajo",
+      "description": "Incidencia baja de homicidios y hurtos en la zona."
+    }
+  ],
+
+  "main features": "Características Principales",
+  "user": "Usuario",
+  "password": "Contraseña",
+  "yourPass": "Tu contraseña",
+  "forgotPass": "¿Olvidaste tu contraseña?",
+  "u/e": "Usuario/Correo Electronico",
+  "email": "Correo Electrónico",
+  "yourEmail": "Tu correo electrónico",
+  "optionFP": "Tu usuario o correo electrónico",
+  "yourUser": "Tu usuario",
+  "next": "Siguiente",
+  "newP": "Nueva Contraseña",
+  "newPP": "Ingresa una contraseña nueva",
+  "change": "Cambiar",
+  "noAccount": "¿No tienes cuenta?",
+  "decreaseText": "Reducir tamaño de texto",
+  "increaseText": "Aumentar tamaño de texto",
+  "removeHighContrast": "Quitar Alto Contraste",
+  "readScreen": "Leer Pantalla",
+  "stopReading": "Detener Lectura",
+  "enableMotion": "Habilitar Movimiento",
+  "myProfile": "Mi Perfil",
+  "text3": "Gestiona tu información personal",
+  "delete": "Eliminar Cuenta",
+  "updateProfile": "Actulizar Perfil",
+  "askconfirmation": "¿Estás Seguro?",
+  "textConfirmation": "Esta acción eliminará permanentemente tu cuenta y no se puede deshacer.",
+  "confirmation": "Aceptar",
+  "noEmail": "Correo electrónico inválido",
+  "8carac": "La contraseña debe tener al menos 8 caracteres",
+  "usercarac": "El nombre de usuario debe tener al menos 3 caracteres",
+  "profileUpdated": "Perfil actualizado correctamente",
+  "profileNoUpdated": "Error al actualizar el perfil",
+  "accountDeleteError": "Error al eliminar la cuenta",
+  "updating": "Actualizando...",
+  "removing": "Eliminando...",
+  "userCreated": "Usuario creado correctamente",
+  "signUpError": "Error al registrar:",
+  "backendError": "Error al conectar el Backend",
+  "servidorError": "Hubo un problema con el servidor",
+  "name": "Nombre",
+  "lastName": "Apellido",
+  "birthDate": "Fecha de Nacimiento",
+  "back": "Atrás",
+  "youHaveaccount": "¿Ya tienes cuenta?"
+  
+
+}

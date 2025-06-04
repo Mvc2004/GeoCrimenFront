@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { XMarkIcon, VideoCameraIcon, PhotoIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from 'react-i18next';
+
 
 function ReporteModal({ initialData, onClose, onSubmit }) {
+
+  const { t, i18n } = useTranslation();
   const [reportData, setReportData] = useState({
     crimeType: "",
     date: "",
@@ -45,7 +49,8 @@ function ReporteModal({ initialData, onClose, onSubmit }) {
         mediaFiles.forEach((media) => URL.revokeObjectURL(media.preview))
       }
     }, [mediaFiles])
-  const handleMediaChange = (e) => {
+  
+    const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
     const newFiles = files.map((file) => {
       const type = file.type.includes("image") ? "image" : "video";
@@ -84,7 +89,7 @@ const handleReport = async () => {
     !reportData.location ||
     !reportData.description
   ) {
-    alert("Por favor completa todos los campos requeridos.");
+    alert(t("reportRequired"));
     return;
   }
 const combinedDateTime = reportData.time
@@ -111,7 +116,7 @@ const combinedDateTime = reportData.time
 
   localStorage.setItem("communityReports", JSON.stringify(updatedReports));
 
-  alert(initialData ? "Reporte actualizado con éxito." : "Reporte enviado con éxito.");
+  alert(initialData ? t("reportUpdated") : t("reportCreated"));
 
   setReportData({
     crimeType: "",
@@ -129,7 +134,7 @@ const combinedDateTime = reportData.time
 };
 const getLocation = () => {
     if (!navigator.geolocation) {
-      alert("La geolocalización no está disponible en tu navegador.")
+      alert(t("noGeolocation"))
       return
     }
 
@@ -165,7 +170,7 @@ setIsGettingLocation(true)
       },
       (error) => {
         console.error("Error getting location:", error)
-        alert("No se pudo obtener tu ubicación. Por favor, ingrésala manualmente.")
+        alert(t("location"))
         setIsGettingLocation(false)
       },
     )
@@ -183,11 +188,11 @@ setIsGettingLocation(true)
         </button>
 
         <div className="px-4 py-4">
-          <h2 className="text-xl font-bold mb-4 text-center">Reporte Anónimo de Delitos</h2>
+          <h2 className="text-xl font-bold mb-4 text-center">{t("anonimoReport")}</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label htmlFor="crimeType" className="block text-sm font-medium mb-1">Tipo de Crimen</label>
+              <label htmlFor="crimeType" className="block text-sm font-medium mb-1">{t("crimeType")}</label>
               <select
                 id="crimeType"
                 value={reportData.crimeType}
@@ -195,14 +200,14 @@ setIsGettingLocation(true)
                 className="w-full p-2 text-md border border-gray-300 rounded-md bg-white/80"
                 required
               >
-                <option value="">Seleccionar tipo</option>
-                <option value="hurto">Hurto</option>
-                <option value="homicidio">Homicidio</option>
+                <option value="">{t("selectType")}</option>
+                <option value="hurto">{t("robbery")}</option>
+                <option value="homicidio">{t("homicide")}</option>
               </select>
             </div>
 
             <div>
-              <label htmlFor="date" className="block text-sm font-medium mb-1">Fecha del Incidente</label>
+              <label htmlFor="date" className="block text-sm font-medium mb-1">{t("date")}</label>
               <input
                 id="date"
                 type="date"
@@ -214,7 +219,7 @@ setIsGettingLocation(true)
             </div>
             <div>
                 <label htmlFor="time" className="block text-sm font-medium mb-1">
-                  Hora
+                  {t("hour")}
                 </label>
                 <input
                   id="time"
@@ -227,14 +232,14 @@ setIsGettingLocation(true)
           </div>
 
           <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium mb-1">Ubicación</label>
+            <label htmlFor="location" className="block text-sm font-medium mb-1">{t("ubication")}</label>
             <div className="flex">
               <input
                 id="location"
                 type="text"
                 value={reportData.location}
                 onChange={handleInputChange}
-                placeholder="Agrega la dirección presionando el icono de ubicación"
+                placeholder={t("enterAddress")}
                 className="w-full p-2 text-sm border border-gray-300 rounded-l-md bg-white/80"
                 required
               />
@@ -259,13 +264,13 @@ setIsGettingLocation(true)
           </div>
 
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium mb-1">Descripción</label>
+            <label htmlFor="description" className="block text-sm font-medium mb-1">{t("description")}</label>
             <textarea
               id="description"
               value={reportData.description}
               onChange={handleInputChange}
               rows="4"
-              placeholder="Escribe una breve descripción del incidente..."
+              placeholder={t("describeIncident")}
               className="w-full p-2 text-sm border border-gray-300 rounded-md bg-white/80"
               required
             ></textarea>
@@ -273,7 +278,7 @@ setIsGettingLocation(true)
 
           {mediaFiles.length > 0 && (
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Evidencia adjunta</label>
+              <label className="block text-sm font-medium mb-2">{t("evidence")}</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 {mediaFiles.map((media, index) => (
                   <div key={index} className="relative group">
@@ -314,14 +319,14 @@ setIsGettingLocation(true)
                   onClick={handleCancel}
                   className="inline-flex items-center py-2.5 px-4 text-xs font-bold text-center text-white bg-[#D32F2F] rounded-lg hover:bg-[#B71C1C] focus:ring-4 focus:ring-red-300"
                 >
-                  Cancelar
+                  {t("cancel")}
                 </button>
                 <button
                   type="button"
                   onClick={handleReport}
                   className="inline-flex items-center py-2.5 px-4 text-xs font-bold text-center text-white bg-[#003049] rounded-lg focus:ring-4 focus:ring-gray-700 hover:bg-gray-700"
                 >
-                  Enviar reporte anónimo
+                  {t("submit")}
                 </button>
               </div>
 
@@ -349,7 +354,7 @@ setIsGettingLocation(true)
 
         <div className="px-3 py-2 bg-white/40 rounded-b-lg">
           <p className="text-xs text-gray-600">
-            <strong>Reporte 100% anónimo:</strong> No recopilamos ninguna información personal ni datos que puedan identificarte.
+            <strong>{t("100")}</strong>
           </p>
         </div>
       </form>
