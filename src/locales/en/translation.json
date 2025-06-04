@@ -1,0 +1,180 @@
+{
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "searchPlaceholder": "Search for a crime name or location",
+    "listening": "Listening...",
+    "reportEasily": "Report Easily",
+    "reportButton": "Just press the button!",
+    "reportCrime": "Report Crime",
+    "loadingCrimes": "Loading crimes...",
+    "noCrimesFound": "No crimes found.",
+    "anonimoReport": "Anonymous Crime Reporting",
+
+    "date": "Date of crime",
+    "address": "Address",
+    "hour": "Hour",
+    "ubication": "Location",
+    "description": "Description",
+
+    "language": "Language",
+    "fontSize": "Font size",
+    "highContrast": "High contrast",
+    "reduceMotion": "Reduce motion",
+    "screenReader": "Screen reader",
+    "voiceSearch": "Voice search",
+    "search": "Search",
+    "stopListening": "Stop listening",
+    "startVoiceSearch": "Start voice search",
+    "accessibility": "Accessibility",
+    "closeSettings": "Close settings",
+    "results": "Results",
+    "skipToContent": "Skip to main content",
+    "mainNavigation": "Main navigation",
+    "quickActions": "Quick actions",
+    "searchResults": "Crime search results",
+    "crimeSearchAndReports": "Crime search and reports",
+    "myReports": "My Reports",
+    "editReport": "Edit report",
+    "crimeType": "Crime Type",
+    "selectType": "Select type",
+    "time": "Date and Time",
+    "robbery": "Robbery",
+    "homicide": "Homicide",
+    "enterAddress": "Add the address by pressing the location icon",
+    "describeIncident": "Describe crime details",
+    "details": "Details of the crime",
+    "cancel": "Cancel",
+    "submit": "Submit anonymous report",
+    "evidence": "Attached evidence",
+    "100": "100% anonymous report",
+    "report": "Reports",
+    "reportCreated": "Report created successfully",
+    "reportUpdated": "Report updated successfully",
+    "noGeolocation": "Geolocation is not available in your browser.",
+    "closeModal": "Close modal",
+    "editReportTitle": "Edit Report",
+    "required": "Required",
+    "reportRequired": "Please complete all required fields.",
+    
+
+    "Sign Up": "Sign Up",    
+    "Sign In": "Sign In",
+    "SignInText": "Sign in to GeoCrimen",
+    "SignUpText": "Sign up to GeoCrimen",
+    "About": "About",
+    "Us": "Us",
+    "Text1": "GeoCrimen is a platform that allows citizens to report and visualize crimes anywhere in Colombia. Using heatmap technology, users will be able to observe the location and nature of crimes, which helps raise awareness and foster community safety.",
+    "Text2": "Our mission is to empower communities with valuable information to make informed decisions about their safety, while facilitating citizen collaboration in crime prevention.",
+    "Get Started Now": "Get Started Now",
+    "close": "Close",
+    "location": "Your location could not be obtained. Please enter it manually.",
+    "carouselTexts":{
+     "carouselText1": "Together for a safer community",
+     "carouselText2": "Report crimes anonymously",
+     "carouselText3": "Visualize risk areas in real time",
+     "carouselText4": "Contribute to the safety of your neighborhood",
+     "carouselText5": "Information that saves lives"
+    },
+
+    
+  "features": {
+    "anonymousReports": {
+      "title": "Anonymous Reports",
+      "description": "Report incidents without revealing your identity, ensuring your safety and privacy."
+    },
+    "heatMap": {
+      "title": "Heat Map",
+      "description": "Visualize areas with high crime rates to make informed decisions."
+    },
+    "stats": {
+      "title": "Statistics",
+      "description": "Access up-to-date data about your community's safety situation."
+    },
+    "dataVerification": {
+      "title": "Data Verification",
+      "description": "Verify the authenticity of reports through ratings by other users."
+    },
+    "preciseLocation": {
+      "title": "Precise Location",
+      "description": "Report incidents with exact location. Just enable GPS and press the location button."
+    }
+  },
+
+  "heatmap_title": "Heatmap",
+  "heatmap_description": "Our heatmap uses a color-coded system to indicate risk levels in different areas, allowing you to quickly identify the safest zones and those requiring greater caution.",
+  "heatmap_button": "View Heatmap",
+  "footer_about": "About",
+  "footer_privacy": "Privacy",
+  "footer_terms": "Terms",
+  "footer_contact": "Contact",
+  "footer_rights": "© 2025 GeoCrimen. All rights reserved.",
+
+  "riskLevels": [
+    {
+      "level": "High",
+      "description": "High incidence of homicides and thefts in the area."
+    },
+    {
+      "level": "Medium",
+      "description": "Moderate incidence of homicides and thefts in the area."
+    },
+    {
+      "level": "Low",
+      "description": "Low incidence of homicides and thefts in the area."
+    }
+  ],
+
+  "main features": "Main Features",
+  "user": "User",
+  "password": "Password",
+  "yourPass": "Your password",
+  "forgotPass": "forgot your password?",
+  "u/e": "User/Email",
+  "email": "Email",
+  "yourEmail": "Your email",
+  "optionFP": "Your username or Email",
+  "yourUser": "Your username",
+  "next": "Next",
+  "newP": "New Password",
+  "newPP": "Enter a new password",
+  "change": "Change",
+  "noAccount": "You don't have an account?",
+  "decreaseText": "Decrease text size",
+  "increaseText": "Increase text size",
+  "removeHighContrast": "Remove High Contrast",
+  "readScreen": "Read Screen",
+  "stopReading": "Stop Reading",
+  "enableMotion": "Enable Motion",
+  "myProfile": "My Profile",
+  "text3": "Manage your personal informatio",
+  "delete": "Delete Account",
+  "updateProfile": "Update Profile",
+  "askconfirmation": "Are you sure?",
+  "textConfirmation": "This action will permanently delete your account and cannot be undone.",
+  "confirmation": "Accept",
+  "noEmail": "Invalid email address",
+  "8carac": "Password must be at least 8 characters",
+  "usercarac": "Username must be at least 3 characters",
+  "profileUpdated": "Profile updated successfully",
+  "profileNoUpdated": "Error updating profile",
+  "accountDeleteError": "Error deleting account",
+  "updating": "Updating...",
+  "removing": "Removing...",
+  "userCreated": "User created successfully",
+  "signUpError": "Error registering:",
+  "backendError": "Error connecting to the backend",
+  "serverError": "There was a problem with the server",
+  "name": "Name",
+  "lastname": "Last Name",
+  "birthDate": "Date of Birth",
+  "back": "Back",
+  "youHaveaccount": "Already have an account?",
+  "information": "Information"
+
+}
+
+
+  
+
+
