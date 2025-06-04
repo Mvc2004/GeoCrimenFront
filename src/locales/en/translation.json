@@ -48,7 +48,7 @@
     "submit": "Submit anonymous report",
     "evidence": "Attached evidence",
     "100": "100% anonymous report",
-    "report": "Report",
+    "report": "Reports",
     "reportCreated": "Report created successfully",
     "reportUpdated": "Report updated successfully",
     "noGeolocation": "Geolocation is not available in your browser.",
@@ -169,7 +169,9 @@
   "lastname": "Last Name",
   "birthDate": "Date of Birth",
   "back": "Back",
-  "youHaveaccount": "Already have an account?"
+  "youHaveaccount": "Already have an account?",
+  "information": "Information"
+
 }
 
 

@@ -48,7 +48,7 @@
     "evidence": "Evidencia adjunta",
     "100": "Reporte 100% anónimo:",
 
-    "report": "Reportar",
+    "report": "Reportes",
     "reportCreated": "Reporte creado exitosamente",
     "reportUpdated": "Reporte actualizado exitosamente",
     "closeModal": "Cerrar modal",
@@ -168,7 +168,8 @@
   "lastName": "Apellido",
   "birthDate": "Fecha de Nacimiento",
   "back": "Atrás",
-  "youHaveaccount": "¿Ya tienes cuenta?"
+  "youHaveaccount": "¿Ya tienes cuenta?",
+  "information": "Información"
   
 
 }

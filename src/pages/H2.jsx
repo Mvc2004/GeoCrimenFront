@@ -4,6 +4,7 @@ import {MapPinIcon,EyeIcon} from '@heroicons/react/24/solid'
 import {ChevronRightIcon, ChevronLeftIcon, ChevronUpIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon} from '@heroicons/react/24/outline'
 import imagen5 from "../images/Homicidio.jpeg";
 import imagen6 from "../images/Hurto.jpeg";
+import { useTranslation } from 'react-i18next';
 import { AccessibilityProvider } from './AccessibilityContext';
 import AccesibilidadButton from './AccesibilidadButton';
 
@@ -12,7 +13,7 @@ import AccesibilidadButton from './AccesibilidadButton';
 const images = [imagen5, imagen6];
 
 function H2() {
-
+  const { t, i18n } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false); // abrir y cerrar informacion
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); //abrir y cerrar barra lateral
@@ -211,7 +212,7 @@ useEffect(() => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-400 rounded-md pr-3 pl-3 py-2 transition duration-300 ease-in-out focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-            placeholder="Buscar..."
+            placeholder={t("crimeSearchAndReports")}
           />
 
           {/* Microphone Button */}
@@ -254,7 +255,7 @@ useEffect(() => {
             {/* Listening Indicator */}
             {isListening && (
               <div className="flex items-center justify-center mt-3 space-x-2">
-                <div className="text-sm font-medium text-red-600">Escuchando...</div>
+                <div className="text-sm font-medium text-red-600">{t("listening")}</div>
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
                   <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
@@ -267,7 +268,7 @@ useEffect(() => {
           {/* Lista de delitos */}
           <div className="mt-6">
             {loading ? (
-              <p className="text-center text-gray-500">Cargando delitos...</p>
+              <p className="text-center text-gray-500">{t("loadingCrimes")}</p>
             ) : filteredDelitos.length > 0 ? (
               <div className="space-y-4">
                 {filteredDelitos.map((delito) => (
@@ -280,7 +281,7 @@ useEffect(() => {
                 ))}
               </div>
             ) : (
-              <p className="text-center text-gray-500">No se encontraron delitos.</p>
+              <p className="text-center text-gray-500">{t("noCrimesFound")}</p>
             )}
           </div>
 
@@ -312,7 +313,7 @@ useEffect(() => {
 
       {/* Menús */}
       <hr className="my-2 border-blue-gray-50" />
-      <nav className="p-3 text-xl font-semibold text-black">
+      <nav className="p-3 text-xl font-semibold text-[#003049]">
         <p>Reportes</p>
       </nav>
       <hr className="my-2 border-blue-gray-50" />
@@ -325,9 +326,9 @@ useEffect(() => {
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center justify-between w-full p-3 text-xl font-semibold text-blue-gray-700 hover:text-blue-gray-900"
           >
-            <div className="flex items-center gap-5 font-bold text-black">
+            <div className="flex items-center gap-5 font-bold text-[#003049]">
               <MapPinIcon className="h-5 w-5" />
-              <p>Información</p>
+              <p>{t("information")}</p>
             </div>
             <ChevronUpIcon
               className={`w-5 h-5 text-black transition-transform ${
@@ -351,9 +352,9 @@ useEffect(() => {
             onClick={() => navigate("/community")}
             className="flex items-center justify-between w-full p-3 text-xl font-semibold text-blue-gray-700 hover:text-blue-gray-900"
           >
-            <div className="flex items-center gap-5 font-bold text-black">
+            <div className="flex items-center gap-5 font-bold text-[#003049]">
               <EyeIcon className="h-5 w-5" />
-              <p>Reportes</p>
+              <p>{t("report")}</p>
             </div>
           </button>
         </div>
