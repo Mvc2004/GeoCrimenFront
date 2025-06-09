@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { PencilSquareIcon, UserCircleIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/imgfondo/perfil.jpg";
@@ -6,18 +6,47 @@ import imagen1 from "../images/imgfondo/perfil.jpg";
 export default function Profile() {
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const id_usuario = localStorage.getItem("id_usuario");
+      if (!id_usuario) return;
+  
+      try {
+        const response = await fetch(`http://localhost:3000/api/usuarios/${id_usuario}`);
+        const data = await response.json();
+        if (data?.data) {
+          setFormData({
+            id_usuario: data.data.Id_usuario,
+            nombre: data.data.nombre,
+            apellido: data.data.apellido,
+            correo: data.data.email,
+            contrasenia: data.data.contrasenia,
+          });
+        }
+        console.log("Datos del usuario obtenidos:", data.data);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
   // Form state
   const [formData, setFormData] = useState({
-    username: "Usuario123",
-    email: "usuario@email.com",
-    password: "********",
+    id_usuario: "",
+    nombre: "",
+    apellido: "",
+    correo: "",
+    contrasenia: "",
   })
 
   // UI state
   const [isEditable, setIsEditable] = useState({
-    username: false,
-    email: false,
-    password: false,
+    nombre: false,
+    apellido: false,
+    correo: false,
+    contrasenia: false,
   })
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState({
@@ -132,7 +161,7 @@ export default function Profile() {
 
         {/* Central partition */}
         <div className="w-full md:w-3/5">
-          <div className="flex flex-col items-center justify-center h-screen">
+          <div className="flex flex-col items-center justify-center mt-24">
             {/* Profile header */}
             <div className="flex flex-col items-center">
               <span className="text-black text-4xl">
@@ -147,14 +176,14 @@ export default function Profile() {
                   {/* Username field */}
                   <div className="w-full max-w-sm min-w-[200px] relative">
                     <label htmlFor="username" className="block mb-2 text-sm text-white font-bold">
-                      Usuario
+                      Id Usuario
                     </label>
                     <input
                       id="username"
                       type="text"
                       name="username"
-                      value={formData.username}
-                      readOnly={!isEditable.username}
+                      value={formData.id_usuario}
+                      readOnly={!isEditable.id_usuario}
                       onChange={handleChange}
                       placeholder="Nombre de usuario"
                       className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
@@ -163,32 +192,84 @@ export default function Profile() {
                         isEditable.username ? "bg-white" : "bg-gray-100"
                       }`}
                     />
+                    
+                  {errors.username && <p className="text-red-300 text-xs mt-1">{errors.username}</p>}
+                  </div>
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label htmlFor="nombre" className="block mb-2 text-sm text-white font-bold">
+                      Apellido
+                    </label>
+                    <input
+                      id="nombre"
+                      type="text"
+                      name="correo"
+                      value={formData.nombre}
+                      readOnly={!isEditable.nombre}
+                      onChange={handleChange}
+                      placeholder="nombre"
+                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
+                        errors.email ? "border-red-500" : "border-gray-500"
+                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
+                        isEditable.email ? "bg-white" : "bg-gray-100"
+                      }`}
+                    />
                     <div
                       className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                      onClick={() => handleEditClick("username")}
+                      onClick={() => handleEditClick("nombre")}
                       role="button"
-                      aria-label="Editar nombre de usuario"
+                      aria-label="Editar nombre"
                       tabIndex={0}
-                      onKeyDown={(e) => e.key === "Enter" && handleEditClick("username")}
+                      onKeyDown={(e) => e.key === "Enter" && handleEditClick("nombre")}
                     >
                       <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
                     </div>
-                    {errors.username && <p className="text-red-300 text-xs mt-1">{errors.username}</p>}
+                    {errors.email && <p className="text-red-300 text-xs mt-1">{errors.email}</p>}
+                  </div>
+
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label htmlFor="apellido" className="block mb-2 text-sm text-white font-bold">
+                      Apellido
+                    </label>
+                    <input
+                      id="apellido"
+                      type="text"
+                      name="apellido"
+                      value={formData.apellido}
+                      readOnly={!isEditable.apellido}
+                      onChange={handleChange}
+                      placeholder="nombre"
+                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
+                        errors.email ? "border-red-500" : "border-gray-500"
+                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
+                        isEditable.apellido ? "bg-white" : "bg-gray-100"
+                      }`}
+                    />
+                    <div
+                      className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                      onClick={() => handleEditClick("apellido")}
+                      role="button"
+                      aria-label="Editar apellido"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === "Enter" && handleEditClick("email")}
+                    >
+                      <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
+                    </div>
+                    {errors.email && <p className="text-red-300 text-xs mt-1">{errors.email}</p>}
                   </div>
 
                   {/* Email field */}
                   <div className="w-full max-w-sm min-w-[200px] relative">
-                    <label htmlFor="email" className="block mb-2 text-sm text-white font-bold">
+                    <label htmlFor="Correo" className="block mb-2 text-sm text-white font-bold">
                       Email
                     </label>
                     <input
-                      id="email"
+                      id="correo"
                       type="email"
-                      name="email"
-                      value={formData.email}
-                      readOnly={!isEditable.email}
+                      name="correo"
+                      value={formData.correo}
+                      readOnly={!isEditable.correo}
                       onChange={handleChange}
-                      placeholder="Email"
+                      placeholder="Correo"
                       className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
                         errors.email ? "border-red-500" : "border-gray-500"
                       } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
@@ -217,8 +298,8 @@ export default function Profile() {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       name="password"
-                      value={formData.password}
-                      readOnly={!isEditable.password}
+                      value={formData.contrasenia}
+                      readOnly={!isEditable.contrasenia}
                       onChange={handleChange}
                       placeholder="Contraseña"
                       className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
