@@ -12,7 +12,6 @@ import AccesibilidadButton from './AccesibilidadButton';
 
 const plans = [ 
   { name: "Perfil", path: "/profile" },
-  { name: "Notificaciones", path: "/notificaciones" },
   { name: "Mapa de Calor", path: "/heatmap" },
   { name: "Informe de Crímenes", path: "/informe" },
 ]
@@ -257,7 +256,6 @@ function Community() {
               >
                 <div className="flex-shrink-0 mr-4">
                   {plan.name === "Perfil" && <UserIcon className="h-8 w-8 text-white" />}
-                  {plan.name === "Notificaciones" && <BellIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Mapa de Calor" && <MapIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Informe de Crímenes" && <ClipboardDocumentListIcon className="h-8 w-8 text-white" />}
 
