@@ -285,6 +285,8 @@ useEffect(() => {
             )}
           </div>
 
+
+
       {/* Carrusel */}
       <div className="mt-5 relative h-40 overflow-hidden rounded-lg mb-4">
         {images.map((img, i) => (
