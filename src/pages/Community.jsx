@@ -233,27 +233,9 @@ function Community() {
     setEditData(null)
   }
 
-  useEffect(() => {
-    const fetchBusqueda = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/api/delitos/")
-        if (!response.ok) throw new Error("Error al obtener los delitos")
-        const data = await response.json()
-        setDelitos(data)
-      } catch (error) {
-        console.error("Error al obtener los delitos:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchBusqueda()
-  }, [])
+ 
 
-  const filteredDelitos = delitos.filter((delito) =>
-    delito.tipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    delito.fecha.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    delito.direccion.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  
 
   return (
 
@@ -356,25 +338,6 @@ function Community() {
             )}
           </form>
 
-          {/* Lista de delitos */}
-          <div className="mt-6">
-            {loading ? (
-              <p className="text-center text-gray-500">{t("loadingCrimes")}</p>
-            ) : filteredDelitos.length > 0 ? (
-              <div className="space-y-4">
-                {filteredDelitos.map((delito) => (
-                  <div key={delito.id} className="p-4 bg-gray-100 rounded-lg shadow-sm">
-                    <h3 className="text-lg font-semibold">{delito.tipo}</h3>
-                    <p><strong>Fecha:</strong> {delito.fecha}</p>
-                    <p><strong>Dirección:</strong> {delito.direccion}</p>
-                    <p><strong>Descripción:</strong> {delito.descripcion}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-center text-gray-500">{t("noCrimesFound")}</p>
-            )}
-          </div>
 
           <FormatosR
             reports={reportList}
