@@ -10,7 +10,6 @@ import H2 from "./pages/H2";
 import Heatmap from "./pages/Heatmap";
 import FormatosR from "./pages/FormatosR";
 import InformeCrimenes from "./pages/InformeCrimenes";
-import 'leaflet/dist/leaflet.css';
 
 
 
