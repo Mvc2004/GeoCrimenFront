@@ -171,7 +171,9 @@
   "back": "Back",
   "youHaveaccount": "Already have an account?",
   "information": "Information",
-  "crimeR": "Crime Report"
+  "crimeR": "Crime Report",
+  "hidePass": "Hide password",
+  "showPass": "Show password"
 
 
 }

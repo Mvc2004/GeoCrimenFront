@@ -170,7 +170,9 @@
   "back": "Atrás",
   "youHaveaccount": "¿Ya tienes cuenta?",
   "information": "Información",
-  "crimeR": "Informe de Crímenes"
+  "crimeR": "Informe de Crímenes",
+  "hidePass": "Ocultar contraseña",
+  "showPass": "Mostrar contraseña"
   
 
 }

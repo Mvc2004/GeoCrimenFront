@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate} from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha"
 import imagen1 from "../images/in-up/sign-in.jpg";
 import imagen2 from "../images/logo/logo.png"
 import { useTranslation } from 'react-i18next';
@@ -10,17 +11,22 @@ import AccesibilidadButton from './AccesibilidadButton';
 export default function Login() {
   const [email, setEmail] = useState("");            
   const [contrasenia, setContrasenia] = useState(""); 
-   // Estado para manejar errores
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [errorCaptcha, setErrorCaptcha] = useState(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   const handleLogin = async (event) => {
-    event.preventDefault(); // <-- evita que se recargue
+    event.preventDefault(); 
+    if (!captchaToken) {
+      setErrorCaptcha(true);
+      return;
+    }
     try {
       const response = await fetch("http://localhost:3000/api/login", { // cambia la URL según tu backend
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, contrasenia }),
+        body: JSON.stringify({ email, contrasenia, token: captchaToken }),
       });
       if (!response.ok) {
         throw new Error("Credenciales inválidas");
@@ -28,7 +34,7 @@ export default function Login() {
       const data = await response.json();
       localStorage.setItem("id_usuario", data.id_usuario);
       console.log("Inicio de sesión exitoso:", data);
-      navigate('/community');
+      navigate('/community', { replace: true });
     } catch (error) {
       alert("Inicio de sesión fallido: " + error.message);
     }
@@ -76,6 +82,20 @@ export default function Login() {
               className="w-full p-2 border border-black/50 rounded-md mt-1"
               required
             />
+          </div>
+          <div className="mt-5">
+            <ReCAPTCHA
+              sitekey="6Ld2xVorAAAAAMuzUboIkMOLPSFaXjY6MHvCQjSZ" // 👈 Tu clave de sitio
+              onChange={(token) => {
+                setCaptchaToken(token);
+                setErrorCaptcha(false);
+              }}
+            />
+            {errorCaptcha && (
+              <p className="text-sm text-red-500 mt-2">
+                Por favor verifica que no eres un robot.
+              </p>
+            )}
           </div>
 
           <Link to="/forgotP1">

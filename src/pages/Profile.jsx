@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { PencilSquareIcon, UserCircleIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/imgfondo/perfil.jpg"
@@ -12,18 +12,47 @@ export default function Profile() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const id_usuario = localStorage.getItem("id_usuario");
+      if (!id_usuario) return;
+  
+      try {
+        const response = await fetch(`http://localhost:3000/api/usuarios/${id_usuario}`);
+        const data = await response.json();
+        if (data?.data) {
+          setFormData({
+            id_usuario: data.data.Id_usuario,
+            nombre: data.data.nombre,
+            apellido: data.data.apellido,
+            correo: data.data.email,
+            contrasenia: data.data.contrasenia,
+          });
+        }
+        console.log("Datos del usuario obtenidos:", data.data);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
   // Form state
   const [formData, setFormData] = useState({
-    username: "Usuario123",
-    email: "usuario@email.com",
-    password: "********",
+    id_usuario: "",
+    nombre: "",
+    apellido: "",
+    correo: "",
+    contrasenia: "",
   })
 
   // UI state
   const [isEditable, setIsEditable] = useState({
-    username: false,
-    email: false,
-    password: false,
+    nombre: false,
+    apellido: false,
+    correo: false,
+    contrasenia: false,
   })
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState({
@@ -137,7 +166,8 @@ export default function Profile() {
 
         {/* Central partition */}
         <div className="w-full md:w-3/5">
-          <div className="flex flex-col items-center justify-center min-h-screen py-12">
+
+          <div className="flex flex-col items-center justify-center mt-24">
             {/* Profile header */}
             <div className="flex flex-col items-center mb-8">
               <div className="relative">
@@ -153,69 +183,117 @@ export default function Profile() {
               <div className="bg-[#003049] backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Username field */}
-                  <div className="space-y-2">
-                    <label htmlFor="username" className="block text-sm font-bold text-white">
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label htmlFor="username" className="block mb-2 text-sm text-white font-bold">
                       {t("user")}
                     </label>
-                    <div className="relative">
-                      <input
-                        id="username"
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        readOnly={!isEditable.username}
-                        onChange={handleChange}
-                        placeholder={t("yourUser")}
-                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
-                          errors.username
-                            ? "border-red-300 bg-red-50"
-                            : isEditable.username
-                              ? "border-blue-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                              : "border-slate-200 bg-slate-50"
-                        } text-slate-700 placeholder-slate-400 focus:outline-none`}
-                      />
-                      <button
-                        type="button"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-slate-100 transition-colors"
-                        onClick={() => handleEditClick("username")}
-                        aria-label="Editar nombre de usuario"
-                      >
-                        <PencilSquareIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
-                      </button>
+                    <input
+                      id="username"
+                      type="text"
+                      name="username"
+                      value={formData.id_usuario}
+                      readOnly={!isEditable.id_usuario}
+                      onChange={handleChange}
+                      placeholder={t("yourUser")}
+                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
+                        errors.username ? "border-red-500" : "border-gray-500"
+                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
+                        isEditable.username ? "bg-white" : "bg-gray-100"
+                      }`}
+                    />
+                    
+                  {errors.username && <p className="text-red-300 text-xs mt-1">{errors.username}</p>}
+                  </div>
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label htmlFor="nombre" className="block mb-2 text-sm text-white font-bold">
+                      {t("name")}
+                    </label>
+                    <input
+                      id="nombre"
+                      type="text"
+                      name="correo"
+                      value={formData.nombre}
+                      readOnly={!isEditable.nombre}
+                      onChange={handleChange}
+                      placeholder="nombre"
+                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
+                        errors.email ? "border-red-500" : "border-gray-500"
+                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
+                        isEditable.email ? "bg-white" : "bg-gray-100"
+                      }`}
+                    />
+                    <div
+                      className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                      onClick={() => handleEditClick("nombre")}
+                      role="button"
+                      aria-label="Editar nombre"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === "Enter" && handleEditClick("nombre")}
+                    >
+                      <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
                     </div>
-                    {errors.username && <p className="text-red-500 text-xs font-medium">{errors.username}</p>}
+                    {errors.email && <p className="text-red-300 text-xs mt-1">{errors.email}</p>}
+                  </div>
+
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label htmlFor="apellido" className="block mb-2 text-sm text-white font-bold">
+                      {t("lastname")}
+                    </label>
+                    <input
+                      id="apellido"
+                      type="text"
+                      name="apellido"
+                      value={formData.apellido}
+                      readOnly={!isEditable.apellido}
+                      onChange={handleChange}
+                      placeholder="nombre"
+                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
+                        errors.email ? "border-red-500" : "border-gray-500"
+                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
+                        isEditable.apellido ? "bg-white" : "bg-gray-100"
+                      }`}
+                    />
+                    <div
+                      className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                      onClick={() => handleEditClick("apellido")}
+                      role="button"
+                      aria-label="Editar apellido"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === "Enter" && handleEditClick("email")}
+                    >
+                      <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
+                    </div>
+                    {errors.email && <p className="text-red-300 text-xs mt-1">{errors.email}</p>}
                   </div>
 
                   {/* Email field */}
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="block text-sm font-bold text-white">
-                      {t("email")}
+                  <div className="w-full max-w-sm min-w-[200px] relative">
+                    <label htmlFor="Correo" className="block mb-2 text-sm text-white font-bold">
+                      Email
                     </label>
-                    <div className="relative">
-                      <input
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        readOnly={!isEditable.email}
-                        onChange={handleChange}
-                        placeholder={t("yourEmail")}
-                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
-                          errors.email
-                            ? "border-red-300 bg-red-50"
-                            : isEditable.email
-                              ? "border-blue-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                              : "border-slate-200 bg-slate-50"
-                        } text-slate-700 placeholder-slate-400 focus:outline-none`}
-                      />
-                      <button
-                        type="button"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-slate-100 transition-colors"
-                        onClick={() => handleEditClick("email")}
-                        aria-label="Editar email"
-                      >
-                        <PencilSquareIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
-                      </button>
+                    <input
+                      id="correo"
+                      type="email"
+                      name="correo"
+                      value={formData.correo}
+                      readOnly={!isEditable.correo}
+                      onChange={handleChange}
+                      placeholder="Correo"
+                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
+                        errors.email ? "border-red-500" : "border-gray-500"
+                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
+                        isEditable.email ? "bg-white" : "bg-gray-100"
+                      }`}
+                    />
+                    <div
+                      className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                      onClick={() => handleEditClick("email")}
+                      role="button"
+                      aria-label="Editar email"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === "Enter" && handleEditClick("email")}
+                    >
+                      <PencilSquareIcon className="h-6 w-6 text-gray-500 mt-5" />
                     </div>
                     {errors.email && <p className="text-red-500 text-xs font-medium">{errors.email}</p>}
                   </div>
@@ -225,48 +303,44 @@ export default function Profile() {
                     <label htmlFor="password" className="block text-sm font-bold text-white">
                       {t("password")}
                     </label>
-                    <div className="relative">
-                      <input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        value={formData.password}
-                        readOnly={!isEditable.password}
-                        onChange={handleChange}
-                        placeholder={t("yourPass")}
-                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
-                          errors.password
-                            ? "border-red-300 bg-red-50"
-                            : isEditable.password
-                              ? "border-blue-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                              : "border-slate-200 bg-slate-50"
-                        } text-slate-700 placeholder-slate-400 focus:outline-none ${isEditable.password ? "pr-20" : "pr-12"}`}
-                      />
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1">
-                        {isEditable.password && (
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.contrasenia}
+                      readOnly={!isEditable.contrasenia}
+                      onChange={handleChange}
+                      placeholder={t("yourPass")}
+                      className={`w-full bg-white placeholder:text-gray-400 text-gray-700 text-sm border ${
+                        errors.password ? "border-red-500" : "border-gray-500"
+                      } rounded-md px-3 py-2 pr-10 shadow-sm focus:outline-none ${
+                        isEditable.password ? "bg-white" : "bg-gray-100"
+                      }`}
+                    />
+                      {isEditable.password && (
+                        <div
+                          className="absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                          onClick={() => setShowPassword(!showPassword)}
+                          role="button"
+                          aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                          tabIndex={0}
+                          onKeyDown={(e) => e.key === "Enter" && setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeSlashIcon className="h-5 w-5 text-gray-500 mt-5" />
+                          ) : (
+                            <EyeIcon className="h-5 w-5 text-gray-500 mt-5" />
+                          )}
                           <button
                             type="button"
                             className="p-1 rounded-lg hover:bg-slate-100 transition-colors"
-                            onClick={() => setShowPassword(!showPassword)}
-                            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                            onClick={() => handleEditClick("password")}
+                            aria-label="Editar contraseña"
                           >
-                            {showPassword ? (
-                              <EyeSlashIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
-                            ) : (
-                              <EyeIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
-                            )}
+                            <PencilSquareIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
                           </button>
-                        )}
-                        <button
-                          type="button"
-                          className="p-1 rounded-lg hover:bg-slate-100 transition-colors"
-                          onClick={() => handleEditClick("password")}
-                          aria-label="Editar contraseña"
-                        >
-                          <PencilSquareIcon className="h-5 w-5 text-slate-400 hover:text-blue-600" />
-                        </button>
-                      </div>
-                    </div>
+                       </div>)}
+                    
                     {errors.password && <p className="text-red-500 text-xs font-medium">{errors.password}</p>}
                   </div>
 

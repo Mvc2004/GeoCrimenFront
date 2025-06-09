@@ -11,8 +11,7 @@ import AccesibilidadButton from './AccesibilidadButton';
 const plans = [
   { name: "profile", path: "/profile" },
   { name: "notifications", path: "/notificaciones" },
-  { name: "heatmap_title", path: "/heatmap" },
-  { name: "crimeR", path: "/informe" },
+  { name: "crimeR", path: "/informe" }
 ]
 
 
@@ -58,7 +57,13 @@ function Community() {
     }
   }, [])
  
-
+  useEffect(() => {
+    const id_usuario = localStorage.getItem("id_usuario");
+    if (!id_usuario) {
+      navigate("/login", { replace: true }); // 🔒 reemplaza el historial
+    }
+  }, [navigate]);
+  
   useEffect(() => {
     const cargarReportes = async () => {
       try {
@@ -273,7 +278,6 @@ function Community() {
               >
                 <div className="flex-shrink-0 mr-4">
                   {plan.name === "Perfil" && <UserIcon className="h-8 w-8 text-white" />}
-                  {plan.name === "Notificaciones" && <BellIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Mapa de Calor" && <MapIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Informe de Crímenes" && <ClipboardDocumentListIcon className="h-8 w-8 text-white" />}
 
@@ -281,6 +285,18 @@ function Community() {
                 <p className="text-2xl font-bold text-white">{t(plan.name)}</p>
               </button>
             ))}
+            <div className="mt-12 pl-2">
+              <button
+                onClick={() => {
+                  localStorage.removeItem("id_usuario");
+                  navigate("/login", { replace: true });
+                }}
+                className="flex items-center w-full bg-[#D62828] hover:bg-[#c21f1f] transition rounded-md py-3 px-4 text-white"
+              >
+                <XMarkIcon className="h-5 w-5 text-white mr-2" strokeWidth={2} />
+                <span className="text-sm font-semibold">Cerrar Sesión</span>
+              </button>
+            </div>
           </div>
         </div>
 
