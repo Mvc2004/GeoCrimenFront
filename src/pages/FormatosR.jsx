@@ -6,33 +6,112 @@ import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon, CheckIcon } from "@heroic
 import { CalendarIcon, MapPinIcon, ShieldExclamationIcon, VideoCameraIcon, HandRaisedIcon} from "@heroicons/react/24/outline"
 import { useTranslation } from 'react-i18next';
 
+//const [reports, setReports] = useState([]);
 
-function FormatosR() {
+function FormatosR({ onEdit, reports = [], setReports }) {
   const { t, i18n } = useTranslation();
-  const [report, setReports] = useState([])
-  const [activeIndexes, setActiveIndexes] = useState({}) // índice por reporte
+  //const [report, setReports] = useState([])
+  // const [activeIndexes, setActiveIndexes] = useState({}) // índice por reporte
+  // const [showDeleteConfirmIndex, setShowDeleteConfirmIndex] = useState(null)
+  // const [showModal, setShowModal] = useState(false)
+  // const [editData, setEditData] = useState(null)
+  // const [reports, setReports] = useState([]);
+
+  const [activeIndexes, setActiveIndexes] = useState({})
   const [showDeleteConfirmIndex, setShowDeleteConfirmIndex] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [editData, setEditData] = useState(null)
 
+  useEffect(() => {
+    const initialIndexes = {};
+    reports.forEach((_, i) => {
+      initialIndexes[i] = 0;
+    });
+    setActiveIndexes(initialIndexes);
+  }, [reports]);
+
   const deleteReport = (indexToDelete) => {
-    const updatedReports = report.filter((_, i) => i !== indexToDelete)
+    const updatedReports = reports.filter((_, i) => i !== indexToDelete)
     localStorage.setItem("communityReports", JSON.stringify(updatedReports))
     setReports(updatedReports)
     setShowDeleteConfirmIndex(null)
   }
 
-  useEffect(() => {
-    const storedReports = JSON.parse(localStorage.getItem("communityReports")) || []
-    setReports(storedReports)
+  //nuevos metodos
+  const aprobarReporte = async (id_reporte) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/reportes/${id_reporte}/aprobar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        //body: JSON.stringify(comentario),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Error al aprobar el reporte");
+      }
+      alert("Reporte aprobado");
+    } catch (error) {
+      console.error("Error al aprobar:", error);
+    }
+  };
+  
+  const rechazarReporte = async (id) => {
+    try {
+      const response = fetch(`http://localhost:3000/api/reportes/${id_reporte}/rechazar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Error al rechazar el reporte");
+      }
+      alert("Reporte rechazado");
+    } catch (error) {
+      console.error("Error al rechazar:", error);
+    }
+  };
 
-    // Inicializar índice 0 por cada reporte
-    const initialIndexes = {}
-    storedReports.forEach((_, i) => {
-      initialIndexes[i] = 0
-    })
-    setActiveIndexes(initialIndexes)
-  }, [])
+  // useEffect(() => {
+  //   const storedReports = JSON.parse(localStorage.getItem("communityReports")) || []
+  //   setReports(storedReports)
+
+  //   // Inicializar índice 0 por cada reporte
+  //   const initialIndexes = {}
+  //   storedReports.forEach((_, i) => {
+  //     initialIndexes[i] = 0
+  //   })
+  //   setActiveIndexes(initialIndexes)
+  // }, [])
+
+  // 
+  
+  // useEffect(() => {
+  //   const fetchReports = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3000/api/reportes/reportesPendientes");
+  //       const data = await response.json();
+  //       if (response.ok) {
+  //         setReports(data.data || []);
+  //         const initialIndexes = {};
+  //         (data.data || []).forEach((_, i) => {
+  //           initialIndexes[i] = 0;
+  //         });
+  //         setActiveIndexes(initialIndexes);
+  //       } else {
+  //         console.error("Error al cargar reportes pendientes:", data.error);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error al obtener reportes pendientes:", error);
+  //     }
+  //   };
+  
+  //   fetchReports();
+  // }, []);
+  
 
   const handlePrev = (reportIndex, mediaLength) => {
     setActiveIndexes((prev) => ({
@@ -75,7 +154,7 @@ function FormatosR() {
 
   return (
     <div className="mt-6 space-y-6 overscroll-none overflow-y-auto max-h-[calc(100vh-99px)] px-4">
-      {report.length === 0 ? (
+      {reports.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
           <div className="bg-gray-100 rounded-full p-4 mb-4">
             <ShieldExclamationIcon className="h-12 w-12 text-gray-400" />
@@ -87,11 +166,11 @@ function FormatosR() {
         </div>
       ) : (
         <div className="space-y-6">
-          {report.map((reportItem, index) => {
+          {reports.map((reportItem, index) => {
             const media = reportItem.media || []
             const activeIndex = activeIndexes[index] || 0
             const activeMedia = media[activeIndex]
-            const formattedDate = formatDate(reportItem.date)
+            const formattedDate = formatDate(reportItem.fecha_reporte  || reportItem.date)
 
             return (
               <div key={index} className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
@@ -180,7 +259,7 @@ function FormatosR() {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500 mb-0.5">{t("crimeType")}</p>
-                        <p className="text-md font-medium capitalize">{t(reportItem.crimeType)}</p>
+                        <p className="text-md font-medium capitalize">{ reportItem.id_crimen == 1 ? t("robbery"): reportItem.id_crimen == 2 ? t("homicide") : 'otro'}</p>
                       </div>
                     </div>
 
@@ -189,8 +268,9 @@ function FormatosR() {
                         <MapPinIcon className="h-8 w-8 text-blue-600" />
                       </div>
                       <div>
+
                         <p className="text-sm text-gray-500 mb-0.5">{t("ubication")}</p>
-                        <p className="text-md font-medium">{reportItem.location}</p>
+                        <p className="text-md font-medium">{reportItem.ubicacion_reporte}</p>
                       </div>
                     </div>
 
@@ -199,17 +279,24 @@ function FormatosR() {
                         <CalendarIcon className="h-8 w-8 text-amber-600" />
                       </div>
                       <div>
+
                         <p className="text-sm text-gray-500 mb-0.5">{t("time")}</p>
-                        <p className="text-md font-medium">{formattedDate}</p>
+                        <p className="text-md font-medium">{new Date(reportItem.fecha_reporte).toLocaleString('es-CO', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Description */}
+                  {/* Descripcion */}
                   <div className="mt-5 mb-4">
                     <h3 className="text-md font-semibold text-gray-700 mb-2">{t("detail")}</h3>
                     <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                      {reportItem.description}
+                      {reportItem.descripcion}
                     </p>
                   </div>
 
@@ -217,27 +304,59 @@ function FormatosR() {
                   {media.length > 0 && (
                     <div className="relative rounded-lg overflow-hidden mb-4">
                       <div className=" bg-gray-50 aspect-video flex items-center justify-center rounded-lg border border-gray-100">
-                        {activeMedia?.type === "image" ? (
-                          <img
-                            src={
-                              activeMedia.base64.startsWith("data:image/")
-                                ? activeMedia.base64
-                                : `data:image/png;base64,${activeMedia.base64}`
-                            }
-                            alt={`Evidencia ${activeIndex + 1}`}
-                            className="max-h-[full] max-w-full object-contain"
-                          />
-                        ) : (
-                          <div className="relative w-full h-full">
-                            <video controls className="w-full h-full object-contain">
-                              <source src={activeMedia.base64} type="video/mp4" />
-                              Tu navegador no soporta el video.
-                            </video>
-                            <VideoCameraIcon className="absolute top-2 left-2 w-6 h-6 text-white rounded-full p-1" />
-                          </div>
-                        )}
-                      </div>
+                      {media.length > 0 && (
+                        <div className="relative rounded-lg overflow-hidden mb-4">
+                          <div className="bg-gray-50 aspect-video flex items-center justify-center rounded-lg border border-gray-100">
+                            {activeMedia.tipoArchivoId === 1 ? (
+                              <img
+                                src={activeMedia.url}
+                                alt={`Evidencia ${activeIndex + 1}`}
+                                className="max-h-[full] max-w-full object-contain"
+                              />
+                            ) : (
+                            <div className="relative w-full h-full">
+                              <video controls className="w-full h-full object-contain">
+                              <source src={activeMedia.url} type="video/mp4" />
+                                Tu navegador no soporta el video.
+                              </video>
+                              <VideoCameraIcon className="absolute top-2 left-2 w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                            </div>
+                            )}
+                        </div>
 
+                {/* Botones de navegación si hay más de 1 */}
+                {media.length > 1 && (
+                  <>
+                    <button
+                      onClick={() => handlePrev(index, media.length)}
+                      className="absolute top-1/2 left-2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+                      aria-label="Anterior"
+                    >
+                      <ChevronLeftIcon className="w-5 h-5" strokeWidth={2.5} />
+                    </button>
+                    <button
+                      onClick={() => handleNext(index, media.length)}
+                      className="absolute top-1/2 right-2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+                      aria-label="Siguiente"
+                    >
+                      <ChevronRightIcon className="w-5 h-5" strokeWidth={2.5} />
+                    </button>
+
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1">
+                    {media.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveIndexes((prev) => ({ ...prev, [index]: i }))}
+                        className={`w-2 h-2 rounded-full ${i === activeIndex ? "bg-white" : "bg-white/50"}`}
+                        aria-label={`Ir a media ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                      </>
+                    )}
+                  </div>
+                )}
+                  </div>
                       {/* Navigation buttons */}
                       {media.length > 1 && (
                         <>
@@ -274,11 +393,15 @@ function FormatosR() {
 
                   {/* Actions */}
                   <div className="flex justify-end items-center mt-4 space-x-2">
-                    <button className="flex items-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
+                    <button 
+                      onClick={() => rechazarReporte(reportItem.id)}
+                      className="flex items-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
                       <XMarkIcon className="h-4 w-4 mr-1" strokeWidth={2.5} />
                      
                     </button>
-                    <button className="flex items-center px-3 py-1.5 rounded-md bg-green-100 text-green-600 hover:bg-green-100 transition-colors">
+                    <button 
+                      onClick={() => aprobarReporte(reportItem.id_reporte)}
+                      className="flex items-center px-3 py-1.5 rounded-md bg-green-100 text-green-600 hover:bg-green-100 transition-colors">
                       <CheckIcon className="h-4 w-4 mr-1" strokeWidth={2.5} />
                       
                     </button>
@@ -295,12 +418,12 @@ function FormatosR() {
           initialData={editData}
           onClose={() => setShowModal(false)}
           onSubmit={(updatedReport) => {
-            const updatedReports = [...report]
-            const index = report.findIndex((r) => r.timestamp === updatedReport.timestamp)
+            const updatedReports = [...reports]
+            const index = reports.findIndex((r) => r.timestamp === updatedReport.timestamp)
 
             if (index !== -1) {
               updatedReports[index] = updatedReport
-              localStorage.setItem("communityReports", JSON.stringify(updatedReports))
+              //localStorage.setItem("communityReports", JSON.stringify(updatedReports))
               setReports(updatedReports)
             }
 

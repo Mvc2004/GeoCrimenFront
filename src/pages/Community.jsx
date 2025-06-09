@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { UserIcon, BellIcon, MapIcon } from "@heroicons/react/24/solid"
+import { useState, useEffect, useRef } from "react"
+import { UserIcon, BellIcon, MapIcon, PhotoIcon, ArrowPathIcon, XMarkIcon,MagnifyingGlassIcon, VideoCameraIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/logo/logo.png"
 import { Link, useNavigate } from "react-router-dom"
 import FormatosR from "./FormatosR"
@@ -8,21 +8,23 @@ import { useTranslation } from 'react-i18next';
 import { AccessibilityProvider } from './AccessibilityContext';
 import AccesibilidadButton from './AccesibilidadButton';
 
-
 const plans = [
   { name: "profile", path: "/profile" },
   { name: "notifications", path: "/notificaciones" },
   { name: "heatmap_title", path: "/heatmap" },
+  { name: "crimeR", path: "/informe" },
 ]
+
 
 function Community() {
   const { t, i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [editData, setEditData] = useState(null)
-  const [reportList, setReportList] = useState([])
-  const [delitos, setDelitos] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [reportList, setReportList] = useState([]) 
+  const [selectedDate, setSelectedDate] = useState("")
+  const [originalReportList, setOriginalReportList] = useState([]);
+
 
   const navigate = useNavigate()
   const [isListening, setIsListening] = useState(false)
@@ -55,24 +57,170 @@ function Community() {
       setRecognition(recognitionInstance)
     }
   }, [])
+ 
+
+  useEffect(() => {
+    const cargarReportes = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/reportes/reportesPendientes");
+        const data = await response.json();
+  
+        if (!response.ok) throw new Error("Error al obtener reportes");
+  
+        const reportes = data.data || [];
+  
+        // Obtener archivos para cada reporte
+        const reportesConMedia = await Promise.all(
+          reportes.map(async (reporte) => {
+            try {
+              const resArchivos = await fetch(`http://localhost:3000/api/reportes/obtenerArchivoPorReporte/${reporte.id_reporte}`);
+              const dataArchivos = await resArchivos.json();
+              const mediaTransformada = (dataArchivos.data || []).map((archivo) => ({
+                url: archivo.url_archivo,
+                tipoArchivoId: parseInt(archivo.tipo_archivo),
+                type: parseInt(archivo.tipo_archivo) === 1 ? "image" : "video"
+              }));
+              return { ...reporte, media: mediaTransformada };
+            } catch (e) {
+              console.error("Error al obtener archivos de reporte", reporte.id_reporte, e);
+              return { ...reporte, media: [] };
+            }
+          })
+        );
+  
+        setReportList(reportesConMedia);
+        setOriginalReportList(reportesConMedia)
+      } catch (err) {
+        console.error("Error al cargar reportes desde el backend:", err);
+      }
+    };
+  
+    cargarReportes();
+  }, []);
+  
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+  
+    if (!selectedDate) {
+      alert("Selecciona una fecha");
+      return;
+    }
+  
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/reportes/obtenerReportesPorFecha?fecha_reporte=${selectedDate}`
+      );
+  
+      if (!response.ok) {
+        throw new Error("Error al obtener reportes por fecha");
+      }
+  
+      const data = await response.json();
+      setReportList(data.data || []);
+    } catch (error) {
+      console.error("Error al buscar reportes:", error);
+      alert("No se pudo obtener los reportes");
+    }
+  };
+  
+  // Justo encima o debajo de handleSaveReport
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "public_upload"); // Usa el que tengas configurado (ej. public_upload)
+    formData.append("cloud_name", "dxa28laqj");
+
+    const response = await fetch("https://api.cloudinary.com/v1_1/dxa28laqj/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) throw new Error("Error al subir archivo a Cloudinary");
+
+    const data = await response.json();
+    return data.secure_url;
+  };
+
+  const handleSaveReport = async (report) => {
+    const id_usuario = localStorage.getItem("id_usuario");
+    const id_crimen = (crimeType) => {
+      switch(crimeType){
+        case 'hurto':
+          return 1;
+        case 'homicidio':
+          return 2;
+      }
+    }
+    const reporteUsuario = {
+      //...report,
+      id_usuario,
+      id_crimen: id_crimen(report.crimeType),
+      ubicacion_reporte: report.location,
+      fecha_reporte: report.date,
+      ubi_lat: report.latitude,
+      ubi_lng: report.longitude,
+      descripcion: report.descripcion,
+
+    }
+    try {
+      const response = await fetch("http://localhost:3000/api/reportes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reporteUsuario),
+      });
+      console.log("Enviando reporte:", reporteUsuario);
+      if (!response.ok) throw new Error("Error al enviar el reporte");
+
+      const data = await response.json();
+      const idReporte = data.id_reporte_insertado;
+      console.log("Reporte creado:", data);
+      const mediaConUrl = [];
+      for (const archivo of report.media) {
+
+        const cloudinaryUrl = await uploadToCloudinary(archivo.file);
+        console.log("Archivo subido a Cloudinary:", cloudinaryUrl);
+
+        await fetch("http://localhost:3000/api/reportes/archivoPorReporte", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_reporte: idReporte,
+            url_archivo: cloudinaryUrl,
+            tipo_archivo: archivo.tipoArchivoId,
+          }),
+        });
+        mediaConUrl.push({
+          url: cloudinaryUrl,
+          tipoArchivoId: archivo.tipoArchivoId,
+          type: archivo.tipoArchivoId 
+        });
+      }
+      console.log("Archivos enviados correctamente");
+      console.log(mediaConUrl);
+
+      setReportList((prev) => [...prev, { ...report, id_reporte: data.id_reporte_insertado, media: mediaConUrl }]);
+      setShowModal(false);
+      setEditData(null);
+      
+    } catch (error) {
+      console.error("Error al guardar el reporte:", error);
+      alert("No se pudo enviar el reporte");
+    }
+  };
+
 
   const toggleListening = () => {
     if (!recognition) return
-    isListening ? recognition.stop() : recognition.start()
-    setIsListening(!isListening)
-  }
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    if (searchTerm.trim()) {
-      // Opcional: redirige a otra ruta
-      // navigate(`/${searchTerm}`)
-    }
-  }
+    if (isListening) {
+      recognition.stop()
+      setIsListening(false)
 
-  const handleSaveReport = (report) => {
-    if (editData) {
-      setReportList(prev => prev.map((r) => (r.id === report.id ? report : r)))
     } else {
       setReportList(prev => [...prev, { ...report, id: Date.now() }])
     }
@@ -127,6 +275,8 @@ function Community() {
                   {plan.name === "Perfil" && <UserIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Notificaciones" && <BellIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Mapa de Calor" && <MapIcon className="h-8 w-8 text-white" />}
+                  {plan.name === "Informe de Crímenes" && <ClipboardDocumentListIcon className="h-8 w-8 text-white" />}
+
                 </div>
                 <p className="text-2xl font-bold text-white">{t(plan.name)}</p>
               </button>
@@ -134,58 +284,49 @@ function Community() {
           </div>
         </div>
 
-        {/* Panel central */}
-        <div className="w-full md:w-3/5 p-4 bg-white">
-          <form className="mt-5 max-w-md mx-auto">
-            <div className="relative flex items-center">
-              <div className="absolute flex items-center">
-              </div>
+        {/* Particion 2 (centro) */}
+        <div className="w-full md:w-3/5 p-0 bg-white">
+          <form onSubmit={handleSearch} className="mt-5 max-w-md mx-auto">
+          <div className="relative flex flex-col">
+              <label
+                htmlFor="buscarFecha"
+                className="text-sm font-medium text-slate-600 mb-1 ml-1"
+              >
+                <b>Buscar reportes por fecha</b>
+              </label>
 
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-400 rounded-md pr-3 pl-3 py-2 transition duration-300 ease-in-out focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                placeholder={t("searchPlaceholder")}
-              />
+              <div className="flex items-center">
+                <div className="absolute left-3">
+                  <MagnifyingGlassIcon className="size-5 text-[#003049]" strokeWidth={1.5} />
+                </div>
 
-              {/* Microphone Button */}
-              <button
+                <input
+                  id="buscarFecha"
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 text-sm text-slate-700 border border-slate-400 rounded-md transition duration-300 ease-in-out focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                />
+                {/* Search Button */}
+                <button
+                  type="submit"
+                  className="ml-2 p-2.5 rounded-md bg-[#003049] text-white text-sm transition-all duration-300 shadow-sm hover:shadow-lg hover:bg-slate-700 active:bg-slate-800 focus:outline-none"
+                >
+                  🔍
+                </button>
+                <button
                 type="button"
-                onClick={toggleListening}
-                className={`rounded-md ml-2 p-2.5 border border-transparent text-center text-sm text-white transition-all duration-300 shadow-sm hover:shadow-lg focus:outline-none ${
-                  isListening
-                    ? "bg-red-600 hover:bg-red-700 active:bg-red-800 animate-pulse"
-                    : "bg-[#003049] hover:bg-slate-700 active:bg-slate-800"
-                }`}
-                aria-label={isListening ? "Stop listening" : "Start voice search"}
+                onClick={() => {
+                  setSelectedDate("");
+                  setReportList(originalReportList);
+                }}
+                className="ml-2 p-2.5 rounded-md bg-[#003049] text-white text-sm transition-all duration-300 shadow-sm hover:shadow-lg hover:bg-slate-700 active:bg-slate-800 focus:outline-none"
+                title="Limpiar filtros"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
-                  <path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" />
-                  <path d="M5.5 9.643a.75.75 0 0 0-1.5 0V10c0 3.06 2.29 5.585 5.25 5.954V17.5h-1.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-1.5v-1.546A6.001 6.001 0 0 0 16 10v-.357a.75.75 0 0 0-1.5 0V10a4.5 4.5 0 0 1-9 0v-.357Z" />
-                </svg>
-              </button>
-
-              {/* Search Button */}
-              <button
-                type="submit"
-                className="rounded-md ml-2 bg-[#003049] p-2.5 border border-transparent text-center text-sm text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:bg-slate-700 active:bg-slate-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
-                  <path
-                    fillRule="evenodd"
-                    d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 14 0A7 7 0 0 1 2 9Z"
-                    clipRule="evenodd"
-                  />
-                  <path
-                    fillRule="evenodd"
-                    d="M12.293 12.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1-1.414 1.414l-4-4a1 1 0 0 1 0-1.414Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
+                <ArrowPathIcon className="w-4 h-4" />
+              </button>             
+              </div>
             </div>
-
             {/* Listening Indicator */}
             {isListening && (
               <div className="flex items-center justify-center mt-3 space-x-2">
@@ -221,6 +362,7 @@ function Community() {
 
           <FormatosR
             reports={reportList}
+            setReports={setReportList}
             onEdit={(report) => {
               setEditData(report)
               setShowModal(true)

@@ -51,6 +51,7 @@ function Register() {
 
       if (res.ok) {
         alert(t("userCreated"));
+        localStorage.setItem("id_usuario", data.id_insertado);
         navigate("/");
       } else {
         alert(t("signUpError") + data.message);
