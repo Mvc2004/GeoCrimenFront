@@ -237,7 +237,7 @@ export default function Profile() {
 
                   <div className="w-full max-w-sm min-w-[200px] relative">
                     <label htmlFor="apellido" className="block mb-2 text-sm text-white font-bold">
-                      {t("lastname")}
+                      {t("lastName")}
                     </label>
                     <input
                       id="apellido"
