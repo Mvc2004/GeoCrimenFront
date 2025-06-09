@@ -20,7 +20,7 @@ function Community() {
   const [searchTerm, setSearchTerm] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [editData, setEditData] = useState(null)
-  const [reportList, setReportList] = useState([]) // Lista de reportes enviados
+  const [reportList, setReportList] = useState([]) 
 
 
   const navigate = useNavigate()
@@ -58,6 +58,64 @@ function Community() {
       setRecognition(recognitionInstance)
     }
   }, [])
+  // useEffect(() => {
+  //   const cargarReportes = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3000/api/reportes/reportesPendientes")
+  //       const data = await response.json()
+  //       if (response.ok) {
+  //         setReportList(data.data || [])
+  //         console.log("Reportes cargados:", data.data)
+  //       } else {
+  //         console.error("Error en la respuesta del servidor:", data)
+  //       }
+  //     } catch (err) {
+  //       console.error("Error al cargar reportes desde el backend:", err)
+  //     }
+  //   }
+  
+  //   cargarReportes()
+  // }, [])
+
+  useEffect(() => {
+    const cargarReportes = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/reportes/reportesPendientes");
+        const data = await response.json();
+  
+        if (!response.ok) throw new Error("Error al obtener reportes");
+  
+        const reportes = data.data || [];
+  
+        // Obtener archivos para cada reporte
+        const reportesConMedia = await Promise.all(
+          reportes.map(async (reporte) => {
+            try {
+              const resArchivos = await fetch(`http://localhost:3000/api/reportes/obtenerArchivoPorReporte/${reporte.id_reporte}`);
+              const dataArchivos = await resArchivos.json();
+              const mediaTransformada = (dataArchivos.data || []).map((archivo) => ({
+                url: archivo.url_archivo,
+                tipoArchivoId: parseInt(archivo.tipo_archivo),
+                type: parseInt(archivo.tipo_archivo) === 1 ? "image" : "video"
+              }));
+              return { ...reporte, media: mediaTransformada };
+            } catch (e) {
+              console.error("Error al obtener archivos de reporte", reporte.id_reporte, e);
+              return { ...reporte, media: [] };
+            }
+          })
+        );
+  
+        setReportList(reportesConMedia);
+      } catch (err) {
+        console.error("Error al cargar reportes desde el backend:", err);
+      }
+    };
+  
+    cargarReportes();
+  }, []);
+  
+  
 
 
   const handleSearch = (e) => {
@@ -66,6 +124,24 @@ function Community() {
       navigate(`/${searchTerm}`)
     }
   }
+
+  // Justo encima o debajo de handleSaveReport
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "public_upload"); // Usa el que tengas configurado (ej. public_upload)
+    formData.append("cloud_name", "dxa28laqj");
+
+    const response = await fetch("https://api.cloudinary.com/v1_1/dxa28laqj/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) throw new Error("Error al subir archivo a Cloudinary");
+
+    const data = await response.json();
+    return data.secure_url;
+  };
 
   const handleSaveReport = async (report) => {
     const id_usuario = localStorage.getItem("id_usuario");
@@ -78,13 +154,14 @@ function Community() {
       }
     }
     const reporteUsuario = {
-      ...report,
+      //...report,
       id_usuario,
       id_crimen: id_crimen(report.crimeType),
       ubicacion_reporte: report.location,
       fecha_reporte: report.date,
       ubi_lat: report.latitude,
-      ubi_lng: report.longitude
+      ubi_lng: report.longitude,
+      descripcion: report.descripcion,
 
     }
     try {
@@ -99,9 +176,35 @@ function Community() {
       if (!response.ok) throw new Error("Error al enviar el reporte");
 
       const data = await response.json();
+      const idReporte = data.id_reporte_insertado;
       console.log("Reporte creado:", data);
+      const mediaConUrl = [];
+      for (const archivo of report.media) {
 
-      setReportList((prev) => [...prev, { ...report, id_reporte: data.id_reporte_insertado }]);
+        const cloudinaryUrl = await uploadToCloudinary(archivo.file);
+        console.log("Archivo subido a Cloudinary:", cloudinaryUrl);
+
+        await fetch("http://localhost:3000/api/reportes/archivoPorReporte", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_reporte: idReporte,
+            url_archivo: cloudinaryUrl,
+            tipo_archivo: archivo.tipoArchivoId,
+          }),
+        });
+        mediaConUrl.push({
+          url: cloudinaryUrl,
+          tipoArchivoId: archivo.tipoArchivoId,
+          type: archivo.tipoArchivoId 
+        });
+      }
+      console.log("Archivos enviados correctamente");
+      console.log(mediaConUrl);
+
+      setReportList((prev) => [...prev, { ...report, id_reporte: data.id_reporte_insertado, media: mediaConUrl }]);
       setShowModal(false);
       setEditData(null);
       
@@ -225,6 +328,7 @@ function Community() {
 
           <FormatosR
             reports={reportList}
+            setReports={setReportList}
             onEdit={(report) => {
               setEditData(report)
               setShowModal(true)

@@ -29,7 +29,7 @@ function ReporteModal({ initialData, onClose, onSubmit }) {
         date: date || "",
         time: time || "",
         location: initialData.location || "",
-        description: initialData.descripcion || "",
+        descripcion: initialData.descripcion || "",
       })
       setMediaFiles(initialData.media || [])
     }
@@ -72,12 +72,14 @@ function ReporteModal({ initialData, onClose, onSubmit }) {
         date: "",
         time: "",
         location: "",
-        description: "",
+        descripcion: "",
         })
         setMediaFiles([])
         onClose()
     }
+
 const handleReport = async () => {
+  console.log("Datos del reporte:");
   if (
     !reportData.crimeType ||
     !reportData.date ||
@@ -109,7 +111,7 @@ const combinedDateTime = reportData.time
       updatedReports = [newReport, ...storedReports]
     }
 
-  localStorage.setItem("communityReports", JSON.stringify(updatedReports));
+  //localStorage.setItem("communityReports", JSON.stringify(updatedReports));
 
   alert(initialData ? "Reporte actualizado con éxito." : "Reporte enviado con éxito.");
 
@@ -118,7 +120,7 @@ const combinedDateTime = reportData.time
     date: "",
     time: "",
     location: "",
-    description: "",
+    descripcion: "",
   });
   setMediaFiles([]);
   onClose();
@@ -137,9 +139,9 @@ setIsGettingLocation(true)
     const apiKey = "590f7aa7ad8496782ccda3353b3c6e4";
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude } = position.coords
-        // const latitude = 4.081200;
-        // const longitude = -76.192800;
+        //const { latitude, longitude } = position.coords
+        const latitude = 4.081200;
+        const longitude = -76.192800;
         console.log("Ubicación obtenida:", latitude, longitude);
         // Attempt to get address from coordinates using Nominatim (OpenStreetMap)
         //fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=es`)
@@ -171,6 +173,23 @@ setIsGettingLocation(true)
       }
     );
   }
+
+  const handleMediaUpload = (file, tipo) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setMediaFiles((prev) => [
+        ...prev,
+        {
+          file,
+          base64: event.target.result,
+          type: tipo === "imagen" ? "image" : "video",
+          tipoArchivoId: tipo === "imagen" ? 1 : 2,
+        },
+      ]);
+    };
+    reader.readAsDataURL(file);
+  };
+  
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50" role="dialog" aria-modal="true">
@@ -274,7 +293,7 @@ setIsGettingLocation(true)
 
           {mediaFiles.length > 0 && (
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Evidencia adjunta</label>
+              <label className="block text-sm font-medium mb-2">Evidencia del reporte</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 {mediaFiles.map((media, index) => (
                   <div key={index} className="relative group">
@@ -326,24 +345,29 @@ setIsGettingLocation(true)
                 </button>
               </div>
 
-          <div className="flex space-x-1">
-            <input
-              type="file"
-              id="media-upload"
-              ref={fileInputRef}
-              accept="image/*,video/*"
-              onChange={handleMediaChange}
-              multiple
-              className="hidden"
-            />
-            <label
-              htmlFor="media-upload"
-              className="inline-flex justify-center items-center p-2 text-gray-500 rounded-md hover:bg-gray-300"
-            >
-              <div className="flex items-center">
-                <PhotoIcon className="w-6 h-6 text-black" />
-                <VideoCameraIcon className="w-6 h-6 text-black ml-1" />
-              </div>
+          <div className="flex space-x-3">
+            {/* Botón para subir imagen */}
+            <label className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-md cursor-pointer">
+              <PhotoIcon className="w-5 h-5 text-black" />
+              <span className="text-sm text-black">Imagen</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => handleMediaUpload(e.target.files[0], "imagen")}
+              />
+            </label>
+
+            {/* Botón para subir video */}
+            <label className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-md cursor-pointer">
+              <VideoCameraIcon className="w-5 h-5 text-black" />
+              <span className="text-sm text-black">Video</span>
+              <input
+                type="file"
+                accept="video/*"
+                className="hidden"
+                onChange={(e) => handleMediaUpload(e.target.files[0], "video")}
+              />
             </label>
           </div>
         </div>

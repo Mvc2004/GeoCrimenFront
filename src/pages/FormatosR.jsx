@@ -5,16 +5,31 @@ import { EllipsisVerticalIcon } from "@heroicons/react/24/solid"
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon, CheckIcon } from "@heroicons/react/24/outline"
 import { CalendarIcon, MapPinIcon, ShieldExclamationIcon, VideoCameraIcon, HandRaisedIcon} from "@heroicons/react/24/outline"
 
-function FormatosR({ onEdit }) {
+//const [reports, setReports] = useState([]);
+
+function FormatosR({ onEdit, reports = [], setReports }) {
   //const [report, setReports] = useState([])
-  const [activeIndexes, setActiveIndexes] = useState({}) // índice por reporte
+  // const [activeIndexes, setActiveIndexes] = useState({}) // índice por reporte
+  // const [showDeleteConfirmIndex, setShowDeleteConfirmIndex] = useState(null)
+  // const [showModal, setShowModal] = useState(false)
+  // const [editData, setEditData] = useState(null)
+  // const [reports, setReports] = useState([]);
+
+  const [activeIndexes, setActiveIndexes] = useState({})
   const [showDeleteConfirmIndex, setShowDeleteConfirmIndex] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [editData, setEditData] = useState(null)
-  const [reports, setReports] = useState([]);
+
+  useEffect(() => {
+    const initialIndexes = {};
+    reports.forEach((_, i) => {
+      initialIndexes[i] = 0;
+    });
+    setActiveIndexes(initialIndexes);
+  }, [reports]);
 
   const deleteReport = (indexToDelete) => {
-    const updatedReports = report.filter((_, i) => i !== indexToDelete)
+    const updatedReports = reports.filter((_, i) => i !== indexToDelete)
     localStorage.setItem("communityReports", JSON.stringify(updatedReports))
     setReports(updatedReports)
     setShowDeleteConfirmIndex(null)
@@ -72,28 +87,28 @@ function FormatosR({ onEdit }) {
 
   // 
   
-  useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/reportes/reportesPendientes");
-        const data = await response.json();
-        if (response.ok) {
-          setReports(data.data || []);
-          const initialIndexes = {};
-          (data.data || []).forEach((_, i) => {
-            initialIndexes[i] = 0;
-          });
-          setActiveIndexes(initialIndexes);
-        } else {
-          console.error("Error al cargar reportes pendientes:", data.error);
-        }
-      } catch (error) {
-        console.error("Error al obtener reportes pendientes:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchReports = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3000/api/reportes/reportesPendientes");
+  //       const data = await response.json();
+  //       if (response.ok) {
+  //         setReports(data.data || []);
+  //         const initialIndexes = {};
+  //         (data.data || []).forEach((_, i) => {
+  //           initialIndexes[i] = 0;
+  //         });
+  //         setActiveIndexes(initialIndexes);
+  //       } else {
+  //         console.error("Error al cargar reportes pendientes:", data.error);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error al obtener reportes pendientes:", error);
+  //     }
+  //   };
   
-    fetchReports();
-  }, []);
+  //   fetchReports();
+  // }, []);
   
 
   const handlePrev = (reportIndex, mediaLength) => {
@@ -153,7 +168,7 @@ function FormatosR({ onEdit }) {
             const media = reportItem.media || []
             const activeIndex = activeIndexes[index] || 0
             const activeMedia = media[activeIndex]
-            const formattedDate = formatDate(reportItem.date)
+            const formattedDate = formatDate(reportItem.fecha_reporte  || reportItem.date)
 
             return (
               <div key={index} className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
@@ -273,7 +288,7 @@ function FormatosR({ onEdit }) {
                     </div>
                   </div>
 
-                  {/* Description */}
+                  {/* Descripcion */}
                   <div className="mt-5 mb-4">
                     <h3 className="text-md font-semibold text-gray-700 mb-2">Detalles del delito:</h3>
                     <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
@@ -285,27 +300,59 @@ function FormatosR({ onEdit }) {
                   {media.length > 0 && (
                     <div className="relative rounded-lg overflow-hidden mb-4">
                       <div className=" bg-gray-50 aspect-video flex items-center justify-center rounded-lg border border-gray-100">
-                        {activeMedia?.type === "image" ? (
-                          <img
-                            src={
-                              activeMedia.base64.startsWith("data:image/")
-                                ? activeMedia.base64
-                                : `data:image/png;base64,${activeMedia.base64}`
-                            }
-                            alt={`Evidencia ${activeIndex + 1}`}
-                            className="max-h-[full] max-w-full object-contain"
-                          />
-                        ) : (
-                          <div className="relative w-full h-full">
-                            <video controls className="w-full h-full object-contain">
-                              <source src={activeMedia.base64} type="video/mp4" />
-                              Tu navegador no soporta el video.
-                            </video>
-                            <VideoCameraIcon className="absolute top-2 left-2 w-6 h-6 text-white rounded-full p-1" />
-                          </div>
-                        )}
-                      </div>
+                      {media.length > 0 && (
+                        <div className="relative rounded-lg overflow-hidden mb-4">
+                          <div className="bg-gray-50 aspect-video flex items-center justify-center rounded-lg border border-gray-100">
+                            {activeMedia.tipoArchivoId === 1 ? (
+                              <img
+                                src={activeMedia.url}
+                                alt={`Evidencia ${activeIndex + 1}`}
+                                className="max-h-[full] max-w-full object-contain"
+                              />
+                            ) : (
+                            <div className="relative w-full h-full">
+                              <video controls className="w-full h-full object-contain">
+                              <source src={activeMedia.url} type="video/mp4" />
+                                Tu navegador no soporta el video.
+                              </video>
+                              <VideoCameraIcon className="absolute top-2 left-2 w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                            </div>
+                            )}
+                        </div>
 
+                {/* Botones de navegación si hay más de 1 */}
+                {media.length > 1 && (
+                  <>
+                    <button
+                      onClick={() => handlePrev(index, media.length)}
+                      className="absolute top-1/2 left-2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+                      aria-label="Anterior"
+                    >
+                      <ChevronLeftIcon className="w-5 h-5" strokeWidth={2.5} />
+                    </button>
+                    <button
+                      onClick={() => handleNext(index, media.length)}
+                      className="absolute top-1/2 right-2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+                      aria-label="Siguiente"
+                    >
+                      <ChevronRightIcon className="w-5 h-5" strokeWidth={2.5} />
+                    </button>
+
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1">
+                    {media.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveIndexes((prev) => ({ ...prev, [index]: i }))}
+                        className={`w-2 h-2 rounded-full ${i === activeIndex ? "bg-white" : "bg-white/50"}`}
+                        aria-label={`Ir a media ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                      </>
+                    )}
+                  </div>
+                )}
+                  </div>
                       {/* Navigation buttons */}
                       {media.length > 1 && (
                         <>
@@ -367,12 +414,12 @@ function FormatosR({ onEdit }) {
           initialData={editData}
           onClose={() => setShowModal(false)}
           onSubmit={(updatedReport) => {
-            const updatedReports = [...report]
-            const index = report.findIndex((r) => r.timestamp === updatedReport.timestamp)
+            const updatedReports = [...reports]
+            const index = reports.findIndex((r) => r.timestamp === updatedReport.timestamp)
 
             if (index !== -1) {
               updatedReports[index] = updatedReport
-              localStorage.setItem("communityReports", JSON.stringify(updatedReports))
+              //localStorage.setItem("communityReports", JSON.stringify(updatedReports))
               setReports(updatedReports)
             }
 
