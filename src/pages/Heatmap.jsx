@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "leaflet.heat";
@@ -18,9 +18,7 @@ const HeatmapLayer = ({ points }) => {
       maxZoom: 17,
     }).addTo(map);
 
-    return () => {
-      heat.remove(); // Limpia el heatmap si el componente se desmonta o actualiza
-    };
+    return () => heat.remove();
   }, [map, points]);
 
   return null;
@@ -28,14 +26,16 @@ const HeatmapLayer = ({ points }) => {
 
 function Heatmap() {
   const [heatmapPoints, setHeatmapPoints] = useState([]);
+  const [reportes, setReportes] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/reportes/reportesAprobados")
       .then((res) => res.json())
       .then((data) => {
-        const puntos = data.data
-          .filter(r => r.ubi_lat && r.ubi_lng) // filtrar nulos
-          .map(r => [r.ubi_lat, r.ubi_lng]);
+        const reportesValidos = data.data.filter(r => r.ubi_lat && r.ubi_lng);
+        setReportes(reportesValidos);
+
+        const puntos = reportesValidos.map(r => [r.ubi_lat, r.ubi_lng]);
         setHeatmapPoints(puntos);
       })
       .catch((err) => {
@@ -50,6 +50,17 @@ function Heatmap() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <HeatmapLayer points={heatmapPoints} />
+
+      {reportes.map((r) => (
+        <Marker key={r.id_reporte} position={[r.ubi_lat, r.ubi_lng]}>
+          <Popup>
+            <strong>Tipo:</strong> {r.id_crimen === 1 ? "Hurto" : r.id_crimen === 2 ? "Homicidio" : "Otro"}<br />
+            <strong>Ubicación:</strong> {r.ubicacion_reporte}<br />
+            <strong>Fecha:</strong> {new Date(r.fecha_reporte).toLocaleString("es-CO")}<br />
+            <strong>Descripción:</strong><br />{r.descripcion}
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 }
