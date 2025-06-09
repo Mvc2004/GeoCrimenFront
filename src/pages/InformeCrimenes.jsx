@@ -45,8 +45,6 @@ function InformeCrimenes() {
                 <th className="px-4 py-2">Fecha</th>
                 <th className="px-4 py-2">Ubicación</th>
                 <th className="px-4 py-2">Descripción</th>
-                <th className="px-4 py-2">Lat</th>
-                <th className="px-4 py-2">Lng</th>
               </tr>
             </thead>
             <tbody>
@@ -59,8 +57,6 @@ function InformeCrimenes() {
                   <td className="px-4 py-2">{new Date(reporte.fecha_reporte).toLocaleDateString()}</td>
                   <td className="px-4 py-2">{reporte.ubicacion_reporte}</td>
                   <td className="px-4 py-2">{reporte.descripcion}</td>
-                  <td className="px-4 py-2">{reporte.ubi_lat}</td>
-                  <td className="px-4 py-2">{reporte.ubi_lng}</td>
                 </tr>
               ))}
             </tbody>
