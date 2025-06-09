@@ -1,21 +1,24 @@
 import { useState, useEffect, useRef } from "react"
 import { UserIcon, BellIcon, MapIcon, PhotoIcon, ArrowPathIcon, XMarkIcon,MagnifyingGlassIcon, VideoCameraIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/solid"
 import imagen1 from "../images/logo/logo.png"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import FormatosR from "./FormatosR"
 import ReporteModal from "./VentanaReporte"
 import { useTranslation } from 'react-i18next';
 import { AccessibilityProvider } from './AccessibilityContext';
 import AccesibilidadButton from './AccesibilidadButton';
 
-const plans = [
-  { name: "profile", path: "/profile" },
-  { name: "notifications", path: "/notificaciones" },
-  { name: "crimeR", path: "/informe" }
+
+
+const plans = [ 
+  { name: "Perfil", path: "/profile" },
+  { name: "Notificaciones", path: "/notificaciones" },
+  { name: "Mapa de Calor", path: "/heatmap" },
+  { name: "Informe de Crímenes", path: "/informe" },
 ]
 
-
 function Community() {
+
   const { t, i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("")
   const [showModal, setShowModal] = useState(false)
@@ -26,8 +29,12 @@ function Community() {
 
 
   const navigate = useNavigate()
+
   const [isListening, setIsListening] = useState(false)
   const [recognition, setRecognition] = useState(null)
+
+  
+
 
   useEffect(() => {
     if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
@@ -45,7 +52,7 @@ function Community() {
       }
 
       recognitionInstance.onerror = (event) => {
-        console.error("Error de reconocimiento:", event.error)
+        console.error("no se reconoce el dialogo", event.error)
         setIsListening(false)
       }
 
@@ -57,13 +64,7 @@ function Community() {
     }
   }, [])
  
-  useEffect(() => {
-    const id_usuario = localStorage.getItem("id_usuario");
-    if (!id_usuario) {
-      navigate("/login", { replace: true }); // 🔒 reemplaza el historial
-    }
-  }, [navigate]);
-  
+
   useEffect(() => {
     const cargarReportes = async () => {
       try {
@@ -103,6 +104,8 @@ function Community() {
     cargarReportes();
   }, []);
   
+  
+
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -129,6 +132,7 @@ function Community() {
     }
   };
   
+
   // Justo encima o debajo de handleSaveReport
   const uploadToCloudinary = async (file) => {
     const formData = new FormData();
@@ -225,32 +229,25 @@ function Community() {
     if (isListening) {
       recognition.stop()
       setIsListening(false)
-
     } else {
-      setReportList(prev => [...prev, { ...report, id: Date.now() }])
+      recognition.start()
+      setIsListening(true)
     }
-    setShowModal(false)
-    setEditData(null)
   }
-
- 
-
-  
-
   return (
-
     <AccessibilityProvider>
-      <AccesibilidadButton/>
-
-    <div className="min-h-screen">
+        <AccesibilidadButton/>
+    <div className="min-64-screen ">
+      {/* Contenedor principal con flex-row para organizar las particiones horizontalmente */}
       <div className="flex flex-col md:flex-row min-h-screen">
-        {/* Panel izquierdo */}
+        {/* Particion 1 (izquierda) */}
         <div className="flex flex-col w-full md:w-1/5 p-8 bg-[#003049]">
+          {/* Logo centrado */}
           <div className="flex justify-center mb-12">
-            <Link to="/">
-              <img src={imagen1 || "/placeholder.svg"} alt="Logo" className="w-[100px]" />
-            </Link>
+            <img src={imagen1 || "/placeholder.svg"} alt="Logo" className="w-[100px]" />
           </div>
+
+          {/* Menú alineado a la izquierda */}
           <div className="mt-8 space-y-6 pl-2">
             {plans.map((plan) => (
               <button
@@ -260,28 +257,18 @@ function Community() {
               >
                 <div className="flex-shrink-0 mr-4">
                   {plan.name === "Perfil" && <UserIcon className="h-8 w-8 text-white" />}
+                  {plan.name === "Notificaciones" && <BellIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Mapa de Calor" && <MapIcon className="h-8 w-8 text-white" />}
                   {plan.name === "Informe de Crímenes" && <ClipboardDocumentListIcon className="h-8 w-8 text-white" />}
 
                 </div>
-                <p className="text-2xl font-bold text-white">{t(plan.name)}</p>
+                <div>
+                  <p className="text-2xl font-bold text-white">{plan.name}</p>
+                </div>
               </button>
             ))}
-            <div className="mt-12 pl-2">
-              <button
-                onClick={() => {
-                  localStorage.removeItem("id_usuario");
-                  navigate("/login", { replace: true });
-                }}
-                className="flex items-center w-full bg-[#D62828] hover:bg-[#c21f1f] transition rounded-md py-3 px-4 text-white"
-              >
-                <XMarkIcon className="h-5 w-5 text-white mr-2" strokeWidth={2} />
-                <span className="text-sm font-semibold">Cerrar Sesión</span>
-              </button>
-            </div>
           </div>
         </div>
-
         {/* Particion 2 (centro) */}
         <div className="w-full md:w-3/5 p-0 bg-white">
           <form onSubmit={handleSearch} className="mt-5 max-w-md mx-auto">
@@ -328,7 +315,7 @@ function Community() {
             {/* Listening Indicator */}
             {isListening && (
               <div className="flex items-center justify-center mt-3 space-x-2">
-                <div className="text-sm font-medium text-red-600">{t("listening")}</div>
+                <div className="text-sm font-medium text-red-600">Escuchando...</div>
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
                   <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
@@ -338,7 +325,6 @@ function Community() {
             )}
           </form>
 
-
           <FormatosR
             reports={reportList}
             setReports={setReportList}
@@ -347,33 +333,40 @@ function Community() {
               setShowModal(true)
             }}
           />
+
         </div>
 
-        {/* Panel derecho */}
+        {/* Particion 3 (derecha) */}
         <div className="grid justify-items-center w-full md:w-1/5 p-8 bg-[#003049]">
-          <div className="text-center text-white mb-8">
-            <p className="text-3xl font-bold">{t("reportEasily")}</p>
-            <p className="text-sm mt-2">{t("reportButton")}</p>
-          </div>
-          <button
-            className="w-[200px] h-[90px] text-[#D62828] border-2 border-[#003049]/50 bg-white text-2xl font-bold py-3 rounded-2xl hover:scale-110 transition"
-            onClick={() => {
-              setEditData(null)
-              setShowModal(true)
-            }}
-          >
-            {t("reportCrime")}
-          </button>
-          {showModal && (
-            <ReporteModal
-              initialData={editData}
-              onClose={() => {
-                setShowModal(false)
+          {/* Contenido para la partición derecha */}
+          <div className="grid justify-items-center gap-10">
+            <div className="w-full text-center">
+              <p className="text-white text-3xl font-bold">Reporta Fácilmente</p>
+              <p className="mt-2 text-white text-sm">!Solo presiona el botón!</p>
+            </div>
+            <div className="flex justify-center w-full mb-[50px]">
+              <button
+                type="button"
+                className="w-[200px] h-[90px] text-[#D62828] border-2 border-[#003049]/50 bg-white text-2xl font-bold py-3 rounded rounded-2xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                onClick={() => {
                 setEditData(null)
+                setShowModal(true)
               }}
-              onSubmit={handleSaveReport}
-            />
-          )}
+              >
+                Reportar Delito
+              </button>
+            </div>
+            {showModal && (
+              <ReporteModal
+                initialData={editData}
+                onClose={() => {
+                  setShowModal(false)
+                  setEditData(null)
+                }}
+                onSubmit={handleSaveReport}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
