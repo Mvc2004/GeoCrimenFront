@@ -57,7 +57,7 @@ function FormatosR({ onEdit, reports = [], setReports }) {
   
   const rechazarReporte = async (id_reporte) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/reportes/${id_reporte}/rechazar`, {
+      const response = awaitfetch(`http://localhost:3000/api/reportes/${id_reporte}/rechazar`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

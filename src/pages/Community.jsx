@@ -64,7 +64,7 @@ function Community() {
   useEffect(() => {
     const id_usuario = localStorage.getItem("id_usuario");
     if (!id_usuario) {
-      navigate("/login", { replace: true }); // 🔒 reemplaza el historial
+      navigate("/login", { replace: true }); 
     }
   }, [navigate]);
   
@@ -82,8 +82,13 @@ function Community() {
         const reportesConMedia = await Promise.all(
           reportes.map(async (reporte) => {
             try {
-              const resArchivos = await fetch(`http://localhost:3000/api/reportes/obtenerArchivoPorReporte/${reporte.id_reporte}`);
+              const id_reporte = reporte.id_reporte;
+              console.log("Obteniendo archivos para el reporte:", id_reporte);
+              const resArchivos = await fetch(`http://localhost:3000/api/reportes/obtenerArchivoPorReporte/${id_reporte}`);
+              
               const dataArchivos = await resArchivos.json();
+              console.log("Respuesta de archivos:", dataArchivos); 
+
               const mediaTransformada = (dataArchivos.data || []).map((archivo) => ({
                 url: archivo.url_archivo,
                 tipoArchivoId: parseInt(archivo.tipo_archivo),
@@ -96,7 +101,8 @@ function Community() {
             }
           })
         );
-  
+        console.log("Reportes finales con media", reportesConMedia);
+
         setReportList(reportesConMedia);
         setOriginalReportList(reportesConMedia)
       } catch (err) {
@@ -128,20 +134,45 @@ function Community() {
       }
   
       const data = await response.json();
-      setReportList(data.data || []);
+      const reportesFiltrados = data.data || [];
+  
+      // 👇 Aquí agregamos la obtención de media para cada reporte
+      const reportesConMedia = await Promise.all(
+        reportesFiltrados.map(async (reporte) => {
+          try {
+            const id_reporte = reporte.id_reporte;
+            const resArchivos = await fetch(`http://localhost:3000/api/reportes/obtenerArchivoPorReporte/${id_reporte}`);
+            const dataArchivos = await resArchivos.json();
+  
+            const mediaTransformada = (dataArchivos.data || []).map((archivo) => ({
+              url: archivo.url_archivo,
+              tipoArchivoId: parseInt(archivo.tipo_archivo),
+              type: parseInt(archivo.tipo_archivo) === 1 ? "image" : "video"
+            }));
+  
+            return { ...reporte, media: mediaTransformada };
+          } catch (e) {
+            console.error("Error al obtener archivos del reporte filtrado", reporte.id_reporte, e);
+            return { ...reporte, media: [] };
+          }
+        })
+      );
+  
+      setReportList(reportesConMedia);
+  
     } catch (error) {
       console.error("Error al buscar reportes:", error);
       alert("No se pudo obtener los reportes");
     }
   };
   
+  
 
-  // Justo encima o debajo de handleSaveReport
+  
   const uploadToCloudinary = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "public_upload"); // Usa el que tengas configurado (ej. public_upload)
-    formData.append("cloud_name", "dxa28laqj");
+    formData.append("upload_preset", "public_upload"); 
 
     const response = await fetch("https://api.cloudinary.com/v1_1/dxa28laqj/upload", {
       method: "POST",
@@ -189,7 +220,7 @@ function Community() {
 
       const data = await response.json();
       const idReporte = data.id_reporte_insertado;
-      console.log("Reporte creado:", data);
+      console.log("Reporte creado:", idReporte);
       const mediaConUrl = [];
       for (const archivo of report.media) {
 
