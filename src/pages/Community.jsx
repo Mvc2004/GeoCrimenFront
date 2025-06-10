@@ -11,6 +11,7 @@ const plans = [
   { name: "Perfil", path: "/profile" },
   { name: "Mapa de Calor", path: "/heatmap" },
   { name: "Informe de Crímenes", path: "/informe" },
+  { name: "Historial de Reportes", path: "/historial" }
 ]
 
 function Community() {
@@ -155,6 +156,7 @@ function Community() {
 
   const handleSaveReport = async (report) => {
     const id_usuario = localStorage.getItem("id_usuario");
+    console.log("ID de usuario:", id_usuario);
     const id_crimen = (crimeType) => {
       switch(crimeType){
         case 'hurto':

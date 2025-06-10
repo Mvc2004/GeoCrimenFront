@@ -55,9 +55,9 @@ function FormatosR({ onEdit, reports = [], setReports }) {
     }
   };
   
-  const rechazarReporte = async (id) => {
+  const rechazarReporte = async (id_reporte) => {
     try {
-      const response = fetch(`http://localhost:3000/api/reportes/${id_reporte}/rechazar`, {
+      const response = await fetch(`http://localhost:3000/api/reportes/${id_reporte}/rechazar`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -390,7 +390,7 @@ function FormatosR({ onEdit, reports = [], setReports }) {
                   {/* Actions */}
                   <div className="flex justify-end items-center mt-4 space-x-2">
                     <button 
-                      onClick={() => rechazarReporte(reportItem.id)}
+                      onClick={() => rechazarReporte(reportItem.id_reporte)}
                       className="flex items-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
                       <XMarkIcon className="h-4 w-4 mr-1" strokeWidth={2.5} />
                      

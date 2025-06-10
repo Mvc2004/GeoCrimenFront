@@ -27,7 +27,7 @@ export default function Login() {
       }
       const data = await response.json();
       localStorage.setItem("id_usuario", data.id_usuario);
-      console.log("Inicio de sesión exitoso:", data);
+      console.log("Inicio de sesión exitoso:", data.id_usuario);
       navigate('/community', { replace: true });
     } catch (error) {
       alert("Inicio de sesión fallido: " + error.message);
