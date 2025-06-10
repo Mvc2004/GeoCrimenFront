@@ -7,6 +7,7 @@ import Community from "./pages/Community";
 import ForgotPassword1 from "./pages/ForgotPassword1";
 import ForgotPassword2 from "./pages/ForgotPassword2";
 import Profile from "./pages/Profile";
+import InformeReportes from "./pages/HistorialReportes";
 import H2 from "./pages/H2";
 import Heatmap from "./pages/Heatmap";
 import FormatosR from "./pages/FormatosR";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/heatmap" element={<Heatmap />} />
         <Route path="/formatos" element={<FormatosR />} />
         <Route path="/informe" element={<InformeCrimenes />} />
+        <Route path="/historial" element={<InformeReportes />} />
       </Routes>
     </Router>
   );

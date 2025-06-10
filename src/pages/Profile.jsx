@@ -16,7 +16,7 @@ export default function Profile() {
         const data = await response.json();
         if (data?.data) {
           setFormData({
-            id_usuario: data.data.Id_usuario,
+            id_usuario: data.data.id_usuario,
             nombre: data.data.nombre,
             apellido: data.data.apellido,
             correo: data.data.email,
@@ -32,7 +32,7 @@ export default function Profile() {
     fetchUserData();
   }, []);
   
-  // Form state
+  
   const [formData, setFormData] = useState({
     id_usuario: "",
     nombre: "",
@@ -41,7 +41,7 @@ export default function Profile() {
     contrasenia: "",
   })
 
-  // UI state
+  
   const [isEditable, setIsEditable] = useState({
     nombre: false,
     apellido: false,
@@ -95,7 +95,7 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Validate all fields
+  
     const isUsernameValid = validateField("username", formData.username)
     const isEmailValid = validateField("email", formData.email)
     const isPasswordValid = validateField("password", formData.password)
@@ -104,14 +104,14 @@ export default function Profile() {
       setIsLoading(true)
 
       try {
-        // Simulate API call
+       
         await new Promise((resolve) => setTimeout(resolve, 1000))
 
-        // Success
+      
         setSuccessMessage("Perfil actualizado correctamente")
         setTimeout(() => setSuccessMessage(""), 3000) // Clear after 3 seconds
 
-        // Reset editable states
+       
         setIsEditable({
           username: false,
           email: false,
@@ -127,22 +127,40 @@ export default function Profile() {
   }
 
   const handleDeleteAccount = async () => {
-    setIsLoading(true)
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Redirect to home page after successful deletion
-      navigate("/")
-    } catch (error) {
-      console.error("Error deleting account:", error)
-      setErrors((prev) => ({ ...prev, general: "Error al eliminar la cuenta" }))
-      setShowDeleteConfirm(false)
-    } finally {
-      setIsLoading(false)
+    setIsLoading(true);
+    const id_usuario = localStorage.getItem("id_usuario");
+  
+    if (!id_usuario) {
+      console.error("ID de usuario no encontrado");
+      return;
     }
-  }
+  
+    try {
+      const response = await fetch(`http://localhost:3000/api/usuarios/${id_usuario}`, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al eliminar cuenta");
+      }
+  
+
+      localStorage.removeItem("id_usuario");
+      alert("Cuenta eliminada exitosamente");
+      navigate("/", {replace: true}); 
+    } catch (error) {
+      console.error("Error al eliminar cuenta:", error);
+      setErrors((prev) => ({
+        ...prev,
+        general: "Error al eliminar la cuenta",
+      }));
+    } finally {
+      setIsLoading(false);
+
+    }
+  };
+  
 
   return (
     <div className="w-full min-h-screen bg-cover bg-center relative bg-opacity backdrop-blur-lg">
@@ -353,7 +371,7 @@ export default function Profile() {
                 )}
 
                 {/* Update button */}
-                <button
+                {/* <button
                   type="submit"
                   disabled={isLoading || (!isEditable.username && !isEditable.email && !isEditable.password)}
                   className="mt-8 mx-auto block w-[110px] rounded-md bg-[#FCBF49] font-bold py-2 border border-transparent text-center text-sm text-[#003049] transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#FCBF49]/85 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
@@ -385,7 +403,7 @@ export default function Profile() {
                   ) : (
                     "Actualizar"
                   )}
-                </button>
+                </button> */}
               </form>
             </div>
           </div>
